@@ -1,6 +1,6 @@
 export default function HeroSlideProductOfWeek() {
   return (
-    <div className="swiper-slide fp-week-product-slide">
+    <div className="swiper-slide fp-week-product-slide" suppressHydrationWarning>
       <a href="/gp-anastrozole-arimidex--p8194" className="d-block h-100">
         <div className="fp-week-product">
           <div className="fp-week-product__overlay">

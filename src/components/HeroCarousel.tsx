@@ -3,8 +3,11 @@ import HeroSlideBanner from './HeroSlideBanner'
 
 export default function HeroCarousel() {
   return (
-    <div className="hp-slider swiper">
-      <div className="swiper-wrapper">
+    // suppressHydrationWarning: Swiper.js modifies className and data-* attrs
+    // after SSR, causing a React hydration diff. These elements are fully
+    // managed by Swiper post-hydration, so the mismatch is safe to ignore.
+    <div className="hp-slider swiper" suppressHydrationWarning>
+      <div className="swiper-wrapper" suppressHydrationWarning>
         <HeroSlideBanner
           href="#"
           src="/img/banners/homepage/phishing-warning.jpg"
@@ -22,7 +25,7 @@ export default function HeroCarousel() {
           alt="Top Weight Loss Peptides"
         />
       </div>
-      <div className="swiper-pagination" />
+      <div className="swiper-pagination" suppressHydrationWarning />
     </div>
   )
 }
