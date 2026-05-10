@@ -49,7 +49,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
            </div>
           <Footer />
         </CartProvider>
-
         <OfflineScripts />
       </body>
     </html>
