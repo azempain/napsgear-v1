@@ -6,7 +6,7 @@ interface HeroSlideBannerProps {
 
 export default function HeroSlideBanner({ href, src, alt }: HeroSlideBannerProps) {
   return (
-    <div className="swiper-slide">
+    <div className="swiper-slide" suppressHydrationWarning>
       <a href={href}>
         <img alt={alt} className="w-100" src={src} />
       </a>
