@@ -9,8 +9,8 @@ export default function AskIfbbProPage() {
       <div className="container py-5">
         <h1 className="mb-4">Ask an IFBB Pro</h1>
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-          {videos.map((v) => (
-            <div key={v.url} className="col">
+          {videos.map((v, i) => (
+            <div key={v.thumbnail || i} className="col">
               <VideoCard video={v} />
             </div>
           ))}
