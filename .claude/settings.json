@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(pnpm *)",
+      "Bash(git diff *)",
+      "Bash(git ls-tree *)",
+      "Bash(git log *)",
+      "Bash(git status *)",
+      "WebFetch(domain:www.napsgear.org)",
+      "WebFetch(domain:napsgear.org)"
+    ]
+  }
+}
