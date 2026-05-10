@@ -1,0 +1,602 @@
+[
+  {
+    "slug": "accordo-rx-c144205",
+    "name": "Accordo Rx",
+    "url": "https://www.napsgear.org/accordo-rx-c144205"
+  },
+  {
+    "slug": "alpha-pharma-healthcare-c141952",
+    "name": "Alpha-Pharma Healthcare",
+    "url": "https://www.napsgear.org/alpha-pharma-healthcare-c141952"
+  },
+  {
+    "slug": "alp-laboratories-c146773",
+    "name": "ALP Laboratories",
+    "url": "https://www.napsgear.org/alp-laboratories-c146773"
+  },
+  {
+    "slug": "aurum-pharmaceuticals-c142339",
+    "name": "Aurum Pharmaceuticals",
+    "url": "https://www.napsgear.org/aurum-pharmaceuticals-c142339"
+  },
+  {
+    "slug": "avogen-lab-c135271",
+    "name": "AVoGen Lab",
+    "url": "https://www.napsgear.org/avogen-lab-c135271"
+  },
+  {
+    "slug": "beligas-c142048",
+    "name": "Beligas",
+    "url": "https://www.napsgear.org/beligas-c142048"
+  },
+  {
+    "slug": "biomex-labs-c142714",
+    "name": "Biomex Labs",
+    "url": "https://www.napsgear.org/biomex-labs-c142714"
+  },
+  {
+    "slug": "biotech-labs-c147750",
+    "name": "Biotech Labs",
+    "url": "https://www.napsgear.org/biotech-labs-c147750"
+  },
+  {
+    "slug": "bull-pharma-c146770",
+    "name": "Bull Pharma",
+    "url": "https://www.napsgear.org/bull-pharma-c146770"
+  },
+  {
+    "slug": "crowx-labs-c146386",
+    "name": "Crowx Labs",
+    "url": "https://www.napsgear.org/crowx-labs-c146386"
+  },
+  {
+    "slug": "euro-pharmacies-c142195",
+    "name": "Euro-Pharmacies",
+    "url": "https://www.napsgear.org/euro-pharmacies-c142195"
+  },
+  {
+    "slug": "geneza-pharmaceuticals-c142291",
+    "name": "Geneza Pharmaceuticals",
+    "url": "https://www.napsgear.org/geneza-pharmaceuticals-c142291"
+  },
+  {
+    "slug": "genshi-labs-c145954",
+    "name": "Genshi Labs",
+    "url": "https://www.napsgear.org/genshi-labs-c145954"
+  },
+  {
+    "slug": "nakon-medical-c145333",
+    "name": "Nakon Medical",
+    "url": "https://www.napsgear.org/nakon-medical-c145333"
+  },
+  {
+    "slug": "omega-lab-c147558",
+    "name": "Omega Lab",
+    "url": "https://www.napsgear.org/omega-lab-c147558"
+  },
+  {
+    "slug": "pharmaqo-labs-c142576",
+    "name": "Pharmaqo Labs",
+    "url": "https://www.napsgear.org/pharmaqo-labs-c142576"
+  },
+  {
+    "slug": "ryzen-pharmaceuticals-c146674",
+    "name": "Ryzen Pharmaceuticals",
+    "url": "https://www.napsgear.org/ryzen-pharmaceuticals-c146674"
+  },
+  {
+    "slug": "sixpex-c145330",
+    "name": "SixPex",
+    "url": "https://www.napsgear.org/sixpex-c145330"
+  },
+  {
+    "slug": "tsg-compound-pharmacy-c142099",
+    "name": "TSG Compound Pharmacy",
+    "url": "https://www.napsgear.org/tsg-compound-pharmacy-c142099"
+  },
+  {
+    "slug": "ultima-pharmaceuticals-c144304",
+    "name": "Ultima Pharmaceuticals",
+    "url": "https://www.napsgear.org/ultima-pharmaceuticals-c144304"
+  },
+  {
+    "slug": "xeno-labs-c142528",
+    "name": "Xeno Labs",
+    "url": "https://www.napsgear.org/xeno-labs-c142528"
+  },
+  {
+    "slug": "xt-labs-c141388",
+    "name": "XT Labs",
+    "url": "https://www.napsgear.org/xt-labs-c141388"
+  },
+  {
+    "slug": "ed-pills-c141856",
+    "name": "ED Pills",
+    "url": "https://www.napsgear.org/ed-pills-c141856"
+  },
+  {
+    "slug": "hcg-miscellaneous-c141239",
+    "name": "HCG & Miscellaneous",
+    "url": "https://www.napsgear.org/hcg-miscellaneous-c141239"
+  },
+  {
+    "slug": "human-growth-hormone-c138076",
+    "name": "Human Growth Hormone",
+    "url": "https://www.napsgear.org/human-growth-hormone-c138076"
+  },
+  {
+    "slug": "turkish-pharma-c147846",
+    "name": "Turkish Pharma",
+    "url": "https://www.napsgear.org/turkish-pharma-c147846"
+  },
+  {
+    "slug": "crowx-labs-c146915",
+    "name": "Crowx Labs",
+    "url": "https://www.napsgear.org/crowx-labs-c146915"
+  },
+  {
+    "slug": "euro-pharmacies-c145429",
+    "name": "Euro-Pharmacies",
+    "url": "https://www.napsgear.org/euro-pharmacies-c145429"
+  },
+  {
+    "slug": "nano-peptides-c147606",
+    "name": "Nano Peptides",
+    "url": "https://www.napsgear.org/nano-peptides-c147606"
+  },
+  {
+    "slug": "odin-pharma-c147702",
+    "name": "Odin Pharma",
+    "url": "https://www.napsgear.org/odin-pharma-c147702"
+  },
+  {
+    "slug": "pharmaqo-labs-c145435",
+    "name": "Pharmaqo Labs",
+    "url": "https://www.napsgear.org/pharmaqo-labs-c145435"
+  },
+  {
+    "slug": "sixpex-c147218",
+    "name": "SixPex",
+    "url": "https://www.napsgear.org/sixpex-c147218"
+  },
+  {
+    "slug": "tsg-compound-pharmacy-c147507",
+    "name": "TSG Compound Pharmacy",
+    "url": "https://www.napsgear.org/tsg-compound-pharmacy-c147507"
+  },
+  {
+    "slug": "u-s-made-peptides-c141194",
+    "name": "U.S. Made Peptides",
+    "url": "https://www.napsgear.org/u-s-made-peptides-c141194"
+  },
+  {
+    "slug": "ultima-pharmaceuticals-c145432",
+    "name": "Ultima Pharmaceuticals",
+    "url": "https://www.napsgear.org/ultima-pharmaceuticals-c145432"
+  },
+  {
+    "slug": "xeno-labs-c147029",
+    "name": "Xeno Labs",
+    "url": "https://www.napsgear.org/xeno-labs-c147029"
+  },
+  {
+    "slug": "xt-labs-c146146",
+    "name": "XT Labs",
+    "url": "https://www.napsgear.org/xt-labs-c146146"
+  },
+  {
+    "slug": "euro-pharmacies-europe-c146578",
+    "name": "Euro-Pharmacies, Europe",
+    "url": "https://www.napsgear.org/euro-pharmacies-europe-c146578"
+  },
+  {
+    "slug": "pharmaqo-labs-c145624",
+    "name": "Pharmaqo Labs",
+    "url": "https://www.napsgear.org/pharmaqo-labs-c145624"
+  },
+  {
+    "slug": "xt-labs-c146149",
+    "name": "XT Labs",
+    "url": "https://www.napsgear.org/xt-labs-c146149"
+  },
+  {
+    "slug": "oral-steroids-c23",
+    "name": "Oral Steroids",
+    "url": "https://www.napsgear.org/oral-steroids-c23"
+  },
+  {
+    "slug": "injectable-steroids-c21",
+    "name": "Injectable Steroids",
+    "url": "https://www.napsgear.org/injectable-steroids-c21"
+  },
+  {
+    "slug": "cycle-support-c867",
+    "name": "Cycle Support",
+    "url": "https://www.napsgear.org/cycle-support-c867"
+  },
+  {
+    "slug": "human-growth-hormone-c45",
+    "name": "Human Growth Hormone",
+    "url": "https://www.napsgear.org/human-growth-hormone-c45"
+  },
+  {
+    "slug": "deus-medical-europe-c146933",
+    "name": "Deus Medical, Europe",
+    "url": "https://www.napsgear.org/deus-medical-europe-c146933"
+  },
+  {
+    "slug": "dragon-pharma-c146050",
+    "name": "Dragon Pharma",
+    "url": "https://www.napsgear.org/dragon-pharma-c146050"
+  },
+  {
+    "slug": "euro-pharmacies-europe-c146242",
+    "name": "Euro-Pharmacies, Europe",
+    "url": "https://www.napsgear.org/euro-pharmacies-europe-c146242"
+  },
+  {
+    "slug": "india-pharmacy-peptides-c147897",
+    "name": "India Pharmacy Peptides",
+    "url": "https://www.napsgear.org/india-pharmacy-peptides-c147897"
+  },
+  {
+    "slug": "pharmaqo-labs-c144607",
+    "name": "Pharmaqo Labs",
+    "url": "https://www.napsgear.org/pharmaqo-labs-c144607"
+  },
+  {
+    "slug": "sinoway-c144598",
+    "name": "Sinoway",
+    "url": "https://www.napsgear.org/sinoway-c144598"
+  },
+  {
+    "slug": "ultima-pharmaceuticals-c144604",
+    "name": "Ultima Pharmaceuticals",
+    "url": "https://www.napsgear.org/ultima-pharmaceuticals-c144604"
+  },
+  {
+    "slug": "deus-medical-europe-c146936",
+    "name": "Deus Medical, Europe",
+    "url": "https://www.napsgear.org/deus-medical-europe-c146936"
+  },
+  {
+    "slug": "dragon-pharma-c146389",
+    "name": "Dragon Pharma",
+    "url": "https://www.napsgear.org/dragon-pharma-c146389"
+  },
+  {
+    "slug": "euro-pharmacies-europe-c146248",
+    "name": "Euro-Pharmacies, Europe",
+    "url": "https://www.napsgear.org/euro-pharmacies-europe-c146248"
+  },
+  {
+    "slug": "pharmaqo-labs-c146392",
+    "name": "Pharmaqo Labs",
+    "url": "https://www.napsgear.org/pharmaqo-labs-c146392"
+  },
+  {
+    "slug": "insulins-amp-biguanides-c43",
+    "name": "Insulins & Biguanides",
+    "url": "https://www.napsgear.org/insulins-amp-biguanides-c43"
+  },
+  {
+    "slug": "pre-designed-stacks-c42",
+    "name": "Pre-designed Stacks",
+    "url": "https://www.napsgear.org/pre-designed-stacks-c42"
+  },
+  {
+    "slug": "pct---post-cycle-therapy-c518",
+    "name": "PCT - Post Cycle Therapy",
+    "url": "https://www.napsgear.org/pct---post-cycle-therapy-c518"
+  },
+  {
+    "slug": "men-s-health-c446",
+    "name": "Men`s Health",
+    "url": "https://www.napsgear.org/men-s-health-c446"
+  },
+  {
+    "slug": "erectile-dysfunction-c438",
+    "name": "Erectile Dysfunction",
+    "url": "https://www.napsgear.org/erectile-dysfunction-c438"
+  },
+  {
+    "slug": "ed-trial-packs-c134557",
+    "name": "ED Trial Packs",
+    "url": "https://www.napsgear.org/ed-trial-packs-c134557"
+  },
+  {
+    "slug": "anti-fungal-c141013",
+    "name": "Anti Fungal",
+    "url": "https://www.napsgear.org/anti-fungal-c141013"
+  },
+  {
+    "slug": "anti-viral-c418",
+    "name": "Anti Viral",
+    "url": "https://www.napsgear.org/anti-viral-c418"
+  },
+  {
+    "slug": "anti-acidity-c420",
+    "name": "Anti-Acidity",
+    "url": "https://www.napsgear.org/anti-acidity-c420"
+  },
+  {
+    "slug": "anti-allergic-asthma-c422",
+    "name": "Anti-Allergic/Asthma",
+    "url": "https://www.napsgear.org/anti-allergic-asthma-c422"
+  },
+  {
+    "slug": "anti-depressant-c424",
+    "name": "Anti-Depressant",
+    "url": "https://www.napsgear.org/anti-depressant-c424"
+  },
+  {
+    "slug": "anti-diabetic-c426",
+    "name": "Anti-Diabetic",
+    "url": "https://www.napsgear.org/anti-diabetic-c426"
+  },
+  {
+    "slug": "anti-herpes-c430",
+    "name": "Anti-Herpes",
+    "url": "https://www.napsgear.org/anti-herpes-c430"
+  },
+  {
+    "slug": "antibiotics-c432",
+    "name": "Antibiotics",
+    "url": "https://www.napsgear.org/antibiotics-c432"
+  },
+  {
+    "slug": "blood-pressure-c434",
+    "name": "Blood Pressure",
+    "url": "https://www.napsgear.org/blood-pressure-c434"
+  },
+  {
+    "slug": "diuretics-c520",
+    "name": "Diuretics",
+    "url": "https://www.napsgear.org/diuretics-c520"
+  },
+  {
+    "slug": "eye-care-c140782",
+    "name": "Eye Care",
+    "url": "https://www.napsgear.org/eye-care-c140782"
+  },
+  {
+    "slug": "gastrointestinal-c440",
+    "name": "Gastrointestinal",
+    "url": "https://www.napsgear.org/gastrointestinal-c440"
+  },
+  {
+    "slug": "general-health-c442",
+    "name": "General Health",
+    "url": "https://www.napsgear.org/general-health-c442"
+  },
+  {
+    "slug": "hair-loss-c135403",
+    "name": "Hair Loss",
+    "url": "https://www.napsgear.org/hair-loss-c135403"
+  },
+  {
+    "slug": "healthy-bones-c444",
+    "name": "Healthy Bones",
+    "url": "https://www.napsgear.org/healthy-bones-c444"
+  },
+  {
+    "slug": "heart-and-cholesterol-c436",
+    "name": "Heart and Cholesterol",
+    "url": "https://www.napsgear.org/heart-and-cholesterol-c436"
+  },
+  {
+    "slug": "liver-protection-c134731",
+    "name": "Liver Protection",
+    "url": "https://www.napsgear.org/liver-protection-c134731"
+  },
+  {
+    "slug": "pain-relief-c448",
+    "name": "Pain Relief",
+    "url": "https://www.napsgear.org/pain-relief-c448"
+  },
+  {
+    "slug": "pets-c450",
+    "name": "Pets",
+    "url": "https://www.napsgear.org/pets-c450"
+  },
+  {
+    "slug": "skin-care-c452",
+    "name": "Skin Care",
+    "url": "https://www.napsgear.org/skin-care-c452"
+  },
+  {
+    "slug": "stay-awake-stimulant-c521",
+    "name": "Stay-Awake Stimulant",
+    "url": "https://www.napsgear.org/stay-awake-stimulant-c521"
+  },
+  {
+    "slug": "stop-smoking-c456",
+    "name": "Stop Smoking",
+    "url": "https://www.napsgear.org/stop-smoking-c456"
+  },
+  {
+    "slug": "vitamin-shots-c135406",
+    "name": "Vitamin Shots",
+    "url": "https://www.napsgear.org/vitamin-shots-c135406"
+  },
+  {
+    "slug": "weight-loss-c460",
+    "name": "Weight Loss",
+    "url": "https://www.napsgear.org/weight-loss-c460"
+  },
+  {
+    "slug": "women-s-health-c462",
+    "name": "Women`s Health",
+    "url": "https://www.napsgear.org/women-s-health-c462"
+  },
+  {
+    "slug": "anabolic-steroids-c137965",
+    "name": "Anabolic Steroids",
+    "url": "https://www.napsgear.org/anabolic-steroids-c137965"
+  },
+  {
+    "slug": "human-growth-hormone-c141808",
+    "name": "Human Growth Hormone",
+    "url": "https://www.napsgear.org/human-growth-hormone-c141808"
+  },
+  {
+    "slug": "antiestrogens-c135505",
+    "name": "Antiestrogens",
+    "url": "https://www.napsgear.org/antiestrogens-c135505"
+  },
+  {
+    "slug": "post-cycle-therapy-c135508",
+    "name": "Post Cycle Therapy",
+    "url": "https://www.napsgear.org/post-cycle-therapy-c135508"
+  },
+  {
+    "slug": "asthma-c135397",
+    "name": "Asthma",
+    "url": "https://www.napsgear.org/asthma-c135397"
+  },
+  {
+    "slug": "thyroid-c135502",
+    "name": "Thyroid",
+    "url": "https://www.napsgear.org/thyroid-c135502"
+  },
+  {
+    "slug": "erectile-dysfunction-c135334",
+    "name": "Erectile Dysfunction",
+    "url": "https://www.napsgear.org/erectile-dysfunction-c135334"
+  },
+  {
+    "slug": "antibiotics-c135484",
+    "name": "Antibiotics",
+    "url": "https://www.napsgear.org/antibiotics-c135484"
+  },
+  {
+    "slug": "anxiety-c135490",
+    "name": "Anxiety",
+    "url": "https://www.napsgear.org/anxiety-c135490"
+  },
+  {
+    "slug": "blood-pressure-c135487",
+    "name": "Blood Pressure",
+    "url": "https://www.napsgear.org/blood-pressure-c135487"
+  },
+  {
+    "slug": "cholesterol-c135496",
+    "name": "Cholesterol",
+    "url": "https://www.napsgear.org/cholesterol-c135496"
+  },
+  {
+    "slug": "diabetes-c135325",
+    "name": "Diabetes",
+    "url": "https://www.napsgear.org/diabetes-c135325"
+  },
+  {
+    "slug": "diuretics-c135400",
+    "name": "Diuretics",
+    "url": "https://www.napsgear.org/diuretics-c135400"
+  },
+  {
+    "slug": "general-health-c135394",
+    "name": "General Health",
+    "url": "https://www.napsgear.org/general-health-c135394"
+  },
+  {
+    "slug": "hair-care-c135511",
+    "name": "Hair Care",
+    "url": "https://www.napsgear.org/hair-care-c135511"
+  },
+  {
+    "slug": "muscle-relaxant-c135493",
+    "name": "Muscle Relaxant",
+    "url": "https://www.napsgear.org/muscle-relaxant-c135493"
+  },
+  {
+    "slug": "skin-care-c135331",
+    "name": "Skin Care",
+    "url": "https://www.napsgear.org/skin-care-c135331"
+  },
+  {
+    "slug": "stay-awake-c135499",
+    "name": "Stay-awake",
+    "url": "https://www.napsgear.org/stay-awake-c135499"
+  },
+  {
+    "slug": "vitamin-shots-c135328",
+    "name": "Vitamin Shots",
+    "url": "https://www.napsgear.org/vitamin-shots-c135328"
+  },
+  {
+    "slug": "weight-loss-c135478",
+    "name": "Weight Loss",
+    "url": "https://www.napsgear.org/weight-loss-c135478"
+  },
+  {
+    "slug": "anti-depressant-c485",
+    "name": "Anti-Depressant",
+    "url": "https://www.napsgear.org/anti-depressant-c485"
+  },
+  {
+    "slug": "erectile-dysfunction-c486",
+    "name": "Erectile Dysfunction",
+    "url": "https://www.napsgear.org/erectile-dysfunction-c486"
+  },
+  {
+    "slug": "gastrointestinal-c140053",
+    "name": "Gastrointestinal",
+    "url": "https://www.napsgear.org/gastrointestinal-c140053"
+  },
+  {
+    "slug": "hair-care-c140050",
+    "name": "Hair Care",
+    "url": "https://www.napsgear.org/hair-care-c140050"
+  },
+  {
+    "slug": "himalaya-c488",
+    "name": "Himalaya",
+    "url": "https://www.napsgear.org/himalaya-c488"
+  },
+  {
+    "slug": "joint-amp-bones-health-c140059",
+    "name": "Joint & Bones Health",
+    "url": "https://www.napsgear.org/joint-amp-bones-health-c140059"
+  },
+  {
+    "slug": "liver-protection-c140056",
+    "name": "Liver Protection",
+    "url": "https://www.napsgear.org/liver-protection-c140056"
+  },
+  {
+    "slug": "men-s-health-c489",
+    "name": "Men`s Health",
+    "url": "https://www.napsgear.org/men-s-health-c489"
+  },
+  {
+    "slug": "pain-relief-c490",
+    "name": "Pain Relief",
+    "url": "https://www.napsgear.org/pain-relief-c490"
+  },
+  {
+    "slug": "skin-care-c491",
+    "name": "Skin Care",
+    "url": "https://www.napsgear.org/skin-care-c491"
+  },
+  {
+    "slug": "sleeping-aid-c492",
+    "name": "Sleeping Aid",
+    "url": "https://www.napsgear.org/sleeping-aid-c492"
+  },
+  {
+    "slug": "weight-loss-c494",
+    "name": "Weight Loss",
+    "url": "https://www.napsgear.org/weight-loss-c494"
+  },
+  {
+    "slug": "women-s-health-c495",
+    "name": "Women`s Health",
+    "url": "https://www.napsgear.org/women-s-health-c495"
+  },
+  {
+    "slug": "syringes-needles-c879",
+    "name": "Syringes & Needles",
+    "url": "https://www.napsgear.org/syringes-needles-c879"
+  }
+]

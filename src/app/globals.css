@@ -1,0 +1,291 @@
+/* bare reset — all styles come from public/css/ */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+/* Product of the Week hero slide — white background with subtle hex overlay */
+.fp-week-product-slide .fp-week-product {
+  background: #fff url('/img/bg_week-product.png') center/cover no-repeat !important;
+  min-height: 260px;
+  display: flex;
+  align-items: stretch;
+}
+
+.fp-week-product-slide a.d-block {
+  width: 100%;
+}
+
+.fp-week-product__overlay {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 24px 20px;
+  gap: 20px;
+}
+
+.fp-week-product__left {
+  flex: 1;
+  min-width: 0;
+}
+
+.fp-week-product__right {
+  flex-shrink: 0;
+}
+
+/* Product image card — white box with shadow matching live site */
+.fp-week-product__img-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 4px 4px 16px rgba(0,0,0,0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  max-width: 320px;
+}
+
+.fp-week-product__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+/* ── Main nav structure ── */
+/* header-bottom is the positioning context for megamenus (spans full container width) */
+.header-bottom {
+  position: relative;
+}
+
+.main-nav {
+  position: relative;
+  z-index: 1000;
+}
+
+/* Remove browser-default bullets from the flex menu */
+.main-nav .menu {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+}
+.main-nav .menu > li {
+  list-style: none !important;
+}
+
+/* ── All dropdown panels ── */
+.main-nav .menu-item-dropdown > .dropdown-menu {
+  display: none;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: 1px solid #eee !important;
+  border-top: 3px solid #0089cb !important;
+  box-shadow: 0 1px 25px rgba(0,0,0,.15) !important;
+  padding: 10px 8px !important;
+  background: #fff !important;
+  transform: none !important;
+}
+
+/* Fade-in on open */
+@keyframes navDropIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.main-nav .menu-item-dropdown > .dropdown-menu.show {
+  display: block !important;
+  animation: navDropIn .15s ease-out both;
+}
+
+/* ── Megamenu: spans full width of .main-nav (= container width) ── */
+.main-nav .menu-item-dropdown.with-megamenu {
+  position: static;
+}
+.main-nav .menu-item-dropdown.with-megamenu > .dropdown-menu {
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-height: 72vh;
+  overflow-y: auto;
+}
+
+/* ── Regular dropdown: anchored to its own trigger ── */
+.main-nav .menu-item-dropdown:not(.with-megamenu) {
+  position: relative;
+}
+.main-nav .menu-item-dropdown:not(.with-megamenu) > .dropdown-menu {
+  min-width: 240px;
+  width: max-content;
+}
+
+/* ── Megamenu grid ── */
+.main-nav .menu-item__list {
+  display: grid;
+  grid-template-columns: repeat(var(--drm-cols, 4), 1fr);
+  grid-template-rows: repeat(var(--drm-rows, 8), auto);
+  grid-auto-flow: column;
+  column-gap: 8px;
+  list-style: none;
+  padding: 4px 0;
+  margin: 0;
+}
+.menu-item__list--brands    { --drm-cols: 4; --drm-rows: 8; }
+.menu-item__list--categories { --drm-cols: 4; --drm-rows: 4; }
+.menu-item__list--shipping  { --drm-cols: 3; --drm-rows: 2; }
+
+/* ── Dropdown chevron icon ── */
+.nav-chevron {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 3px;
+  transition: transform 0.2s ease;
+}
+.dropdown-button[aria-expanded="true"] .nav-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Dropdown link hover: blue text + light bg ── */
+.main-nav .menu-item__link:hover,
+.main-nav .menu-item__link:focus {
+  color: #0089cb !important;
+  background-color: #f4f4f4;
+  text-decoration: none;
+}
+
+/* Regular dropdown links: block + no-wrap */
+.main-nav .menu-item-dropdown:not(.with-megamenu) > .dropdown-menu > a.menu-item__link {
+  display: block;
+  white-space: nowrap;
+}
+
+/* ── Subcategory items with › arrow ── */
+.main-nav .menu-item__link.link--has-sub::after {
+  content: '\203A';
+  color: #0089cb;
+  font-size: 14px;
+  font-weight: 700;
+  margin-left: 3px;
+  line-height: 1;
+}
+
+/* ── Section title inside regular dropdown (e.g. "Products on Sale") ── */
+.main-nav .menu-item__title {
+  display: block;
+  padding: 8px 12px 4px;
+  margin-top: 4px;
+  font-size: .75rem;
+  font-weight: 700;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  pointer-events: none;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* ── Nav badge labels ── */
+.badge-new {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: #27ae60;
+  color: #fff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+.badge-promo {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: #e63329;
+  color: #fff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+.megamenu-block-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  padding: 8px 15px 4px;
+  pointer-events: none;
+}
+
+/* Premiere AMA card */
+.post--premiere {
+  background: linear-gradient(135deg, #0d2c6e 0%, #1a4fa0 60%, #0d2c6e 100%);
+  border-radius: 4px;
+  overflow: hidden;
+  color: #fff;
+}
+.post--premiere .post-image {
+  position: relative;
+}
+
+.post-media .post-image {
+  background-image: var(--post-thumb);
+}
+.premiere-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: auto !important;
+  height: auto !important;
+  background: #e63329;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  z-index: 1;
+}
+.post-body--premiere {
+  padding: 10px 12px 12px;
+}
+.premiere-countdown {
+  font-size: 12px;
+  color: #a8c4f0;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+}
+.premiere-countdown__label {
+  opacity: 0.8;
+}
+.premiere-countdown__time {
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.premiere-title {
+  display: block;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  text-decoration: none;
+}
+.premiere-title:hover {
+  color: #a8c4f0 !important;
+}
+.premiere-description {
+  font-size: 11px;
+  color: #a8c4f0;
+  line-height: 1.5;
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
