@@ -10,7 +10,12 @@ next-env.d.ts
 .env.local
 .env*.local
 
-# Claude
-.claude/worktrees/
-.claude/settings.local.json
+# Claude / AI tooling
+.claude/
+.cursor/
+.windsurf/
+.copilot/
+.aider*
 .gstack/
+.superpowers/
+docs/superpowers/
