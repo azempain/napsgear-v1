@@ -1,10 +1,8 @@
 import { notFound } from 'next/navigation'
-import Header from '@/components/Header'
-import MainNav from '@/components/MainNav'
-import MobileNav from '@/components/MobileNav'
-import Footer from '@/components/Footer'
 import { brands, products } from '@/data'
 import ProductCard from '@/components/ProductCard'
+
+export const dynamicParams = false
 
 export function generateStaticParams() {
   return brands.filter((b) => b.slug).map((b) => ({ slug: b.slug! }))
@@ -22,23 +20,21 @@ export default async function BrandPage({
   const brandProducts = products.filter((p) => p.slug.includes(brand.slug!.split('-c')[0]))
 
   return (
-    <>
-      <Header />
-      <MainNav />
-      <MobileNav />
-      <main className="mx-auto max-w-7xl px-4 py-10">
-        <h1 className="mb-6 text-3xl font-bold">{brand.name}</h1>
+    <main className="main">
+      <div className="container py-5">
+        <h1 className="mb-4">{brand.name}</h1>
         {brandProducts.length === 0 ? (
-          <p className="text-gray-600">No products grabbed yet for this brand.</p>
+          <p className="text-muted">No products grabbed yet for this brand.</p>
         ) : (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
             {brandProducts.map((p) => (
-              <ProductCard key={p.slug} product={p} />
+              <div key={p.slug} className="col">
+                <ProductCard product={p} />
+              </div>
             ))}
           </div>
         )}
-      </main>
-      <Footer />
-    </>
+      </div>
+    </main>
   )
 }

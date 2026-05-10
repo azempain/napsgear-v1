@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {/* SVG icon sprite */}
-        <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
+        <svg xmlns="http://www.w3.org/2000/svg" className="icon-sprite">
           <symbol id="icon-search" viewBox="0 0 24 24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" fill="none">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </symbol>
@@ -44,7 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CartProvider>
           <Header />
           <CartDrawer />
+          <div className='min-h-screen'>
           {children}
+           </div>
           <Footer />
         </CartProvider>
 
