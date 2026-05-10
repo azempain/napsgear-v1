@@ -358,5 +358,107 @@
     "name": "Syringes & Needles",
     "id": null,
     "url": "https://www.napsgear.org/brands.php?brands_id=135"
+  },
+  {
+    "slug": "us-domestic-c147753",
+    "name": "U.S. Domestic",
+    "id": 147753,
+    "url": "https://www.napsgear.org/us-domestic-c147753"
+  },
+  {
+    "slug": "maxtreme-pharma-c145523",
+    "name": "Maxtreme Pharma",
+    "id": 145523,
+    "url": "https://www.napsgear.org/maxtreme-pharma-c145523"
+  },
+  {
+    "slug": "deus-medical-europe-c146933",
+    "name": "Deus Medical, Europe",
+    "id": 146933,
+    "url": "https://www.napsgear.org/deus-medical-europe-c146933"
+  },
+  {
+    "slug": "bioteq-labs-europe-c147902",
+    "name": "Bioteq Labs, Europe (UK)",
+    "id": 147902,
+    "url": "https://www.napsgear.org/bioteq-labs-europe-c147902"
+  },
+  {
+    "slug": "dragon-pharma-c146050",
+    "name": "Dragon Pharma",
+    "id": 146050,
+    "url": "https://www.napsgear.org/dragon-pharma-c146050"
+  },
+  {
+    "slug": "generic-asia-c147840",
+    "name": "Generic Asia",
+    "id": 147840,
+    "url": "https://www.napsgear.org/generic-asia-c147840"
+  },
+  {
+    "slug": "bm-pharmaceuticals-c147848",
+    "name": "BM Pharmaceuticals",
+    "id": 147848,
+    "url": "https://www.napsgear.org/bm-pharmaceuticals-c147848"
+  },
+  {
+    "slug": "magnum-pharma-c147850",
+    "name": "Magnum Pharma",
+    "id": 147850,
+    "url": "https://www.napsgear.org/magnum-pharma-c147850"
+  },
+  {
+    "slug": "other-pharmacy-steroid-brands-c147845",
+    "name": "Other Pharmacy Steroid Brands",
+    "id": 147845,
+    "url": "https://www.napsgear.org/other-pharmacy-steroid-brands-c147845"
+  },
+  {
+    "slug": "india-pharmacy-steroids-c147843",
+    "name": "India Pharmacy Steroids",
+    "id": 147843,
+    "url": "https://www.napsgear.org/india-pharmacy-steroids-c147843"
+  },
+  {
+    "slug": "insulins-amp-biguanides-c43",
+    "name": "Insulins & Biguanides",
+    "id": 43,
+    "url": "https://www.napsgear.org/insulins-amp-biguanides-c43"
+  },
+  {
+    "slug": "human-growth-hormone-c45",
+    "name": "Human Growth Hormone",
+    "id": 45,
+    "url": "https://www.napsgear.org/human-growth-hormone-c45"
+  },
+  {
+    "slug": "syringes-needles-c879",
+    "name": "Syringes & Needles",
+    "id": 879,
+    "url": "https://www.napsgear.org/syringes-needles-c879"
+  },
+  {
+    "slug": "peptides-c147555",
+    "name": "Peptides",
+    "id": 147555,
+    "url": "https://www.napsgear.org/peptides-c147555"
+  },
+  {
+    "slug": "sarms-c148012",
+    "name": "SARMs",
+    "id": 148012,
+    "url": "https://www.napsgear.org/sarms-c148012"
+  },
+  {
+    "slug": "singapore-pharmacies-c147841",
+    "name": "Singapore Pharmacies",
+    "id": 147841,
+    "url": "https://www.napsgear.org/singapore-pharmacies-c147841"
+  },
+  {
+    "slug": "herbals-c147844",
+    "name": "Herbals",
+    "id": 147844,
+    "url": "https://www.napsgear.org/herbals-c147844"
   }
 ]

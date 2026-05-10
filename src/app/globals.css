@@ -366,5 +366,5 @@ html, body { margin: 0; padding: 0; }
 }
 
 @utility container {
-  /* Bootstrap's .container is used sitewide — Tailwind's version is intentionally a no-op */
+  --tw-container-suppress: 0; /* Bootstrap's .container is used sitewide */
 }
