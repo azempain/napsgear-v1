@@ -11,10 +11,12 @@ export default function AmaVideoCard({ video }: { video: Video }) {
           style={{ '--post-thumb': `url('${video.thumbnail}')` } as React.CSSProperties}
         />
       </figure>
-      <div className="post-body">
-        <div className="post-meta"><small>{video.date}</small></div>
-        <a title={video.title} href={video.url}>{video.title}</a>
-      </div>
+      {(video.title || video.date) && (
+        <div className="post-body">
+          {video.date && <div className="post-meta"><small>{video.date}</small></div>}
+          {video.title && <a title={video.title} href={video.url}>{video.title}</a>}
+        </div>
+      )}
     </article>
   )
 }
