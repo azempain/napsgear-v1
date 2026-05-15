@@ -26,6 +26,8 @@ export interface Product {
   name: string
   description: string
   images: string[]
+  price?: string
+  brand?: string
 }
 
 export interface QaPost {
@@ -33,6 +35,8 @@ export interface QaPost {
   date: string
   text: string
   url: string
+  category?: string
+  author?: string
 }
 
 export interface Gearpic {

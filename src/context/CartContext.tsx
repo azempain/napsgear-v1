@@ -7,6 +7,7 @@ export interface CartItem {
   price: number
   qty: number
   image?: string
+  brand?: string
 }
 
 export interface CartContextValue {
