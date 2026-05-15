@@ -74,7 +74,7 @@ export default function Header() {
             <a className="header-icon header-icon-user" href="#loginModal" data-bs-toggle="modal" role="button" aria-label="Sign in">
               <User size={20} aria-hidden="true" />
             </a>
-            <a href="#" className="header-icon header-icon-cart dropdown-arrow cart-toggle" aria-label="Cart">
+            <a href="/cart/" className="header-icon header-icon-cart dropdown-arrow cart-toggle" aria-label="Cart">
               <ShoppingCart size={20} aria-hidden="true" />
               <CartBadge />
             </a>

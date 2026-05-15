@@ -62,7 +62,7 @@ export default function MainNav() {
                 <li><h5 className="menu-item__title nolink">Products on Sale</h5></li>
                 <li><a className="menu-item__link" href="#">Supplier Super Deals</a></li>
                 <li><a className="menu-item__link" href="#">Product of the Week</a></li>
-                <li><a className="menu-item__link" href="#">All Recent Promotions</a></li>
+                <li><a className="menu-item__link" href="/promotions/">All Recent Promotions</a></li>
               </ul>
             </div>
           </div>
@@ -76,9 +76,9 @@ export default function MainNav() {
                 <li><a className="menu-item__link" href="/ask-an-ifbb-pro/">Ask an IFBB Pro Anything</a></li>
                 <li><a className="menu-item__link" href="#">NapsGear AAS Diaries</a></li>
                 <li><a className="menu-item__link" href="/why-naps/">Why Buy from NapsGear</a></li>
-                <li><a className="menu-item__link" href="#">Laboratory Tests</a></li>
+                <li><a className="menu-item__link" href="/references/">Laboratory Tests</a></li>
                 <li><a className="menu-item__link" href="#">Community Gear Pics</a></li>
-                <li><a className="menu-item__link" href="#">LIVE Q&amp;A Forums</a></li>
+                <li><a className="menu-item__link" href="/qa/">LIVE Q&amp;A Forums</a></li>
               </ul>
             </div>
           </div>
