@@ -10,6 +10,8 @@ export default function FooterLinks() {
           <li><a href="/why-naps/">Why Naps ?</a></li>
           <li><a href="/contact-us/">Contact us</a></li>
           <li><a href="/ask-an-ifbb-pro/">Ask an IFBB Pro</a></li>
+          <li><a href="/references/">References</a></li>
+          <li><a href="/help/">Help</a></li>
         </ul>
       </div>
     </div>
