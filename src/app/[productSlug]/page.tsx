@@ -4,8 +4,9 @@ import { products } from '@/data'
 export const dynamicParams = false
 
 export function generateStaticParams() {
-  if (products.length === 0) return [{ productSlug: '_empty' }]
-  return products.map((p) => ({ productSlug: p.slug }))
+  const slugs = products.map((p) => p.slug).filter(Boolean)
+  if (slugs.length === 0) return [{ productSlug: '_empty' }]
+  return slugs.map((slug) => ({ productSlug: slug }))
 }
 
 export default async function ProductPage({

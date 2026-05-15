@@ -368,3 +368,73 @@ html, body { margin: 0; padding: 0; }
 @utility container {
   --tw-container-suppress: 0; /* Bootstrap's .container is used sitewide */
 }
+
+/* ── Products grid ── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.product-item-info {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s;
+}
+.product-item-info:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+}
+
+.product-item-photo a {
+  display: block;
+}
+.product-image-photo {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: #f8f8f8;
+  padding: 8px;
+  display: block;
+}
+
+.product-item-details {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.product-item-brand {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #0089cb;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.product-item-name {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+  margin: 0;
+}
+.product-item-name a {
+  color: #333;
+  text-decoration: none;
+}
+.product-item-name a:hover {
+  color: #0089cb;
+}
+
+.price-box .price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e63329;
+}

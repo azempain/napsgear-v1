@@ -17,7 +17,9 @@ export default async function BrandPage({
   const brand = brands.find((b) => b.slug === slug)
   if (!brand) notFound()
 
-  const brandProducts = products.filter((p) => p.slug.includes(brand.slug!.split('-c')[0]))
+  const brandProducts = products.filter(
+    (p) => p.brand && p.brand.toLowerCase() === brand.name.toLowerCase()
+  )
 
   return (
     <main className="main">
