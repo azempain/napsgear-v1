@@ -35,6 +35,22 @@ const CHECKS = [
       if (!handle) throw new Error('handle null')
     },
   },
+  {
+    name: 'Gearpics slider initialized with grid (2 rows base)',
+    route: '/',
+    async assert(page) {
+      const handle = await page.waitForSelector('#gearpicsCarousel.swiper-initialized', { timeout: 8000 })
+      const slideCount = await page.$$eval(
+        '#gearpicsCarousel .swiper-slide',
+        slides => slides.length,
+      )
+      if (slideCount < 4) throw new Error(`expected >=4 slides for a 2x2 grid, got ${slideCount}`)
+      const hasPrevBtn = await page.$('#gearpicsCarousel .swiper-button-prev') !== null
+      const hasNextBtn = await page.$('#gearpicsCarousel .swiper-button-next') !== null
+      if (!hasPrevBtn || !hasNextBtn) throw new Error('navigation buttons missing')
+      if (!handle) throw new Error('handle null')
+    },
+  },
 ]
 
 ;(async () => {
