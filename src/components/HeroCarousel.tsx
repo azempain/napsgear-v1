@@ -1,12 +1,34 @@
+'use client'
+import { useRef } from 'react'
+import { Autoplay, Pagination } from 'swiper/modules'
+import type { SwiperOptions } from 'swiper/types'
+import { useSwiper } from '@/hooks/useSwiper'
 import HeroSlideProductOfWeek from './HeroSlideProductOfWeek'
 import HeroSlideBanner from './HeroSlideBanner'
 
+// Config transcribed verbatim from the original main.js init for .hp-slider.
+const heroConfig: SwiperOptions = {
+  modules: [Autoplay, Pagination],
+  slidesPerView: 1,
+  loop: true,
+  speed: 200,
+  autoplay: { delay: 5000, pauseOnMouseEnter: true },
+  pagination: {
+    el: '.swiper-pagination',
+    bulletClass: 'sw-pagination-bullet',
+    bulletActiveClass: 'active',
+    clickable: true,
+  },
+}
+
 export default function HeroCarousel() {
+  const ref = useRef<HTMLDivElement>(null)
+  useSwiper(ref, heroConfig)
+
   return (
-    // suppressHydrationWarning: Swiper.js modifies className and data-* attrs
-    // after SSR, causing a React hydration diff. These elements are fully
-    // managed by Swiper post-hydration, so the mismatch is safe to ignore.
-    <div className="hp-slider swiper" suppressHydrationWarning>
+    // suppressHydrationWarning: Swiper mutates className/data-* post-mount,
+    // creating a hydration diff that's safe to ignore (managed by Swiper).
+    <div ref={ref} className="hp-slider swiper" suppressHydrationWarning>
       <div className="swiper-wrapper" suppressHydrationWarning>
         <HeroSlideBanner
           href="#"

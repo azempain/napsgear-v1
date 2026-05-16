@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import 'swiper/css/grid'
 import CartProvider from '@/context/CartContext'
 import Header from '@/components/Header'
 import CartDrawer from '@/components/CartDrawer'
 import Footer from '@/components/Footer'
-import OfflineScripts from '@/components/OfflineScripts'
+import NavInteractions from '@/components/NavInteractions'
 
 export const metadata: Metadata = {
   title: 'NapsGear',
@@ -15,7 +19,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <link rel="stylesheet" href="/css/swiper.css" />
         <link rel="stylesheet" href="/css/vendors.css" />
         <link rel="stylesheet" href="/css/main.css" />
       </head>
@@ -45,11 +48,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <CartDrawer />
           <div className='min-h-screen'>
-          {children}
-           </div>
+            {children}
+          </div>
           <Footer />
         </CartProvider>
-        <OfflineScripts />
+        <NavInteractions />
       </body>
     </html>
   )

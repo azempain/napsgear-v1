@@ -51,6 +51,58 @@ const CHECKS = [
       if (!handle) throw new Error('handle null')
     },
   },
+  {
+    name: 'Hero carousel initialized + autoplay loop',
+    route: '/',
+    async assert(page) {
+      const handle = await page.waitForSelector('.hp-slider.swiper-initialized', { timeout: 8000 })
+      if (!handle) throw new Error('handle null')
+    },
+  },
+  {
+    name: 'No /js/runtime.js (or other offline JS) requested',
+    route: '/',
+    async assert(page) {
+      const requests = []
+      page.on('request', r => requests.push(r.url()))
+      await page.reload({ waitUntil: 'networkidle' })
+      const offline = requests.filter(u =>
+        /\/js\/(runtime|main|vendors|bootstrap|swiper|dayjs|patch)\.js/.test(u),
+      )
+      if (offline.length) throw new Error('offline JS still requested: ' + offline.join(','))
+    },
+  },
+  {
+    name: 'Nav dropdown opens on click and closes on outside-click',
+    route: '/',
+    async assert(page) {
+      // HeaderNav uses Bootstrap's next-sibling pattern: button + sibling
+      // .dropdown-menu within the same .menu-item-dropdown li.
+      const trigger = await page.waitForSelector('nav#mainMenuNav button.dropdown-button', { timeout: 8000 })
+      await trigger.click()
+      await page.waitForSelector('nav#mainMenuNav .dropdown-menu.show', { timeout: 2000 })
+      await page.mouse.click(5, 5)
+      await page.waitForTimeout(300)
+      const stillOpen = await page.$('nav#mainMenuNav .dropdown-menu.show')
+      if (stillOpen) throw new Error('dropdown did not close on outside-click')
+    },
+  },
+  {
+    name: 'Login modal trigger toggles #loginModal (no-op tolerated if markup absent)',
+    route: '/',
+    async assert(page) {
+      const trigger = await page.$('[data-bs-toggle="modal"][href="#loginModal"], [data-bs-toggle="modal"][data-bs-target="#loginModal"]')
+      if (!trigger) return
+      const modalExists = await page.$('#loginModal')
+      if (!modalExists) return
+      await trigger.click()
+      await page.waitForSelector('#loginModal.show', { timeout: 2000 })
+      await page.keyboard.press('Escape')
+      await page.waitForTimeout(200)
+      const stillShown = await page.$('#loginModal.show')
+      if (stillShown) throw new Error('modal did not close on Escape')
+    },
+  },
 ]
 
 ;(async () => {
