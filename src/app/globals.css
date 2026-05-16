@@ -523,3 +523,23 @@ html, body { margin: 0; padding: 0; }
     max-width: 160px;
   }
 }
+
+/* ── Product detail (sub-project B) ── */
+.pack-option { cursor: pointer; gap: 8px; }
+.pack-option:hover { background: #f8f8f8; }
+.free-pack-banner {
+  background: #2e7d32;
+  color: #fff;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+.free-pack-badge {
+  background: rgba(0,0,0,0.25);
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.product-tabs .nav-link.disabled { color: #999; pointer-events: none; }
+.product-tabs .nav-link.active { font-weight: 700; }
