@@ -22,6 +22,19 @@ const CHECKS = [
       if (!handle) throw new Error('handle null')
     },
   },
+  {
+    name: 'QA slider initialized + at least 4 slides',
+    route: '/',
+    async assert(page) {
+      const handle = await page.waitForSelector('#qaCarousel.swiper-initialized', { timeout: 8000 })
+      const slideCount = await page.$$eval(
+        '#qaCarousel .swiper-slide',
+        slides => slides.length,
+      )
+      if (slideCount < 4) throw new Error(`expected >=4 slides, got ${slideCount}`)
+      if (!handle) throw new Error('handle null')
+    },
+  },
 ]
 
 ;(async () => {
