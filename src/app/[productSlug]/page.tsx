@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { products } from '@/data'
+import ProductDetail from '@/components/ProductDetail'
 
 export const dynamicParams = false
 
@@ -21,15 +22,18 @@ export default async function ProductPage({
   return (
     <main className="main">
       <div className="container py-5">
-        <h1 className="mb-4">{product.name}</h1>
-        {product.images[0] && (
-          <img
-            src={product.images[0]}
-            alt={product.name}
-            className="mb-4 img-fluid rounded border product-image"
-          />
-        )}
-        <p className="text-muted">{product.description}</p>
+        <nav aria-label="breadcrumb" className="mb-4">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item"><a href="/">Home</a></li>
+            {product.brand && (
+              <li className="breadcrumb-item">{product.brand}</li>
+            )}
+            <li className="breadcrumb-item active" aria-current="page">
+              {product.name}
+            </li>
+          </ol>
+        </nav>
+        <ProductDetail product={product} />
       </div>
     </main>
   )
