@@ -6,7 +6,7 @@
 
 const { chromium } = require('playwright')
 
-const BASE = 'http://localhost:3000'
+const BASE = process.env.VERIFY_BASE || 'http://localhost:3000'
 
 const CHECKS = [
   {
@@ -101,6 +101,46 @@ const CHECKS = [
       await page.waitForTimeout(200)
       const stillShown = await page.$('#loginModal.show')
       if (stillShown) throw new Error('modal did not close on Escape')
+    },
+  },
+  {
+    name: 'Product page: pack selector + total updates on tier change',
+    route: '/catalog/',
+    async assert(page) {
+      const firstProduct = await page.getAttribute('.products-grid a[href^="/"]', 'href')
+      if (!firstProduct) throw new Error('no product link on /catalog/')
+      await page.goto(BASE + firstProduct, { waitUntil: 'networkidle' })
+      await page.waitForSelector('#addToCartBtn', { timeout: 8000 })
+      const radios = await page.$$('input[name="pack"]')
+      if (radios.length !== 5) throw new Error(`expected 5 pack radios, got ${radios.length}`)
+      const totals = await page.$$eval('[data-tier-total]', els => els.map(e => e.textContent))
+      if (totals.length !== 5) throw new Error(`expected 5 tier totals, got ${totals.length}`)
+      if (totals[0] === totals[4]) throw new Error('1-pack total equals 20-pack total — tiers not differentiated')
+    },
+  },
+  {
+    name: 'Add to Cart increments badge, shows toast, persists on reload',
+    route: '/catalog/',
+    async assert(page) {
+      // Start clean so badge math is deterministic
+      await page.evaluate(() => window.localStorage.removeItem('napsgear_cart'))
+      const firstProduct = await page.getAttribute('.products-grid a[href^="/"]', 'href')
+      await page.goto(BASE + firstProduct, { waitUntil: 'networkidle' })
+      await page.waitForSelector('#addToCartBtn', { timeout: 8000 })
+      const before = parseInt((await page.textContent('.cart-count')) || '0', 10)
+      await page.click('#addToCartBtn')
+      await page.waitForSelector('.notification.visible', { timeout: 2000 })
+      await page.waitForFunction(
+        (b) => {
+          const el = document.querySelector('.cart-count')
+          return el && parseInt(el.textContent || '0', 10) === b + 1
+        },
+        before,
+        { timeout: 3000 },
+      )
+      await page.reload({ waitUntil: 'networkidle' })
+      const after = parseInt((await page.textContent('.cart-count')) || '0', 10)
+      if (after !== before + 1) throw new Error(`cart not persisted: before=${before} after=${after}`)
     },
   },
 ]
