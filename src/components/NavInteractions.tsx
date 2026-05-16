@@ -21,9 +21,24 @@ export default function NavInteractions() {
   useEffect(() => {
     // ── DROPDOWNS ────────────────────────────────────────────────────────
     function getMenuFor(button: Element): HTMLElement | null {
+      // Bootstrap supports two patterns:
+      //   (a) data-bs-target="#menuId"  → query that id
+      //   (b) next-sibling within .dropdown parent → first sibling .dropdown-menu
       const target = button.getAttribute('data-bs-target')
-      if (!target) return null
-      return document.querySelector<HTMLElement>(target)
+      if (target) return document.querySelector<HTMLElement>(target)
+      const parent = button.closest('.dropdown, .menu-item-dropdown') || button.parentElement
+      return parent?.querySelector<HTMLElement>(':scope > .dropdown-menu') ?? null
+    }
+
+    function findTriggerForMenu(menu: HTMLElement): HTMLElement | null {
+      // Reverse of getMenuFor: prefer matching by data-bs-target, fall back
+      // to the sibling button within the same .dropdown parent.
+      if (menu.id) {
+        const byTarget = document.querySelector<HTMLElement>(`[data-bs-target="#${menu.id}"]`)
+        if (byTarget) return byTarget
+      }
+      const parent = menu.closest('.dropdown, .menu-item-dropdown') || menu.parentElement
+      return parent?.querySelector<HTMLElement>(':scope > [data-bs-toggle="dropdown"]') ?? null
     }
 
     function closeDropdownGroup(parentSelector: string | null, except?: HTMLElement) {
@@ -33,8 +48,7 @@ export default function NavInteractions() {
       scope.querySelectorAll<HTMLElement>('.dropdown-menu.show').forEach(menu => {
         if (menu === except) return
         menu.classList.remove('show')
-        const trigger = document.querySelector(`[data-bs-target="#${menu.id}"]`)
-        trigger?.setAttribute('aria-expanded', 'false')
+        findTriggerForMenu(menu)?.setAttribute('aria-expanded', 'false')
       })
     }
 
