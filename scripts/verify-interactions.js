@@ -9,7 +9,19 @@ const { chromium } = require('playwright')
 const BASE = 'http://localhost:3000'
 
 const CHECKS = [
-  // populated per phase — see plan tasks
+  {
+    name: 'AMA slider initialized + at least 5 slides',
+    route: '/',
+    async assert(page) {
+      const handle = await page.waitForSelector('#amaCarousel.swiper-initialized', { timeout: 8000 })
+      const slideCount = await page.$$eval(
+        '#amaCarousel .swiper-slide',
+        slides => slides.length,
+      )
+      if (slideCount < 5) throw new Error(`expected >=5 slides, got ${slideCount}`)
+      if (!handle) throw new Error('handle null')
+    },
+  },
 ]
 
 ;(async () => {
