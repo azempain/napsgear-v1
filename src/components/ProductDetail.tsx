@@ -13,7 +13,7 @@ const FREE_PACK_BANNERS = [
 
 export default function ProductDetail({ product }: { product: Product }) {
   const { addItem } = useCart()
-  const tiers = packTiers(parsePrice(product.price))
+  const tiers = packTiers(parsePrice(product.price), product.packs)
   const [selected, setSelected] = useState(0)
   const [toast, setToast] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -22,9 +22,9 @@ export default function ProductDetail({ product }: { product: Product }) {
     if (toastTimer.current) clearTimeout(toastTimer.current)
   }, [])
 
-  const reviews = pseudoCount(product.slug + ':reviews')
-  const images = pseudoCount(product.slug + ':images')
-  const qa = pseudoCount(product.slug + ':qa')
+  const reviews = product.reviews ?? pseudoCount(product.slug + ':reviews')
+  const imagesCount = product.imagesCount ?? pseudoCount(product.slug + ':images')
+  const qa = product.qaCount ?? pseudoCount(product.slug + ':qa')
 
   function handleAdd() {
     const tier = tiers[selected]
@@ -42,7 +42,7 @@ export default function ProductDetail({ product }: { product: Product }) {
   }
 
   return (
-    <div className="product-detail">
+    <>
       <div className={`notification${toast ? ' visible' : ''}`} aria-live="polite">
         <section className="body">
           <span className="title">Success</span>
@@ -50,76 +50,119 @@ export default function ProductDetail({ product }: { product: Product }) {
         </section>
       </div>
 
-      <div className="row g-4">
-        <div className="col-md-5">
-          {product.images[0] && (
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className="img-fluid rounded border product-image"
-              referrerPolicy="no-referrer"
-            />
-          )}
-        </div>
+      <div className="product-single-container product-single-default">
+        <div className="row">
+          <div className="product-single-gallery col-lg-5 col-md-6 position-relative">
+            <div className="product-item-image">
+              <div className="product-single-image">
+                {product.images[0] && (
+                  <img alt={product.name} className="img-fluid" src={product.images[0]} />
+                )}
+              </div>
+              <div className="label-group" />
+            </div>
+          </div>
 
-        <div className="col-md-7">
-          <h1 className="mb-1">{product.name}</h1>
-          <p className="text-muted mb-3">({reviews} reviews)</p>
-          {product.brand && (
-            <p className="mb-3"><strong>Manufacturer:</strong> {product.brand}</p>
-          )}
+          <div className="product-single-details col-lg-7 col-md-6">
+            <h1 className="product-title">{product.name}</h1>
 
-          <fieldset className="pack-selector mb-3">
-            <legend className="h6">Pack:</legend>
-            {tiers.map((t, i) => (
-              <label key={t.packs} className="pack-option d-flex justify-content-between align-items-center border rounded p-2 mb-2">
-                <span>
-                  <input
-                    type="radio"
-                    name="pack"
-                    className="me-2"
-                    checked={selected === i}
-                    onChange={() => setSelected(i)}
-                  />
-                  {t.packs} pack{t.packs > 1 ? 's' : ''}
-                </span>
-                <span className="text-muted">${t.perItem.toFixed(2)} / item</span>
-                <span className="fw-bold" data-tier-total>${t.total.toFixed(2)}</span>
-              </label>
-            ))}
-          </fieldset>
+            <div className="ratings-container">
+              <span className="rating-link">
+                <span className="count">({reviews}</span> reviews)
+              </span>
+            </div>
+            <hr className="short-divider" />
 
-          <button
-            type="button"
-            className="btn btn-primary"
-            id="addToCartBtn"
-            onClick={handleAdd}
-          >
-            Add to Cart
-          </button>
+            <ul className="product-single-specifications">
+              {product.brand && (
+                <li><span className="label">Manufacturer:</span> {product.brand}</li>
+              )}
+              {product.ingredient && (
+                <li><span className="label">Pharmaceutical name:</span> {product.ingredient}</li>
+              )}
+            </ul>
+            <hr className="divider mt-0 mb-3" />
 
-          <div className="free-pack-banners mt-4">
+            <div className="product-multipliers">
+              <div className="product-multipliers__header">
+                <div>Pack:</div>
+                <div className="text-center">Price per item:</div>
+                <div className="text-center">Total:</div>
+              </div>
+              <div className="product-multipliers__content">
+                {tiers.map((t, i) => (
+                  <div className="product-multipliers__item" key={`${t.packs}-${i}`}>
+                    <input
+                      type="radio"
+                      id={`pack_${t.packs}_${i}`}
+                      name="pack"
+                      checked={selected === i}
+                      onChange={() => setSelected(i)}
+                    />
+                    <label htmlFor={`pack_${t.packs}_${i}`} className="product-multipliers__item--info">
+                      <div className="quantity">
+                        {t.packs} pack{t.packs > 1 ? 's' : ''}{t.label ? `  (${t.label})` : ''}
+                      </div>
+                      <div className="price-per-item" data-label="Price per item">
+                        ${t.perItem.toFixed(2)}
+                      </div>
+                      <div className="price-total" data-label="Total">${t.total.toFixed(2)}</div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="product-action product-item-shop">
+              <button
+                className="btn btn-dark add-cart shopping-cart product-item-shop"
+                type="button"
+                id="addToCartBtn"
+                onClick={handleAdd}
+              >
+                Add to Cart
+              </button>
+            </div>
+
+            <hr className="divider mb-5 mt-0" />
+
             {FREE_PACK_BANNERS.map(b => (
-              <div key={b.free} className="free-pack-banner d-flex align-items-center mb-2">
-                <span className="free-pack-badge">{b.free} <small>FREE</small></span>
-                <span className="ms-2">{b.text}</span>
+              <div className="product-promo-banner-block" key={b.free}>
+                <div className="product-promo-banner">
+                  <div className="promo-bonus">
+                    <span>{b.free}&nbsp;</span><span>free</span>
+                  </div>
+                  <div className="promo-info" style={{ textAlign: 'center' }}>{b.text}</div>
+                </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
 
-      <div className="product-tabs mt-5">
-        <ul className="nav nav-tabs" role="tablist">
-          <li className="nav-item"><span className="nav-link active">Description</span></li>
-          <li className="nav-item"><span className="nav-link disabled">Customer Images ({images})</span></li>
-          <li className="nav-item"><span className="nav-link disabled">Customer Q&amp;A ({qa})</span></li>
-          <li className="nav-item"><span className="nav-link disabled">Reviews ({reviews})</span></li>
-        </ul>
-        <div className="tab-content p-3 border border-top-0">
-          <p style={{ whiteSpace: 'pre-line' }}>{product.description || 'No description available.'}</p>
+        <div id="productTabs" className="product-single-tabs">
+          <ul className="nav nav-tabs">
+            <li className="nav-item active">
+              <span className="nav-link active">Description</span>
+            </li>
+            <li className="nav-item">
+              <span className="nav-link disabled">Customer Images: ({imagesCount})</span>
+            </li>
+            <li className="nav-item">
+              <span className="nav-link disabled">Customer Questions &amp; Answers: {qa}</span>
+            </li>
+            <li className="nav-item">
+              <span className="nav-link nav-link-reviews disabled">Reviews: {reviews}</span>
+            </li>
+          </ul>
+          <div className="tab-content" id="productContent">
+            <div className="tab-pane active" id="description">
+              <p style={{ whiteSpace: 'pre-line' }}>
+                {product.description || 'No description available.'}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
