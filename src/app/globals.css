@@ -585,3 +585,376 @@ html, body { margin: 0; padding: 0; }
   visibility: hidden;
   pointer-events: none;
 }
+
+/* Pagination active bullet. main.css defines `.sw-pagination-bullet` (the
+   32x5 grey bar) and a :hover brand-blue state, but no rule for the active
+   class our Swiper configs apply (`bulletActiveClass: 'active'`). Without
+   it every bullet renders identically and the row reads as static
+   decoration. Active = brand blue, matching the hover state for visual
+   continuity. */
+.sw-pagination-bullet.active {
+  background-color: #0089cb;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Cart page
+   ──────────────────────────────────────────────────────────────── */
+.cart-main {
+  background: #f6f7f9;
+  padding: 24px 0 64px;
+}
+
+.cart-crumbs {
+  font-size: 13px;
+  color: #6c757d;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.cart-crumbs a {
+  color: #6c757d;
+  text-decoration: none;
+}
+.cart-crumbs a:hover { color: #0089cb; }
+
+.cart-page__title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 4px 0 20px;
+  color: #1a1f29;
+}
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 992px) {
+  .cart-layout { grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; }
+  .cart-page__title { font-size: 32px; margin-bottom: 24px; }
+}
+
+/* Items column */
+.cart-items {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+  overflow: hidden;
+}
+.cart-items__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid #eef0f3;
+}
+.cart-items__title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #1a1f29;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cart-items__count {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6c757d;
+  background: #f1f3f6;
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+.cart-items__clear {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 13px;
+  color: #cd3c14;
+  cursor: pointer;
+  font-weight: 500;
+}
+.cart-items__clear:hover { text-decoration: underline; }
+
+.cart-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cart-line {
+  display: flex;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #f0f2f5;
+}
+.cart-line:last-child { border-bottom: 0; }
+
+.cart-line__media {
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  border: 1px solid #eceff3;
+  border-radius: 10px;
+  background: #fafbfc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cart-line__media img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.cart-line__placeholder {
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(45deg, #f1f3f6, #f1f3f6 6px, #e8ebef 6px, #e8ebef 12px);
+}
+
+.cart-line__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .cart-line__body {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+}
+
+.cart-line__info { min-width: 0; }
+.cart-line__name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 2px;
+  color: #1a1f29;
+  line-height: 1.3;
+}
+.cart-line__brand {
+  font-size: 12px;
+  color: #0089cb;
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+.cart-line__price-each {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 0;
+}
+.cart-line__price-each span {
+  color: #9aa3b0;
+  font-size: 12px;
+}
+
+.cart-line__controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cart-line__total {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1f29;
+  min-width: 80px;
+  text-align: right;
+}
+
+.cart-line__remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 0;
+  padding: 6px 8px;
+  font-size: 13px;
+  color: #6c757d;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+.cart-line__remove:hover {
+  color: #cd3c14;
+  background: #fff5f3;
+}
+
+/* Quantity stepper */
+.qty-stepper {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid #d8dde3;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  height: 36px;
+}
+.qty-stepper__btn {
+  background: #fff;
+  border: 0;
+  width: 32px;
+  font-size: 18px;
+  line-height: 1;
+  color: #1a1f29;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.qty-stepper__btn:hover { background: #f1f3f6; }
+.qty-stepper__btn:focus-visible { outline: 2px solid #0089cb; outline-offset: -2px; }
+.qty-stepper__input {
+  width: 44px;
+  border: 0;
+  border-left: 1px solid #e6e9ee;
+  border-right: 1px solid #e6e9ee;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1f29;
+  background: #fff;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.qty-stepper__input::-webkit-outer-spin-button,
+.qty-stepper__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.qty-stepper__input:focus { outline: none; background: #f9fbfd; }
+
+/* Summary column */
+.cart-summary__card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+@media (min-width: 992px) {
+  .cart-summary__card {
+    position: sticky;
+    top: 20px;
+  }
+}
+
+.cart-summary__title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: #1a1f29;
+}
+
+.cart-summary__loyalty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #eaf7ec, #f4fbf5);
+  color: #1f7a3a;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 18px;
+  border: 1px solid #d6efdb;
+}
+.cart-summary__loyalty svg { flex-shrink: 0; color: #d39e00; fill: #f7c948; }
+.cart-summary__loyalty strong { font-weight: 700; }
+
+.cart-summary__rows {
+  margin: 0 0 18px;
+  padding: 0;
+}
+.cart-summary__rows > div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #4b5563;
+  padding: 7px 0;
+}
+.cart-summary__rows dt { margin: 0; font-weight: 400; }
+.cart-summary__rows dd { margin: 0; font-weight: 500; color: #1a1f29; }
+
+.cart-summary__total {
+  border-top: 1px solid #eef0f3;
+  margin-top: 6px;
+  padding-top: 12px !important;
+}
+.cart-summary__total dt {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: #1a1f29 !important;
+}
+.cart-summary__total dd {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #1a1f29 !important;
+}
+
+.cart-summary__cta {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-radius: 8px;
+}
+
+.cart-summary__continue {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #6c757d;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.cart-summary__continue:hover { color: #0089cb; }
+
+/* Empty state */
+.cart-empty {
+  background: #fff;
+  border-radius: 12px;
+  padding: 56px 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+.cart-empty__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #f1f3f6;
+  color: #6c757d;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.cart-empty__title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  color: #1a1f29;
+}
+.cart-empty__sub {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0 0 20px;
+}
+
+/* Tighten on small screens */
+@media (max-width: 575px) {
+  .cart-page__title { font-size: 24px; }
+  .cart-line { padding: 16px; gap: 12px; }
+  .cart-line__media { width: 72px; height: 72px; }
+  .cart-items__head { padding: 14px 16px; }
+  .cart-line__controls { width: 100%; justify-content: space-between; }
+  .cart-line__total { min-width: auto; }
+  .cart-summary__card { padding: 18px; }
+}
