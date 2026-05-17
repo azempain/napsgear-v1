@@ -1,1 +1,188 @@
-[]
+[
+  {
+    "id": 30,
+    "name": "Anastrozole",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 412,
+    "name": "Boldenone Undecylenate",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 38,
+    "name": "Chlorodehydromethyltestosterone",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 31,
+    "name": "Clenbuterol Hydrochloride",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 20,
+    "name": "Clomiphene Citrate",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 4,
+    "name": "Drostanolone Propionate",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 1333,
+    "name": "Human Chorionic Gonadotropin",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 34,
+    "name": "Letrozole",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 37,
+    "name": "Liothyronine Sodium (T3)",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 19,
+    "name": "Mesterolone",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 15,
+    "name": "Methandienone",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 1807,
+    "name": "Methenolone Acetate",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 6,
+    "name": "Methenolone Enanthate",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 6418,
+    "name": "Methyldrostanolone",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 1891,
+    "name": "Modafinil",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 3,
+    "name": "Nandrolone Decanoate",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 48,
+    "name": "Nandrolone Phenylpropionate",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 18,
+    "name": "Oxandrolone",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 36,
+    "name": "Oxymetholone",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 22,
+    "name": "Stanozolol",
+    "count": 25,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 21,
+    "name": "Tamoxifen Citrate",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 2653,
+    "name": "Testosterone Blends",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 9,
+    "name": "Testosterone Cypionate",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 8,
+    "name": "Testosterone Enanthate",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 7,
+    "name": "Testosterone Propionate",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 50,
+    "name": "Testosterone Undecanoate",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 10,
+    "name": "Trenbolone Acetate",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 11,
+    "name": "Trenbolone Enanthate",
+    "count": 10,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 2899,
+    "name": "Trenbolone Hexahydrobenzylcarbonate",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 2923,
+    "name": "Trenbolone Suspension",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  },
+  {
+    "id": 622,
+    "name": "Yohimbine",
+    "count": 5,
+    "brand": "Alpha-Pharma Healthcare"
+  }
+]

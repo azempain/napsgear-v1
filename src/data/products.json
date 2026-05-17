@@ -1,242 +1,338 @@
 [
   {
-    "slug": "anazole-arimidex-p23665",
+    "slug": "alphabol-methandienone-p7933",
+    "name": "Alphabol (Methandienone)",
+    "description": "",
+    "images": [
+      "/images/products/alpha-pharma-alphabol.jpg"
+    ],
+    "price": "$24",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "altamofen-nolvadex-20-mg-p7900",
+    "name": "Altamofen (Nolvadex) 20 mg",
+    "description": "",
+    "images": [
+      "/images/products/alpha-pharma-altamofen.jpg"
+    ],
+    "price": "$24",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "anazole-arimidex-p7897",
     "name": "Anazole (Arimidex)",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€52.73",
     "images": [
-      "https://www.napsgear.org/images/catalog/23665/alpha-pharma-anazole.jpg"
-    ]
+      "/images/products/alpha-pharma-anazole.jpg"
+    ],
+    "price": "$38.4",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "androxine-tren-suspension-p18073",
+    "slug": "androxine-tren-suspension-p7972",
     "name": "Androxine (Tren Suspension)",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€89.29",
     "images": [
-      "https://www.napsgear.org/images/catalog/18073/alpha-pharma-androxine_amp.jpg"
-    ]
+      "/images/products/alpha-pharma-androxine_amp.jpg"
+    ],
+    "price": "$5.52",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "boldebolin-amp-p23623",
+    "slug": "astralean-clenbuterol-p7888",
+    "name": "Astralean (Clenbuterol)",
+    "description": "",
+    "images": [
+      "/images/products/alpha-pharma-astralean.jpg"
+    ],
+    "price": "$30.4",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "boldebolin-amp-p7960",
     "name": "Boldebolin amp.",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€79.94",
     "images": [
-      "https://www.napsgear.org/images/catalog/23623/alpha-pharma-boldebolin_amp.jpg"
-    ]
+      "/images/products/alpha-pharma-boldebolin_amp.jpg"
+    ],
+    "price": "$5.44",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "boldebolin-vial-p23626",
+    "slug": "boldebolin-vial-p7957",
     "name": "Boldebolin vial.",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€79.94",
     "images": [
-      "https://www.napsgear.org/images/catalog/23626/alpha-pharma-boldebolin_vial.jpg"
-    ]
+      "/images/products/alpha-pharma-boldebolin_vial.jpg"
+    ],
+    "price": "$54.4",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "induject-250-vial-p25447",
-    "name": "Induject-250 vial.",
+    "slug": "induject-250-sustanon-vial-p7870",
+    "name": "Induject-250 (Sustanon) vial.",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€70.58",
     "images": [
-      "https://www.napsgear.org/images/catalog/25447/alpha-pharma-induject_vial.jpg"
-    ]
+      "/images/products/alpha-pharma-induject_vial.jpg"
+    ],
+    "price": "$44.8",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "letromina-letrozole-p23653",
-    "name": "Letromina (Letrozole)",
+    "slug": "mastebolin-amp-p7954",
+    "name": "Mastebolin amp.",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€59.53",
     "images": [
-      "https://www.napsgear.org/images/catalog/23653/alpha-pharma-letromina.jpg"
-    ]
+      "/images/products/alpha-pharma-mastebolin_amp.jpg"
+    ],
+    "price": "$6.4",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "mastoral-oral-masteron-p23674",
+    "slug": "mastoral-oral-masteron-p7963",
     "name": "Mastoral (Oral Masteron)",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€96.1",
     "images": [
-      "https://www.napsgear.org/images/catalog/23674/alpha-pharma-mastoral10.jpg"
-    ]
+      "/images/products/alpha-pharma-mastoral10.jpg"
+    ],
+    "price": "$72",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "nandrobolin-vial-nandrolone-decanoate-p23656",
+    "slug": "mastoral-oral-masteron-100tabs-p37261",
+    "name": "Mastoral (Oral Masteron) 100tabs",
+    "description": "",
+    "images": [
+      "/images/products/alpha-pharma-mastoral_10.jpg"
+    ],
+    "price": "$134.4",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "modafin-p7879",
+    "name": "Modafin",
+    "description": "",
+    "images": [
+      "/images/products/alpha-pharma-modafin.jpg"
+    ],
+    "price": "$54.4",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "nandrobolin-amp-nandrolone-decanoate-p7945",
+    "name": "NandroBolin amp. (Nandrolone Decanoate)",
+    "description": "",
+    "images": [
+      "/images/products/alpha-pharma-nandrobolin_amp.jpg"
+    ],
+    "price": "$5.44",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "nandrobolin-vial-nandrolone-decanoate-p7939",
     "name": "NandroBolin vial. (Nandrolone Decanoate)",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€76.54",
     "images": [
-      "https://www.napsgear.org/images/catalog/23656/alpha-pharma-nandrobolin_vial.jpg"
-    ]
+      "/images/products/alpha-pharma-nandrobolin_vial.jpg"
+    ],
+    "price": "$54.4",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "nandrorapid-amp-nandrolone-phenyl-prop-p23662",
+    "slug": "nandrorapid-amp-nandrolone-phenyl-prop-p7930",
     "name": "NandroRapid amp. (Nandrolone Phenyl-prop)",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€80.79",
     "images": [
-      "https://www.napsgear.org/images/catalog/23662/alpha-pharma-nandrorapid_amp.jpg"
-    ]
+      "/images/products/alpha-pharma-nandrorapid_amp.jpg"
+    ],
+    "price": "$4.48",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "oxydrolone-oxymetholone-p23620",
+    "slug": "nandrorapid-vial-nandrolone-phenyl-prop-p7924",
+    "name": "NandroRapid vial. (Nandrolone Phenyl-prop)",
+    "description": "",
+    "images": [
+      "/images/products/alpha-pharma-nandrorapid_vial.jpg"
+    ],
+    "price": "$44.8",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "oxanabol-10-100tabs-p37264",
+    "name": "Oxanabol-10 100tabs",
+    "description": "",
+    "images": [
+      "/images/products/alpha-pharma-oxanabol_10.jpg"
+    ],
+    "price": "$134.4",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "oxydrolone-oxymetholone-p7969",
     "name": "Oxydrolone (Oxymetholone)",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€96.1",
     "images": [
-      "https://www.napsgear.org/images/catalog/23620/alpha-pharma-oxydrolone.jpg"
-    ]
+      "/images/products/alpha-pharma-oxydrolone.jpg"
+    ],
+    "price": "$67.2",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "parabolin-tren-hex-p23734",
+    "slug": "parabolin-tren-hex-p7918",
     "name": "Parabolin (Tren Hex)",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€114.8",
     "images": [
-      "https://www.napsgear.org/images/catalog/23734/alpha-pharma-parabolin_amp.jpg"
-    ]
+      "/images/products/alpha-pharma-parabolin_amp.jpg"
+    ],
+    "price": "$7.6",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "promifen-clomid-p23689",
+    "slug": "primo-tabs-p7975",
+    "name": "Primo Tabs",
+    "description": "",
+    "images": [
+      "/images/products/alpha-pharma-primo_tabs.jpg"
+    ],
+    "price": "$117.6",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "promifen-clomid-p7873",
     "name": "Promifen (Clomid)",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€51.02",
     "images": [
-      "https://www.napsgear.org/images/catalog/23/promifen.png"
-    ]
+      "/images/products/alpha-pharma-promifen-50.jpg"
+    ],
+    "price": "$30.4",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "rexobol-10-stanozolol-p23635",
+    "slug": "redux-p37887",
+    "name": "Redux",
+    "description": "",
+    "images": [
+      "/images/products/alpha_pharma_redux.jpg"
+    ],
+    "price": "$41.6",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
+  },
+  {
+    "slug": "rexobol-10-stanozolol-p7993",
     "name": "Rexobol-10 (Stanozolol)",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€79.94",
     "images": [
-      "https://www.napsgear.org/images/catalog/23635/alpha-pharma-rexobol_10.jpg"
-    ]
+      "/images/products/alpha-pharma-rexobol-10.jpg"
+    ],
+    "price": "$25.6",
+    "brand": "Alpha-Pharma Healthcare",
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   },
   {
-    "slug": "rexobol-10-stanozolol-p37557",
-    "name": "Rexobol-10 (Stanozolol)",
+    "slug": "rexobol-10-stanozolol-100tabs-p37273",
+    "name": "Rexobol-10 (Stanozolol) 100tabs",
     "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€57.83",
     "images": [
-      "https://www.napsgear.org/images/catalog/37557/alpha-pharma-rexobol-10.jpg"
-    ]
-  },
-  {
-    "slug": "rexobol-50-stanozolol-p23641",
-    "name": "Rexobol-50 (Stanozolol)",
-    "description": "",
+      "/images/products/alpha-pharma-rexobol_10.jpg"
+    ],
+    "price": "$44",
     "brand": "Alpha-Pharma Healthcare",
-    "price": "€96.1",
-    "images": [
-      "https://www.napsgear.org/images/catalog/23641/alpha-pharma-rexobol50.jpg"
-    ]
-  },
-  {
-    "slug": "rexogin-amp-stanozolol-suspension-p23728",
-    "name": "Rexogin amp. (Stanozolol Suspension)",
-    "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€79.94",
-    "images": [
-      "https://www.napsgear.org/images/catalog/23728/alpha-pharma-rexogin_amp.jpg"
-    ]
-  },
-  {
-    "slug": "testo-extend-nebido-p37560",
-    "name": "Testo Extend (Nebido)",
-    "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€55.28",
-    "images": [
-      "https://www.napsgear.org/images/catalog/37560/alpha-pharma-testo_extend_1000mg_4ml.jpg"
-    ]
-  },
-  {
-    "slug": "testobolin-vial-test-enanthate-p23701",
-    "name": "TestoBolin vial. (Test Enanthate)",
-    "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€71.43",
-    "images": [
-      "https://www.napsgear.org/images/catalog/23701/alpha-pharma-testobolin_vial.jpg"
-    ]
-  },
-  {
-    "slug": "testocyp-amp-testosterone-cypionate-p23695",
-    "name": "Testocyp amp. (Testosterone Cypionate)",
-    "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€71.43",
-    "images": [
-      "https://www.napsgear.org/images/catalog/23695/alpha-pharma-testocyp_amp.jpg"
-    ]
-  },
-  {
-    "slug": "testorapid-vial-test-propionate-p23713",
-    "name": "TestoRapid vial. (Test Propionate)",
-    "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€62.08",
-    "images": [
-      "https://www.napsgear.org/images/catalog/23713/alpha-pharma-testorapid_vial.jpg"
-    ]
-  },
-  {
-    "slug": "thyro3-t3-cytomel-p23692",
-    "name": "Thyro3 (T3, Cytomel)",
-    "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€36.57",
-    "images": [
-      "https://www.napsgear.org/images/catalog/23692/alpha-pharma-thyro3.jpg"
-    ]
-  },
-  {
-    "slug": "trenarapid-amp-tren-acetate-p23716",
-    "name": "TrenaRapid amp. (Tren Acetate)",
-    "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€121.61",
-    "images": [
-      "https://www.napsgear.org/images/catalog/23716/alpha-pharma-trenarapid_amp.jpg"
-    ]
-  },
-  {
-    "slug": "trenarapid-vial-tren-acetate-p23719",
-    "name": "TrenaRapid vial. (Tren Acetate)",
-    "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€121.61",
-    "images": [
-      "https://www.napsgear.org/images/catalog/23719/trenarapid.png"
-    ]
-  },
-  {
-    "slug": "trenbolin-vial-trenbolone-enanthate-p23725",
-    "name": "Trenbolin vial. (Trenbolone Enanthate)",
-    "description": "",
-    "brand": "Alpha-Pharma Healthcare",
-    "price": "€144.57",
-    "images": [
-      "https://www.napsgear.org/images/catalog/21/trenbolin_vial.jpg"
-    ]
+    "labels": {
+      "new": true,
+      "sale": "5 + 1"
+    }
   }
 ]
