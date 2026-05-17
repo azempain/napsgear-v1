@@ -1,8 +1,6 @@
-export interface Tier {
-  packs: number
-  perItem: number
-  total: number
-}
+import type { PackTier } from '@/data/types'
+
+export type Tier = PackTier
 
 const PACK_COUNTS = [1, 5, 10, 15, 20] as const
 // Calibrated to the saved Alpha-Pharma page:
@@ -20,10 +18,11 @@ export function parsePrice(raw: string | undefined): number {
   return Number.isFinite(n) ? n : 0
 }
 
-export function packTiers(base: number): Tier[] {
-  return PACK_COUNTS.map((packs, i) => {
+export function packTiers(base: number, packs?: PackTier[]): PackTier[] {
+  if (packs && packs.length) return packs
+  return PACK_COUNTS.map((count, i) => {
     const perItem = round2(base * PACK_MULTIPLIERS[i])
-    return { packs, perItem, total: round2(perItem * packs) }
+    return { packs: count, perItem, total: round2(perItem * count) }
   })
 }
 

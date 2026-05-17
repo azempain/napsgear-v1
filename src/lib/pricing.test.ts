@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { parsePrice, packTiers, pseudoCount } from './pricing'
+import type { PackTier } from '@/data/types'
 
 describe('parsePrice', () => {
   it('parses euro', () => { expect(parsePrice('€52.73')).toBe(52.73) })
@@ -26,6 +27,24 @@ describe('packTiers', () => {
   })
   it('base 0 -> all zeros', () => {
     expect(packTiers(0).every(x => x.perItem === 0 && x.total === 0)).toBe(true)
+  })
+})
+
+describe('packTiers real-data passthrough', () => {
+  it('returns captured packs verbatim when provided', () => {
+    const real: PackTier[] = [
+      { packs: 1, label: '50 tabs (20mg/tab)', perItem: 30, total: 30 },
+      { packs: 5, label: '250 tabs (20mg/tab)', perItem: 28.6, total: 143 },
+    ]
+    expect(packTiers(999, real)).toBe(real)
+  })
+  it('synthesizes when no packs given (unchanged behavior)', () => {
+    const t = packTiers(30)
+    expect(t).toHaveLength(5)
+    expect(t[0]).toEqual({ packs: 1, perItem: 30, total: 30 })
+  })
+  it('synthesizes when packs is empty', () => {
+    expect(packTiers(30, [])).toHaveLength(5)
   })
 })
 
