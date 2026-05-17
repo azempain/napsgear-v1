@@ -94,9 +94,13 @@ function firstNumber(s: string): number | undefined {
 export function parseDetailPage(html: string): DetailPageResult {
   const $ = load(html)
 
-  const href =
-    $('.breadcrumb-nav a[href*="-p"]').first().attr('href') ||
-    $('a[href*="-p"]').first().attr('href') || ''
+  const isProductHref = (h: string) => /-p\d+(?:\/|$|[?#])/.test(h)
+  let href = ''
+  $('a[href]').each((_, a) => {
+    if (href) return
+    const h = $(a).attr('href') ?? ''
+    if (isProductHref(h)) href = h
+  })
   const slug = slugFromUrl(href)
 
   let ingredient: string | undefined
