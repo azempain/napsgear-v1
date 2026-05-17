@@ -19,4 +19,7 @@ describe('new route modules import cleanly', () => {
   it('cart', async () => {
     expect((await import('./cart/page')).default).toBeTypeOf('function')
   })
+  it('brands/[slug]', async () => {
+    expect((await import('./brands/[slug]/page')).default).toBeTypeOf('function')
+  })
 })

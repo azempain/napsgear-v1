@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
-import { brands, products } from '@/data'
-import ProductCard from '@/components/ProductCard'
+import { brands, products, ingredients } from '@/data'
+import BrandListing from '@/components/BrandListing'
 
 export const dynamicParams = false
 
@@ -20,21 +20,24 @@ export default async function BrandPage({
   const brandProducts = products.filter(
     (p) => p.brand && p.brand.toLowerCase() === brand.name.toLowerCase()
   )
+  const brandIngredients = ingredients.filter(
+    (i) => i.brand.toLowerCase() === brand.name.toLowerCase()
+  )
 
   return (
     <main className="main">
-      <div className="container py-5">
-        <h1 className="mb-4">{brand.name}</h1>
+      <div className="container">
         {brandProducts.length === 0 ? (
-          <p className="text-muted">No products grabbed yet for this brand.</p>
-        ) : (
-          <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
-            {brandProducts.map((p) => (
-              <div key={p.slug} className="col">
-                <ProductCard product={p} />
-              </div>
-            ))}
+          <div className="py-5">
+            <h2 className="category-title">{brand.name}</h2>
+            <p className="text-muted">No products grabbed yet for this brand.</p>
           </div>
+        ) : (
+          <BrandListing
+            brandName={brand.name}
+            products={brandProducts}
+            ingredients={brandIngredients}
+          />
         )}
       </div>
     </main>
