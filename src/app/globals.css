@@ -543,3 +543,45 @@ html, body { margin: 0; padding: 0; }
 }
 .product-tabs .nav-link.disabled { color: #999; pointer-events: none; }
 .product-tabs .nav-link.active { font-weight: 700; }
+
+/* ── Carousel nav arrows (gearpics, future carousel-wrapper sliders) ──
+   npm Swiper's default .swiper-button-prev/next is an unstyled Apple-blue
+   chevron (no background, no shadow), and its disabled state is just
+   opacity:0.35 — which on white reads as a "missing" arrow. Scope: any
+   nav button inside our .carousel-wrapper sliders (currently only
+   gearpics; future-friendly for other configured navigation sliders).
+
+   Make them: small white pill with brand-blue chevron + subtle shadow,
+   sized smaller than the 44px default (less visual weight), hidden when
+   disabled so users don't see a half-faded blue glyph, and pulled in a
+   touch with the rounded background sitting cleanly over slide edges. */
+.carousel-wrapper .swiper-button-prev,
+.carousel-wrapper .swiper-button-next {
+  --swiper-navigation-size: 16px;
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;          /* override Swiper's default `-22px` for new size */
+  background: #fff;
+  color: #0089cb;             /* brand blue */
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.carousel-wrapper .swiper-button-prev { left: 4px; }
+.carousel-wrapper .swiper-button-next { right: 4px; }
+.carousel-wrapper .swiper-button-prev:hover,
+.carousel-wrapper .swiper-button-next:hover {
+  transform: scale(1.06);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.22);
+}
+/* Hide when disabled instead of ghosting — no half-faded blue glyph.
+   Specificity bumped to (0,0,3,0) to beat swiper/css/navigation's compound
+   selector `.swiper-button-prev.swiper-button-disabled` (0,0,2,0), which
+   would otherwise win the cascade because swiper/css is imported after
+   globals.css in layout.tsx. */
+.carousel-wrapper .swiper-button-prev.swiper-button-disabled,
+.carousel-wrapper .swiper-button-next.swiper-button-disabled {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
