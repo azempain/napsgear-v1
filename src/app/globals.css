@@ -596,17 +596,19 @@ html, body { margin: 0; padding: 0; }
   background-color: #0089cb;
 }
 
-/* Pagination placement. swiper/css/pagination makes `.swiper-pagination`
-   position:absolute; bottom:8px — relative to `.swiper`, whose box ends
-   exactly at the last slide's bottom, so the bars sit ON TOP of the cards'
-   bottom edge (overlapsSlide:true on every slider). `.carousel-wrapper`
-   padding-bottom can't help (it's outside `.swiper`). Take the pagination
-   out of absolute flow so it renders in clear space below the slides; the
-   wrapper padding provides breathing room beneath it. Specificity
-   (0,0,2,0) beats swiper/css base `.swiper-pagination` (0,0,1,0). */
-.carousel-wrapper .swiper-pagination {
-  position: static;
-  margin-top: 12px;
+/* Pagination placement — replicate the WORKING hero pattern.
+   swiper/css makes `.swiper-pagination` position:absolute; bottom:8px,
+   resolved against `.swiper`. The hero (`.hp-slider`) renders its bullets
+   correctly purely because main.css gives it `padding-bottom:24px`: that
+   reserves a strip *inside* the overflow:hidden box, so the absolute
+   bullets land below the slides — visible, not overlapping, not clipped.
+   The carousel-wrapper sliders (ama/qa/gearpics) had no such padding, so
+   the absolute bullets overlapped the cards. Mirror the hero exactly:
+   give these `.swiper` roots the same padding-bottom. (padding-BOTTOM is
+   safe for Swiper sizing — slide width is derived from clientWidth, which
+   vertical padding doesn't affect; the hero proves this in production.) */
+.carousel-wrapper .swiper {
+  padding-bottom: 24px;
 }
 
 /* ────────────────────────────────────────────────────────────────

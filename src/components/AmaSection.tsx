@@ -51,6 +51,10 @@ export default function AmaSection() {
               </div>
             ))}
           </div>
+          {/* Pagination inside .swiper, like the hero. The swiper's
+              padding-bottom (globals.css) reserves space inside the
+              overflow:hidden box for Swiper's absolute bottom:8px bullets,
+              so they sit cleanly below the slides without overlap. */}
           <div className="swiper-pagination" />
         </div>
       </div>

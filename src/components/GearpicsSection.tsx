@@ -47,8 +47,12 @@ export default function GearpicsSection() {
               </div>
             ))}
           </div>
+          {/* Nav buttons stay INSIDE .swiper — they're absolutely
+              positioned with `left/right`, vertically centered, and need
+              the .swiper as their positioning context. */}
           <div className="swiper-button-prev" />
           <div className="swiper-button-next" />
+          {/* Pagination inside .swiper — see AmaSection comment. */}
           <div className="swiper-pagination" />
         </div>
       </div>
