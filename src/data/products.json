@@ -16,7 +16,7 @@
   {
     "slug": "altamofen-nolvadex-20-mg-p7900",
     "name": "Altamofen (Nolvadex) 20 mg",
-    "description": "",
+    "description": "Altamofen by Alpha-Pharma Healthcare each tablets contain 20 mg Tamoxifen Citrate. Altamofen is a SERM (Selective Estrogen Receptor Modulator) and its most common use is for prevention of gynocomastia and other unwanted side effects from extra estrogen floating around in the body when on a cycle containing aromatizing steroids. Tamoxifen Citrate binds strongly to the estrogen receptors and thus blocks the estrogen from attaching. It doesn't eliminate estrogen but this has its benefits because estrogen is needed for a healthy immune defense and improved lipid profile.\nAltamofen has another equally very beneficial use and that is as a superior post-cycle drug, which is not to be underestimated. It raises LH levels which in turn greatly raises testosterone levels and this is exactly the wanted effect after a cycle. Recommended to use during a cycle for those prone to gynocomastia and particularly recommended post-cycle in combination with HCG. Altamofen is the most effective post-cycle treatment for maximum preservation of muscle mass and quick recovery hormonal balance.\nSwallow the tablet(s) whole, with water or another non-alcoholic liquid. You can take this medicine with or without food at the same time each day. If you miss a dose, take it when you remember, then take the next dose as usual. If it is almost time for your next dose or you remember at your next dose, do not take extra tablets to make up the missed dose. Take this medicine for at least 5 years post treatment, unless your doctor tells you otherwise.\nCall your doctor right away if you have any changes in the lining (endometrium) or body of your uterus. These changes may indicate that serious problems are starting, including cancer of the uterus. The signs of changes in the uterus are: vaginal bleeding or bloody discharge that could be a rusty or brown color, change in your monthly bleeding such as in the amount or timing of bleeding or increased clotting, pain or pressure in your pelvis (below your belly button).\nBlood clots in your veins or lungs can cause serious problems, including death. You may get clots up to 2-3 months after you stop taking this medicine. The signs of blood clots are: sudden chest pain, shortness of breath, coughing up blood, pain, tenderness, or swelling in one or both of your legs\nStroke can cause serious medical problems, including death. The signs of stroke are: sudden weakness, tingling, or numbness in your face, arm or leg, especially on one side of your body; sudden confusion, trouble speaking or understanding; sudden trouble seeing in one or both eyes; sudden trouble walking, dizziness, loss of balance or coordination; sudden severe headache with no known cause.\nYou may have liver problems, including jaundice, if you have a lack of appetite and yellowing of your skin or whites of your eyes. You may have cataracts or increased chance of needing cataract surgery if you experience blurring of your vision. Contact your doctor immediately if any of these conditions appears.",
     "images": [
       "/images/products/alpha-pharma-altamofen.jpg"
     ],
@@ -25,7 +25,43 @@
     "labels": {
       "new": true,
       "sale": "5 + 1"
-    }
+    },
+    "ingredient": "Tamoxifen Citrate",
+    "packs": [
+      {
+        "packs": 1,
+        "label": "50 tabs (20mg/tab)",
+        "perItem": 30,
+        "total": 30
+      },
+      {
+        "packs": 5,
+        "label": "250 tabs (20mg/tab)",
+        "perItem": 28.6,
+        "total": 143
+      },
+      {
+        "packs": 10,
+        "label": "500 tabs (20mg/tab)",
+        "perItem": 27,
+        "total": 270
+      },
+      {
+        "packs": 15,
+        "label": "750 tabs (20mg/tab)",
+        "perItem": 25.53,
+        "total": 383
+      },
+      {
+        "packs": 20,
+        "label": "50 tabs (20mg/tab)",
+        "perItem": 24,
+        "total": 480
+      }
+    ],
+    "reviews": 26,
+    "imagesCount": 135,
+    "qaCount": 14
   },
   {
     "slug": "anazole-arimidex-p7897",
