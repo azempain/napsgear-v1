@@ -31,29 +31,31 @@ export function useCart(): CartContextValue {
   return ctx
 }
 
-function loadInitial(): CartItem[] {
-  if (typeof window === 'undefined') return []
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? (parsed as CartItem[]) : []
-  } catch {
-    return []
-  }
-}
-
 export default function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>(loadInitial)
+  const [items, setItems] = useState<CartItem[]>([])
+  const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        if (Array.isArray(parsed)) setItems(parsed as CartItem[])
+      }
+    } catch {
+      /* corrupt storage — start empty */
+    }
+    setHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (!hydrated) return
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
     } catch {
       /* quota / privacy mode — ignore, cart still works in-memory */
     }
-  }, [items])
+  }, [items, hydrated])
 
   const count = items.reduce((sum, i) => sum + i.qty, 0)
 
