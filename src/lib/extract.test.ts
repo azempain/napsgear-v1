@@ -85,3 +85,60 @@ describe('parseBrandPage', () => {
     ])
   })
 })
+
+import { parseDetailPage } from './extract'
+
+const DETAIL_HTML = `
+<nav class="breadcrumb-nav"><a href="https://www.napsgear.org/altamofen-nolvadex-20-mg-p7900"></a></nav>
+<h1 class="product-title">Altamofen (Nolvadex) 20 mg</h1>
+<ul class="product-single-specifications">
+  <li><span class="label">Manufacturer:</span> Alpha-Pharma Healthcare</li>
+  <li><span class="label">Pharmaceutical name:</span> Tamoxifen Citrate </li>
+</ul>
+<div class="product-multipliers">
+  <div class="product-multipliers__content">
+    <div class="product-multipliers__item">
+      <label class="product-multipliers__item--info">
+        <div class="quantity"> 1 pack  (50 tabs (20mg/tab)) </div>
+        <div class="price-per-item">$30</div>
+        <div class="price-total">$30</div></label></div>
+    <div class="product-multipliers__item">
+      <label class="product-multipliers__item--info">
+        <div class="quantity"> 5 packs  (250 tabs (20mg/tab)) </div>
+        <div class="price-per-item">$28.6</div>
+        <div class="price-total">$143</div></label></div>
+  </div>
+</div>
+<div id="productTabs">
+  <ul class="nav nav-tabs">
+    <li><a class="nav-link" id="gearpicsTab">Customer Images: (135)</a></li>
+    <li><a class="nav-link" id="questionsTab">Customer Questions &amp; Answers: 14</a></li>
+    <li><a class="nav-link nav-link-reviews" id="reviewsTab">Reviews: 26</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane" id="description">
+      <div>Altamofen by Alpha-Pharma.</div><div> </div><div>Second paragraph.</div>
+    </div>
+  </div>
+</div>`
+
+describe('parseDetailPage', () => {
+  const d = parseDetailPage(DETAIL_HTML)
+
+  it('extracts slug, ingredient, and counts', () => {
+    expect(d.slug).toBe('altamofen-nolvadex-20-mg-p7900')
+    expect(d.ingredient).toBe('Tamoxifen Citrate')
+    expect(d.reviews).toBe(26)
+    expect(d.imagesCount).toBe(135)
+    expect(d.qaCount).toBe(14)
+  })
+  it('joins description blocks, dropping nbsp-only ones', () => {
+    expect(d.description).toBe('Altamofen by Alpha-Pharma.\nSecond paragraph.')
+  })
+  it('extracts real pack tiers with quantity labels', () => {
+    expect(d.packs).toEqual([
+      { packs: 1, label: '50 tabs (20mg/tab)', perItem: 30, total: 30 },
+      { packs: 5, label: '250 tabs (20mg/tab)', perItem: 28.6, total: 143 },
+    ])
+  })
+})
