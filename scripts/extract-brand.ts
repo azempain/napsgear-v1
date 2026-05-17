@@ -25,7 +25,9 @@ function readArgs(argv: string[]) {
   const brandFile = args[0]
   const details: string[] = []
   for (let i = 1; i < args.length; i++) {
-    if (args[i] === '--details') details.push(args[++i])
+    if (args[i] === '--details' && i + 1 < args.length) {
+      details.push(args[++i])
+    }
   }
   return { brandFile, details }
 }
