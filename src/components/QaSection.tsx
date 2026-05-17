@@ -46,6 +46,7 @@ export default function QaSection() {
               </div>
             ))}
           </div>
+          {/* Pagination inside .swiper — see AmaSection comment. */}
           <div className="swiper-pagination" />
         </div>
       </div>
