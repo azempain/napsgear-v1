@@ -142,3 +142,54 @@ describe('parseDetailPage', () => {
     ])
   })
 })
+
+import { mergeProducts, mergeIngredients, applyDetails } from './extract'
+import type { Product, Ingredient } from '@/data/types'
+
+describe('mergeProducts', () => {
+  it('drops existing rows for the same brand (case-insensitive) and appends new', () => {
+    const existing: Product[] = [
+      { slug: 'old-p1', name: 'Old', description: '', images: [], brand: 'alpha-pharma healthcare' },
+      { slug: 'keep-p9', name: 'Keep', description: '', images: [], brand: 'Other Brand' },
+    ]
+    const fresh: Product[] = [
+      { slug: 'new-p2', name: 'New', description: '', images: [], brand: 'Alpha-Pharma Healthcare' },
+    ]
+    const out = mergeProducts(existing, 'Alpha-Pharma Healthcare', fresh)
+    expect(out.map(p => p.slug)).toEqual(['keep-p9', 'new-p2'])
+  })
+})
+
+describe('mergeIngredients', () => {
+  it('replaces the brand rows only', () => {
+    const existing: Ingredient[] = [
+      { id: 1, name: 'A', count: 1, brand: 'Alpha-Pharma Healthcare' },
+      { id: 2, name: 'B', count: 1, brand: 'Other' },
+    ]
+    const fresh: Ingredient[] = [{ id: 3, name: 'C', count: 2, brand: 'Alpha-Pharma Healthcare' }]
+    const out = mergeIngredients(existing, 'Alpha-Pharma Healthcare', fresh)
+    expect(out).toEqual([
+      { id: 2, name: 'B', count: 1, brand: 'Other' },
+      { id: 3, name: 'C', count: 2, brand: 'Alpha-Pharma Healthcare' },
+    ])
+  })
+})
+
+describe('applyDetails', () => {
+  it('attaches detail fields onto the matching product by slug', () => {
+    const products: Product[] = [
+      { slug: 'altamofen-nolvadex-20-mg-p7900', name: 'Alt', description: '', images: [] },
+      { slug: 'other-p1', name: 'Other', description: '', images: [] },
+    ]
+    const out = applyDetails(products, [
+      { slug: 'altamofen-nolvadex-20-mg-p7900', description: 'Desc', ingredient: 'Tamoxifen Citrate',
+        packs: [{ packs: 1, perItem: 30, total: 30 }], reviews: 26, imagesCount: 135, qaCount: 14 },
+    ])
+    const p = out.find(x => x.slug === 'altamofen-nolvadex-20-mg-p7900')!
+    expect(p.description).toBe('Desc')
+    expect(p.ingredient).toBe('Tamoxifen Citrate')
+    expect(p.packs).toEqual([{ packs: 1, perItem: 30, total: 30 }])
+    expect(p.reviews).toBe(26)
+    expect(out.find(x => x.slug === 'other-p1')!.description).toBe('')
+  })
+})

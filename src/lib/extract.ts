@@ -138,3 +138,31 @@ export function parseDetailPage(html: string): DetailPageResult {
   if (qa !== undefined) result.qaCount = qa
   return result
 }
+
+const sameBrand = (a?: string, b?: string) =>
+  (a ?? '').trim().toLowerCase() === (b ?? '').trim().toLowerCase()
+
+export function mergeProducts(existing: Product[], brand: string, fresh: Product[]): Product[] {
+  return [...existing.filter(p => !sameBrand(p.brand, brand)), ...fresh]
+}
+
+export function mergeIngredients(existing: Ingredient[], brand: string, fresh: Ingredient[]): Ingredient[] {
+  return [...existing.filter(i => !sameBrand(i.brand, brand)), ...fresh]
+}
+
+export function applyDetails(products: Product[], details: DetailPageResult[]): Product[] {
+  const bySlug = new Map(details.map(d => [d.slug, d]))
+  return products.map(p => {
+    const d = bySlug.get(p.slug)
+    if (!d) return p
+    return {
+      ...p,
+      description: d.description || p.description,
+      ...(d.ingredient ? { ingredient: d.ingredient } : {}),
+      ...(d.packs ? { packs: d.packs } : {}),
+      ...(d.reviews !== undefined ? { reviews: d.reviews } : {}),
+      ...(d.imagesCount !== undefined ? { imagesCount: d.imagesCount } : {}),
+      ...(d.qaCount !== undefined ? { qaCount: d.qaCount } : {}),
+    }
+  })
+}
