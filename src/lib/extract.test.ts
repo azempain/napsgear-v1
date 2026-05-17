@@ -193,3 +193,28 @@ describe('applyDetails', () => {
     expect(out.find(x => x.slug === 'other-p1')!.description).toBe('')
   })
 })
+
+describe('parseDetailPage slug — regression: category-prefixed breadcrumb', () => {
+  // Mirrors real napsgear detail pages where the breadcrumb shows the
+  // current page's category FIRST (whose slug may contain '-p' as a
+  // substring, e.g. 'pct---post-cycle-therapy-c518'), and the product
+  // anchor appears elsewhere on the page.
+  const HTML = `
+    <nav class="breadcrumb-nav">
+      <a href="https://www.napsgear.org/index.php">Home</a>
+      <a href="https://www.napsgear.org/pct---post-cycle-therapy-c518">PCT</a>
+    </nav>
+    <h1 class="product-title">Altamofen (Nolvadex) 20 mg</h1>
+    <a href="https://www.napsgear.org/altamofen-nolvadex-20-mg-p7900">Self link</a>
+    <ul class="product-single-specifications">
+      <li><span class="label">Pharmaceutical name:</span> Tamoxifen Citrate </li>
+    </ul>
+    <div id="productTabs"><div class="tab-content"><div class="tab-pane" id="description"><div>Hi</div></div></div></div>
+  `
+
+  it('skips the category breadcrumb and picks the product href', () => {
+    const d = parseDetailPage(HTML)
+    expect(d.slug).toBe('altamofen-nolvadex-20-mg-p7900')
+    expect(d.ingredient).toBe('Tamoxifen Citrate')
+  })
+})
