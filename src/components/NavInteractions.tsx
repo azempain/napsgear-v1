@@ -1,5 +1,6 @@
 'use client'
 import { useEffect } from 'react'
+import { useStickyHeader } from '@/hooks/useStickyHeader'
 
 /**
  * Replaces Bootstrap's data-API for the two behaviors the clone uses:
@@ -18,6 +19,7 @@ import { useEffect } from 'react'
  * delegated listeners on document, so it has no DOM output of its own.
  */
 export default function NavInteractions() {
+  useStickyHeader()
   useEffect(() => {
     // ── DROPDOWNS ────────────────────────────────────────────────────────
     function getMenuFor(button: Element): HTMLElement | null {
