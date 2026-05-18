@@ -2,6 +2,9 @@ import { ImageResponse } from 'next/og'
 
 // Apple home-screen icon, generated at build by next/og.
 // 180×180 PNG, brand-blue tile with white "NG" — matches src/app/icon.svg.
+// `force-static` is required when next.config has `output: 'export'` —
+// Next evaluates this once at build and emits a static PNG into /out.
+export const dynamic = 'force-static'
 export const size = { width: 180, height: 180 }
 export const contentType = 'image/png'
 
