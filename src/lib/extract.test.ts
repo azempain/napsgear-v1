@@ -125,12 +125,11 @@ const DETAIL_HTML = `
 describe('parseDetailPage', () => {
   const d = parseDetailPage(DETAIL_HTML)
 
-  it('extracts slug, ingredient, and counts', () => {
+  it('extracts slug and ingredient', () => {
     expect(d.slug).toBe('altamofen-nolvadex-20-mg-p7900')
     expect(d.ingredient).toBe('Tamoxifen Citrate')
-    expect(d.reviews).toBe(26)
-    expect(d.imagesCount).toBe(135)
-    expect(d.qaCount).toBe(14)
+    expect(d.reviews).toBeUndefined()
+    expect(d.qa).toBeUndefined()
   })
   it('joins description blocks, dropping nbsp-only ones', () => {
     expect(d.description).toBe('Altamofen by Alpha-Pharma.\nSecond paragraph.')
@@ -183,13 +182,16 @@ describe('applyDetails', () => {
     ]
     const out = applyDetails(products, [
       { slug: 'altamofen-nolvadex-20-mg-p7900', description: 'Desc', ingredient: 'Tamoxifen Citrate',
-        packs: [{ packs: 1, perItem: 30, total: 30 }], reviews: 26, imagesCount: 135, qaCount: 14 },
+        packs: [{ packs: 1, perItem: 30, total: 30 }],
+        reviews: [{ rating: 5, author: 'A', date: 'd', body: 'b' }],
+        qa: [{ author: 'Q', date: 'd', question: 'why' }] },
     ])
     const p = out.find(x => x.slug === 'altamofen-nolvadex-20-mg-p7900')!
     expect(p.description).toBe('Desc')
     expect(p.ingredient).toBe('Tamoxifen Citrate')
     expect(p.packs).toEqual([{ packs: 1, perItem: 30, total: 30 }])
-    expect(p.reviews).toBe(26)
+    expect(p.reviews).toEqual([{ rating: 5, author: 'A', date: 'd', body: 'b' }])
+    expect(p.qa).toEqual([{ author: 'Q', date: 'd', question: 'why' }])
     expect(out.find(x => x.slug === 'other-p1')!.description).toBe('')
   })
 })

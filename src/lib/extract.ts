@@ -81,9 +81,8 @@ export interface DetailPageResult {
   description: string
   ingredient?: string
   packs?: PackTier[]
-  reviews?: number
-  imagesCount?: number
-  qaCount?: number
+  reviews?: Review[]
+  qa?: QAItem[]
 }
 
 function firstNumber(s: string): number | undefined {
@@ -130,16 +129,13 @@ export function parseDetailPage(html: string): DetailPageResult {
     packs.push({ packs: packsN, ...(label ? { label } : {}), perItem, total })
   })
 
-  const tabText = (id: string) => $(`#${id}`).text()
   const result: DetailPageResult = { slug, description }
   if (ingredient) result.ingredient = ingredient
   if (packs.length) result.packs = packs
-  const rv = firstNumber(tabText('reviewsTab'))
-  const im = firstNumber(tabText('gearpicsTab'))
-  const qa = firstNumber(tabText('questionsTab'))
-  if (rv !== undefined) result.reviews = rv
-  if (im !== undefined) result.imagesCount = im
-  if (qa !== undefined) result.qaCount = qa
+  const reviews = parseReviews(html)
+  const qa = parseQA(html)
+  if (reviews.length) result.reviews = reviews
+  if (qa.length) result.qa = qa
   return result
 }
 
@@ -164,9 +160,8 @@ export function applyDetails(products: Product[], details: DetailPageResult[]): 
       description: d.description || p.description,
       ...(d.ingredient ? { ingredient: d.ingredient } : {}),
       ...(d.packs ? { packs: d.packs } : {}),
-      ...(d.reviews !== undefined ? { reviews: d.reviews } : {}),
-      ...(d.imagesCount !== undefined ? { imagesCount: d.imagesCount } : {}),
-      ...(d.qaCount !== undefined ? { qaCount: d.qaCount } : {}),
+      ...(d.reviews ? { reviews: d.reviews } : {}),
+      ...(d.qa ? { qa: d.qa } : {}),
     }
   })
 }
