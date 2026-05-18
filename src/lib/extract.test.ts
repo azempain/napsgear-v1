@@ -218,3 +218,76 @@ describe('parseDetailPage slug — regression: category-prefixed breadcrumb', ()
     expect(d.ingredient).toBe('Tamoxifen Citrate')
   })
 })
+
+import { parseReviews } from './extract'
+import type { Review } from '@/data/types'
+
+const REVIEWS_HTML = `
+<div class="product-review-list">
+  <div class="product-review__item mb-3">
+    <div class="product-review__item-content">
+      <div class="product-review__item-header">
+        <div class="rating me-2">
+          <div class="rating-stars" title="5">
+            <span class="rating-stars-icon active"><svg></svg></span>
+            <span class="rating-stars-icon active"><svg></svg></span>
+            <span class="rating-stars-icon active"><svg></svg></span>
+            <span class="rating-stars-icon active"><svg></svg></span>
+            <span class="rating-stars-icon active"><svg></svg></span>
+          </div>
+        </div>
+        <div class="post-author"><h4>by Blackhorse</h4></div>
+        <div class="post-meta">
+          <div class="post-date"><time class="entry-date published">Date Added: 5 months ago</time></div>
+        </div>
+      </div>
+      <div class="product-review__item-body">
+        Great post cycle treatment. Back up and runnin in no time
+      </div>
+    </div>
+  </div>
+  <div class="product-review__item mb-3">
+    <div class="product-review__item-content">
+      <div class="product-review__item-header">
+        <div class="rating me-2">
+          <div class="rating-stars">
+            <span class="rating-stars-icon active"><svg></svg></span>
+            <span class="rating-stars-icon active"><svg></svg></span>
+            <span class="rating-stars-icon active"><svg></svg></span>
+            <span class="rating-stars-icon"><svg></svg></span>
+            <span class="rating-stars-icon"><svg></svg></span>
+          </div>
+        </div>
+        <div class="post-author"><h4>by Mike</h4></div>
+        <div class="post-meta">
+          <div class="post-date"><time class="entry-date published">Date Added: 1 year ago</time></div>
+        </div>
+      </div>
+      <div class="product-review__item-body">Solid.</div>
+    </div>
+  </div>
+</div>`
+
+describe('parseReviews', () => {
+  const r: Review[] = parseReviews(REVIEWS_HTML)
+  it('parses every review item', () => {
+    expect(r).toHaveLength(2)
+  })
+  it('reads rating from the rating-stars title', () => {
+    expect(r[0].rating).toBe(5)
+  })
+  it('falls back to counting active star icons when no title', () => {
+    expect(r[1].rating).toBe(3)
+  })
+  it('strips "by " from author and "Date Added: " from date', () => {
+    expect(r[0].author).toBe('Blackhorse')
+    expect(r[0].date).toBe('5 months ago')
+  })
+  it('captures the body text trimmed', () => {
+    expect(r[0].body).toBe('Great post cycle treatment. Back up and runnin in no time')
+    expect(r[1].body).toBe('Solid.')
+  })
+  it('returns [] when there are no review items', () => {
+    expect(parseReviews('<div></div>')).toEqual([])
+  })
+})

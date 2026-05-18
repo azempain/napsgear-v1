@@ -2,7 +2,7 @@
 // No filesystem / network here — the CLI wrapper does I/O.
 
 import { load } from 'cheerio'
-import type { Product, Ingredient, PackTier } from '@/data/types'
+import type { Product, Ingredient, PackTier, Review } from '@/data/types'
 import { parsePrice } from './pricing'
 
 export interface BrandPageResult {
@@ -169,4 +169,22 @@ export function applyDetails(products: Product[], details: DetailPageResult[]): 
       ...(d.qaCount !== undefined ? { qaCount: d.qaCount } : {}),
     }
   })
+}
+
+export function parseReviews(html: string): Review[] {
+  const $ = load(html)
+  const out: Review[] = []
+  $('.product-review__item').each((_, el) => {
+    const it = $(el)
+    const titleAttr = it.find('.rating-stars').first().attr('title')
+    let rating = Number(titleAttr)
+    if (!Number.isFinite(rating)) rating = it.find('.rating-stars-icon.active').length
+    rating = Math.max(0, Math.min(5, Math.round(rating)))
+    const author = it.find('.post-author h4').first().text().replace(/^\s*by\s+/i, '').trim()
+    const date = it.find('.post-date').first().text().replace(/^\s*date added:\s*/i, '').trim()
+    const body = it.find('.product-review__item-body').first().text().trim()
+    if (!body && rating === 0) return
+    out.push({ rating, author, date, body })
+  })
+  return out
 }
