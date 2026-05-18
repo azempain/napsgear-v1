@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import type { Product } from '@/data/types'
 import { useCart } from '@/context/CartContext'
-import { parsePrice, packTiers, pseudoCount } from '@/lib/pricing'
+import { parsePrice, packTiers } from '@/lib/pricing'
 
 const FREE_PACK_BANNERS = [
   { free: '1 pack', text: 'For every 5 packs purchased, you get 1 pack FREE' },
@@ -22,9 +22,8 @@ export default function ProductDetail({ product }: { product: Product }) {
     if (toastTimer.current) clearTimeout(toastTimer.current)
   }, [])
 
-  const reviews = product.reviews ?? pseudoCount(product.slug + ':reviews')
-  const imagesCount = product.imagesCount ?? pseudoCount(product.slug + ':images')
-  const qa = product.qaCount ?? pseudoCount(product.slug + ':qa')
+  const reviews = product.reviews ?? []
+  const qa = product.qa ?? []
 
   function handleAdd() {
     const tier = tiers[selected]
@@ -66,11 +65,13 @@ export default function ProductDetail({ product }: { product: Product }) {
           <div className="product-single-details col-lg-7 col-md-6">
             <h1 className="product-title">{product.name}</h1>
 
-            <div className="ratings-container">
-              <span className="rating-link">
-                <span className="count">({reviews}</span> reviews)
-              </span>
-            </div>
+            {reviews.length > 0 && (
+              <div className="ratings-container">
+                <span className="rating-link">
+                  <span className="count">({reviews.length}</span> reviews)
+                </span>
+              </div>
+            )}
             <hr className="short-divider" />
 
             <ul className="product-single-specifications">
@@ -145,13 +146,10 @@ export default function ProductDetail({ product }: { product: Product }) {
               <span className="nav-link active">Description</span>
             </li>
             <li className="nav-item">
-              <span className="nav-link disabled">Customer Images: ({imagesCount})</span>
+              <span className="nav-link disabled">Customer Questions &amp; Answers: {qa.length}</span>
             </li>
             <li className="nav-item">
-              <span className="nav-link disabled">Customer Questions &amp; Answers: {qa}</span>
-            </li>
-            <li className="nav-item">
-              <span className="nav-link nav-link-reviews disabled">Reviews: {reviews}</span>
+              <span className="nav-link nav-link-reviews disabled">Reviews: {reviews.length}</span>
             </li>
           </ul>
           <div className="tab-content" id="productContent">

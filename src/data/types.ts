@@ -50,9 +50,8 @@ export interface Product {
   brand?: string
   ingredient?: string
   labels?: { new?: boolean; sale?: string }
-  reviews?: number
-  imagesCount?: number
-  qaCount?: number
+  reviews?: Review[]
+  qa?: QAItem[]
   packs?: PackTier[]
 }
 
