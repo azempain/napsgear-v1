@@ -1106,3 +1106,76 @@ body.has-sticky-header {
 .mobile-drawer__list--flat .mobile-drawer__link { padding-left: 16px; }
 .mobile-drawer__link:hover { background: #fff; color: #0a66c2; }
 .mobile-drawer__divider { height: 8px; background: #f7f7f7; }
+
+/* Mobile cart polish — sticky-bottom actions */
+.ngc-cart-mobile-actions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px env(safe-area-inset-bottom, 10px);
+  background: #fff;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, .06), 0 -6px 18px rgba(0, 0, 0, .06);
+}
+.ngc-cart-mobile-actions__total {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  font-size: 12px;
+  color: #666;
+  min-width: 0;
+  flex: 0 0 auto;
+}
+.ngc-cart-mobile-actions__total strong {
+  color: #111;
+  font-size: 16px;
+  font-weight: 700;
+}
+.ngc-cart-mobile-actions .ngc-btn {
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 10px 14px;
+}
+.ngc-cart-mobile-actions__continue {
+  display: none;
+}
+@media (min-width: 768px) {
+  .ngc-cart-mobile-actions { display: none; }
+}
+
+/* Mobile cart row polish — only ≤ 576px */
+@media (max-width: 576px) {
+  .ngc-item__image { width: 48px; height: 48px; }
+  .ngc-item__image img { width: 48px; height: 48px; object-fit: contain; }
+  .ngc-item { padding-top: 10px; padding-bottom: 10px; }
+  .ngc-item__brand { font-size: 11px; color: #888; }
+  .ngc-stepper__btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .ngc-stepper__input { width: 44px; height: 32px; font-size: 14px; }
+  /* Spacer so the last cart row isn't covered by the fixed action bar */
+  .ngc-page::after {
+    content: "";
+    display: block;
+    height: 96px;
+  }
+  /* Show the Continue Shopping link under the dark Checkout button on small screens */
+  .ngc-cart-mobile-actions { flex-wrap: wrap; }
+  .ngc-cart-mobile-actions__continue {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #0a66c2;
+    text-decoration: none;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+}

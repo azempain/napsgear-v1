@@ -12,6 +12,19 @@ const TrashIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
+function MobileCartActions({ totalLabel }: { totalLabel: string }) {
+  return (
+    <div className="ngc-cart-mobile-actions d-md-none" role="region" aria-label="Cart actions">
+      <div className="ngc-cart-mobile-actions__total">
+        <span>Total</span>
+        <strong>{totalLabel}</strong>
+      </div>
+      <a className="ngc-btn ngc-btn--dark" href="/checkout/">Checkout</a>
+      <a className="ngc-cart-mobile-actions__continue" href="/catalog/">Continue Shopping</a>
+    </div>
+  )
+}
+
 export default function CartView() {
   const { items, updateQty, removeItem, clearCart } = useCart()
   const [toast, setToast] = useState(false)
@@ -186,6 +199,8 @@ export default function CartView() {
           </div>
         </aside>
       </div>
+
+      <MobileCartActions totalLabel={money(total(items))} />
     </>
   )
 }
