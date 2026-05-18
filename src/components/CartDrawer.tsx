@@ -62,7 +62,7 @@ export default function CartDrawer() {
                 </span>
               </div>
               <div className="dropdown-cart-action">
-                <a href="/checkout" className="btn btn-primary btn-block">Checkout</a>
+                <a href="/checkout/" className="btn btn-primary btn-block">Checkout</a>
               </div>
             </>
           )}
