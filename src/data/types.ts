@@ -28,6 +28,13 @@ export interface PackTier {
   total: number
 }
 
+export interface Review {
+  rating: number   // 1–5
+  author: string
+  date: string
+  body: string
+}
+
 export interface Product {
   slug: string
   name: string
