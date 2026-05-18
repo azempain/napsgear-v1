@@ -159,9 +159,9 @@ export default function CartView() {
 
             <div className="ngc-actions">
               <a className="ngc-btn ngc-btn--outline" href="/catalog/">Continue Shopping</a>
-              <button type="button" className="ngc-btn ngc-btn--dark">
+              <a className="ngc-btn ngc-btn--dark" href="/checkout/">
                 Proceed to Checkout
-              </button>
+              </a>
             </div>
           </div>
         </aside>
