@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parsePrice, packTiers, pseudoCount } from './pricing'
+import { parsePrice, packTiers } from './pricing'
 import type { PackTier } from '@/data/types'
 
 describe('parsePrice', () => {
@@ -45,21 +45,5 @@ describe('packTiers real-data passthrough', () => {
   })
   it('synthesizes when packs is empty', () => {
     expect(packTiers(30, [])).toHaveLength(5)
-  })
-})
-
-describe('pseudoCount', () => {
-  it('is deterministic for the same seed', () => {
-    expect(pseudoCount('foo')).toBe(pseudoCount('foo'))
-  })
-  it('differs by seed', () => {
-    expect(pseudoCount('a:reviews')).not.toBe(pseudoCount('a:images'))
-  })
-  it('is within 8..140', () => {
-    for (const s of ['x', 'y-z-p23665', 'altamofen', '']) {
-      const n = pseudoCount(s)
-      expect(n).toBeGreaterThanOrEqual(8)
-      expect(n).toBeLessThanOrEqual(140)
-    }
   })
 })

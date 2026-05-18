@@ -25,14 +25,3 @@ export function packTiers(base: number, packs?: PackTier[]): PackTier[] {
     return { packs: count, perItem, total: round2(perItem * count) }
   })
 }
-
-// Deterministic cosmetic count (reviews / images / Q&A) in [8, 140].
-// No real per-product data is stored or invented.
-export function pseudoCount(seed: string): number {
-  let h = 2166136261
-  for (let i = 0; i < seed.length; i++) {
-    h ^= seed.charCodeAt(i)
-    h = Math.imul(h, 16777619)
-  }
-  return 8 + (Math.abs(h) % 133)
-}
