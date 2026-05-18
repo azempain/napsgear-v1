@@ -143,6 +143,54 @@ const CHECKS = [
       if (after !== before + 1) throw new Error(`cart not persisted: before=${before} after=${after}`)
     },
   },
+  {
+    name: 'Checkout: summary totals, validation, mocked submit -> confirm + cart cleared',
+    route: '/',
+    async assert(page) {
+      // Seed a cart in localStorage, then load /checkout/.
+      await page.addInitScript(() => {
+        localStorage.setItem('napsgear_cart', JSON.stringify([
+          { id: 'x__1', name: 'Test Product — 1 pack', price: 30, qty: 2 },
+        ]))
+      })
+      // Mock the Web3Forms endpoint so no real key/network is needed.
+      await page.route('**://api.web3forms.com/**', route =>
+        route.fulfill({ status: 200, contentType: 'application/json',
+          body: JSON.stringify({ success: true }) }))
+
+      await page.goto(BASE + '/checkout/', { waitUntil: 'load' })
+      await page.waitForSelector('#placeOrderBtn', { timeout: 8000 })
+
+      // Order total = subtotal 60 + shipping 35 = 95
+      const totalText = (await page.textContent('[data-order-total]'))?.trim()
+      if (totalText !== '$95.00') throw new Error(`expected $95.00, got ${totalText}`)
+
+      // Empty submit -> inline validation, no navigation
+      await page.click('#placeOrderBtn')
+      await page.waitForSelector('.invalid-feedback', { timeout: 3000 })
+
+      // Fill required fields
+      const fill = async (id, val) => page.fill(`#${id}`, val)
+      await fill('fullName', 'Jane Doe')
+      await fill('email', 'jane@example.com')
+      await fill('phone', '5551234567')
+      await fill('address1', '12 King St')
+      await fill('city', 'Austin')
+      await fill('state', 'TX')
+      await fill('postalCode', '78701')
+      await fill('country', 'United States')
+
+      await page.click('#placeOrderBtn')
+      // Confirmation screen
+      await page.waitForSelector('text=Order received', { timeout: 6000 })
+      // Cart cleared in localStorage
+      const cart = await page.evaluate(() => localStorage.getItem('napsgear_cart'))
+      const parsed = cart ? JSON.parse(cart) : []
+      if (Array.isArray(parsed) && parsed.length !== 0) {
+        throw new Error('cart not cleared after order')
+      }
+    },
+  },
 ]
 
 ;(async () => {
