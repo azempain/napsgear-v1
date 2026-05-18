@@ -2,7 +2,7 @@
 // No filesystem / network here — the CLI wrapper does I/O.
 
 import { load } from 'cheerio'
-import type { Product, Ingredient, PackTier, Review } from '@/data/types'
+import type { Product, Ingredient, PackTier, Review, QAItem } from '@/data/types'
 import { parsePrice } from './pricing'
 
 export interface BrandPageResult {
@@ -185,6 +185,20 @@ export function parseReviews(html: string): Review[] {
     const body = it.find('.product-review__item-body').first().text().trim()
     if (!body && rating === 0) return
     out.push({ rating, author, date, body })
+  })
+  return out
+}
+
+export function parseQA(html: string): QAItem[] {
+  const $ = load(html)
+  const out: QAItem[] = []
+  $('.product-customer-post').each((_, el) => {
+    const it = $(el)
+    const author = it.find('.post-author h4').first().text().trim()
+    const date = it.find('.post-date').first().text().replace(/^\s*asked:\s*/i, '').trim()
+    const question = it.find('.question-body .text-body').first().text().trim()
+    if (!question) return
+    out.push({ author, date, question })
   })
   return out
 }
