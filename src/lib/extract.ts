@@ -166,6 +166,22 @@ export function applyDetails(products: Product[], details: DetailPageResult[]): 
   })
 }
 
+// Saved napsgear pages double-encode user text (source has "&amp;#039;").
+// cheerio .text() decodes one level; this strips the remaining level so
+// rendered review/Q&A text reads naturally instead of showing entity codes.
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCharCode(parseInt(n, 16)))
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .trim()
+}
+
 export function parseReviews(html: string): Review[] {
   const $ = load(html)
   const out: Review[] = []
@@ -177,7 +193,7 @@ export function parseReviews(html: string): Review[] {
     rating = Math.max(0, Math.min(5, Math.round(rating)))
     const author = it.find('.post-author h4').first().text().replace(/^\s*by\s+/i, '').trim()
     const date = it.find('.post-date').first().text().replace(/^\s*date added:\s*/i, '').trim()
-    const body = it.find('.product-review__item-body').first().text().trim()
+    const body = decodeEntities(it.find('.product-review__item-body').first().text())
     if (!body && rating === 0) return
     out.push({ rating, author, date, body })
   })
@@ -191,7 +207,7 @@ export function parseQA(html: string): QAItem[] {
     const it = $(el)
     const author = it.find('.post-author h4').first().text().trim()
     const date = it.find('.post-date').first().text().replace(/^\s*asked:\s*/i, '').trim()
-    const question = it.find('.question-body .text-body').first().text().trim()
+    const question = decodeEntities(it.find('.question-body .text-body').first().text())
     if (!question) return
     out.push({ author, date, question })
   })
