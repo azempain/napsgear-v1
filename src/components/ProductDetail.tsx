@@ -15,6 +15,7 @@ export default function ProductDetail({ product }: { product: Product }) {
   const { addItem } = useCart()
   const tiers = packTiers(parsePrice(product.price), product.packs)
   const [selected, setSelected] = useState(0)
+  const [tab, setTab] = useState<'description' | 'reviews' | 'qa'>('description')
   const [toast, setToast] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -142,22 +143,106 @@ export default function ProductDetail({ product }: { product: Product }) {
 
         <div id="productTabs" className="product-single-tabs">
           <ul className="nav nav-tabs">
-            <li className="nav-item active">
-              <span className="nav-link active">Description</span>
-            </li>
             <li className="nav-item">
-              <span className="nav-link disabled">Customer Questions &amp; Answers: {qa.length}</span>
+              <button
+                type="button"
+                className={`nav-link${tab === 'description' ? ' active' : ''}`}
+                onClick={() => setTab('description')}
+              >
+                Description
+              </button>
             </li>
-            <li className="nav-item">
-              <span className="nav-link nav-link-reviews disabled">Reviews: {reviews.length}</span>
-            </li>
+            {qa.length > 0 && (
+              <li className="nav-item">
+                <button
+                  type="button"
+                  className={`nav-link${tab === 'qa' ? ' active' : ''}`}
+                  onClick={() => setTab('qa')}
+                >
+                  Customer Questions &amp; Answers: {qa.length}
+                </button>
+              </li>
+            )}
+            {reviews.length > 0 && (
+              <li className="nav-item">
+                <button
+                  type="button"
+                  className={`nav-link nav-link-reviews${tab === 'reviews' ? ' active' : ''}`}
+                  onClick={() => setTab('reviews')}
+                >
+                  Reviews: {reviews.length}
+                </button>
+              </li>
+            )}
           </ul>
           <div className="tab-content" id="productContent">
-            <div className="tab-pane active" id="description">
-              <p style={{ whiteSpace: 'pre-line' }}>
-                {product.description || 'No description available.'}
-              </p>
-            </div>
+            {tab === 'description' && (
+              <div className="tab-pane active" id="description">
+                <p style={{ whiteSpace: 'pre-line' }}>
+                  {product.description || 'No description available.'}
+                </p>
+              </div>
+            )}
+            {tab === 'qa' && (
+              <div className="tab-pane active" id="questions">
+                <div className="product-customer-reviews-block">
+                  {qa.map((item, i) => (
+                    <div className="product-customer-post mb-0" key={i}>
+                      <article className="card article-question article-post question">
+                        <div className="question-content">
+                          <div className="card-header question-header">
+                            <div className="d-flex flex-row align-items-baseline">
+                              <div className="post-author"><h4>{item.author}</h4></div>
+                              <div className="post-meta">
+                                <span className="post-date">Asked: <time className="entry-date published">{item.date}</time></span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="question-body card-body bg-gray">
+                            <div className="text-body">{item.question}</div>
+                          </div>
+                        </div>
+                      </article>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {tab === 'reviews' && (
+              <div className="tab-pane active" id="reviews">
+                <div className="product-review-list">
+                  {reviews.map((rv, i) => (
+                    <div className="product-review__item mb-3" key={i}>
+                      <div className="product-review__item-content">
+                        <div className="product-review__item-header">
+                          <div className="rating me-2">
+                            <div className="rating-stars" title={String(rv.rating)}>
+                              {[1, 2, 3, 4, 5].map(n => (
+                                <span
+                                  key={n}
+                                  className={`rating-stars-icon${n <= rv.rating ? ' active' : ''}`}
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24">
+                                    <path d="M12.5,0c-0.5,0-1.1,0.3-1.3,0.8L8.1,7L1.3,8c-1.2,0.2-1.7,1.7-0.8,2.6l5,4.8l-1.2,6.8c-0.2,1,0.6,1.8,1.5,1.8c0.2,0,0.5-0.1,0.7-0.2l6.1-3.2l6.1,3.2c0.2,0.1,0.5,0.2,0.7,0.2c0.9,0,1.6-0.8,1.5-1.8l-1.2-6.8l5-4.8C25.5,9.7,25,8.2,23.8,8l-6.8-1l-3.1-6.2C13.6,0.3,13.1,0,12.5,0L12.5,0z" />
+                                  </svg>
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="post-author"><h4>by {rv.author}</h4></div>
+                          <div className="post-meta">
+                            <div className="post-date">
+                              <time className="entry-date published">Date Added: {rv.date}</time>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="product-review__item-body">{rv.body}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
