@@ -362,3 +362,32 @@ describe('parseQA', () => {
     expect(parseQA('<div></div>')).toEqual([])
   })
 })
+
+describe('entity decoding (double-encoded saved HTML)', () => {
+  // Real napsgear saved pages double-encode user text: the source contains
+  // "ain&amp;#039;t" and "&amp;nbsp;". Cheerio .text() decodes one level to
+  // "ain&#039;t" / "&nbsp;"; the parser must decode the remaining level so
+  // React renders "ain't", not literal entity codes.
+  const ENC_REVIEW = `
+    <div class="product-review__item">
+      <div class="rating-stars" title="5"></div>
+      <div class="post-author"><h4>by Tester</h4></div>
+      <div class="post-date"><time>Date Added: 1 day ago</time></div>
+      <div class="product-review__item-body">It ain&amp;#039;t bad &amp;amp; works.&amp;nbsp;</div>
+    </div>`
+  const ENC_QA = `
+    <div class="product-customer-post">
+      <div class="post-author"><h4>Asker</h4></div>
+      <span class="post-date">Asked: <time>2 days ago</time></span>
+      <div class="question-body"><div class="text-body">Can I use it &amp;quot;safely&amp;quot;?</div></div>
+    </div>`
+
+  it('decodes numeric + named entities in review bodies', () => {
+    const r = parseReviews(ENC_REVIEW)
+    expect(r[0].body).toBe("It ain't bad & works.")
+  })
+  it('decodes entities in Q&A questions', () => {
+    const q = parseQA(ENC_QA)
+    expect(q[0].question).toBe('Can I use it "safely"?')
+  })
+})
