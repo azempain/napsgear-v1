@@ -35,6 +35,12 @@ export interface Review {
   body: string
 }
 
+export interface QAItem {
+  author: string
+  date: string
+  question: string
+}
+
 export interface Product {
   slug: string
   name: string

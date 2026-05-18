@@ -291,3 +291,72 @@ describe('parseReviews', () => {
     expect(parseReviews('<div></div>')).toEqual([])
   })
 })
+
+import { parseQA } from './extract'
+import type { QAItem } from '@/data/types'
+
+const QA_HTML = `
+<div class="product-customer-reviews-block" id="qa_items_wrapper">
+  <div class="product-customer-post mb-0" id="qa_items_65500">
+    <h5 class="brief mb-1"><a class="name">NapsGear Products</a></h5>
+    <article class="card article-question article-post question">
+      <div class="question-inner">
+        <div class="question-content">
+          <div class="card-header question-header">
+            <div class="d-flex flex-row align-items-baseline">
+              <div class="post-author"><h4 data-url="x">Bradthenewguy</h4><a class="cinfo post-author-info">User profile</a></div>
+              <div class="post-meta">
+                <span class="post-date">Asked: <time class="entry-date published">5 years ago</time></span>
+              </div>
+            </div>
+          </div>
+          <div class="question-body card-body bg-gray">
+            <div class="text-body">Is this good for PCT after a test cycle?</div>
+          </div>
+          <div class="question-actions"></div>
+          <div class="answers collapse"></div>
+        </div>
+      </div>
+    </article>
+  </div>
+  <div class="product-customer-post mb-0" id="qa_items_65206">
+    <h5 class="brief mb-1"><a class="name">NapsGear Products</a></h5>
+    <article class="card article-question article-post question">
+      <div class="question-inner">
+        <div class="question-content">
+          <div class="card-header question-header">
+            <div class="d-flex flex-row align-items-baseline">
+              <div class="post-author"><h4 data-url="y">gfvc</h4></div>
+              <div class="post-meta">
+                <span class="post-date">Asked: <time class="entry-date published">5 years ago</time></span>
+              </div>
+            </div>
+          </div>
+          <div class="question-body card-body bg-gray">
+            <div class="text-body">How many tabs per day?</div>
+          </div>
+          <div class="answers collapse"></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>`
+
+describe('parseQA', () => {
+  const q: QAItem[] = parseQA(QA_HTML)
+  it('parses every customer post', () => {
+    expect(q).toHaveLength(2)
+  })
+  it('captures asker, date (Asked: stripped), and question text', () => {
+    expect(q[0]).toEqual({
+      author: 'Bradthenewguy',
+      date: '5 years ago',
+      question: 'Is this good for PCT after a test cycle?',
+    })
+    expect(q[1].author).toBe('gfvc')
+    expect(q[1].question).toBe('How many tabs per day?')
+  })
+  it('returns [] when there are no posts', () => {
+    expect(parseQA('<div></div>')).toEqual([])
+  })
+})
