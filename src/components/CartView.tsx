@@ -1,4 +1,5 @@
 'use client'
+import { useState, useRef, useEffect } from 'react'
 import { useCart } from '@/context/CartContext'
 import { subtotal, shippingFee, loyaltyCredit, total } from '@/lib/cart'
 
@@ -13,6 +14,19 @@ const TrashIcon = ({ className }: { className?: string }) => (
 
 export default function CartView() {
   const { items, updateQty, removeItem, clearCart } = useCart()
+  const [toast, setToast] = useState(false)
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => () => {
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+  }, [])
+
+  function handleRemove(id: string) {
+    removeItem(id)
+    setToast(true)
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+    toastTimer.current = setTimeout(() => setToast(false), 2500)
+  }
 
   if (items.length === 0) {
     return (
@@ -39,6 +53,13 @@ export default function CartView() {
 
   return (
     <>
+      <div className={`notification${toast ? ' visible' : ''}`} aria-live="polite">
+        <section className="body">
+          <span className="title">Removed</span>
+          <p className="message">Item removed from cart</p>
+        </section>
+      </div>
+
       <nav className="ngc-crumbs" aria-label="Breadcrumb">
         <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
         <span>CART CONTENTS</span>
@@ -86,7 +107,6 @@ export default function CartView() {
                       {item.brand && (
                         <div className="ngc-item__brand">{item.brand}</div>
                       )}
-                      <div className="ngc-item__props">1 x pack</div>
                     </div>
                   </div>
 
@@ -123,7 +143,7 @@ export default function CartView() {
                     <button
                       type="button"
                       className="ngc-item__remove"
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => handleRemove(item.id)}
                       aria-label={`Remove ${item.name}`}
                       title="Remove Product"
                     >
