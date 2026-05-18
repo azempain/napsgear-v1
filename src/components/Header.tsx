@@ -1,7 +1,8 @@
-import { Search, User, ShoppingCart, Menu } from 'lucide-react'
+import { Search, User, ShoppingCart } from 'lucide-react'
 import CartBadge from './CartBadge'
 import NapsGearLogo from './NapsGearLogo'
 import HeaderNav from './HeaderNav'
+import MobileMenu from './MobileMenu'
 
 export default function Header() {
   return (
@@ -40,9 +41,7 @@ export default function Header() {
       <div className="header-middle sticky-header mobile-sticky">
         <div className="container">
 
-          <button type="button" className="mobile-menu-toggle" aria-label="Open menu">
-            <Menu size={22} aria-hidden="true" />
-          </button>
+          <MobileMenu />
 
           <a href="/" className="logo" aria-label="NapsGear home">
             <NapsGearLogo />
