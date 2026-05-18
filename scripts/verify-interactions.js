@@ -113,7 +113,8 @@ const CHECKS = [
       await page.waitForSelector('#addToCartBtn', { timeout: 8000 })
       const radios = await page.$$('input[name="pack"]')
       if (radios.length !== 5) throw new Error(`expected 5 pack radios, got ${radios.length}`)
-      const totals = await page.$$eval('[data-tier-total]', els => els.map(e => e.textContent))
+      // Sub-project C rewrote ProductDetail; tier totals live in .price-total now.
+      const totals = await page.$$eval('.price-total', els => els.map(e => e.textContent))
       if (totals.length !== 5) throw new Error(`expected 5 tier totals, got ${totals.length}`)
       if (totals[0] === totals[4]) throw new Error('1-pack total equals 20-pack total — tiers not differentiated')
     },
