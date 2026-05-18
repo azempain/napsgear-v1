@@ -1009,3 +1009,10 @@ html, body { margin: 0; padding: 0; }
     right: 0;
   }
 }
+
+/* ── sub-project D-F: mobile nav + sticky header + cart polish ── */
+
+/* Sticky header: reserve space so .header-middle.fixed doesn't jump the page. */
+body.has-sticky-header {
+  padding-top: var(--sticky-h, 60px);
+}
