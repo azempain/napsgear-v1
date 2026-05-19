@@ -64,38 +64,53 @@ describe('checkoutFieldValidators (per-field)', () => {
 })
 
 describe('buildOrderPayload', () => {
-  const FROZEN = new Date('2026-05-19T04:23:00Z')
-  const p = buildOrderPayload(valid, items, { now: FROZEN })
+  const p = buildOrderPayload(valid, items)
 
   it('subject is the scannable triage format (name — N items — total)', () => {
     expect(p.subject).toBe('New NapsGear order — Jane Doe — 3 items — $238.00')
   })
-  it('from_name + replyto + customer fields', () => {
+  it('from_name + replyto', () => {
     expect(p.from_name).toBe('NapsGear Checkout')
     expect(p.replyto).toBe('jane@example.com')
-    expect(p.customer_name).toBe('Jane Doe')
-    expect(p.customer_email).toBe('jane@example.com')
-    expect(p.customer_phone).toBe('555 123 4567')
   })
-  it('shipping_address joins lines with \\n and skips blanks', () => {
-    expect(p.shipping_address).toBe('12 King St\nAustin, TX 78701\nUnited States')
+  it('customer field is tight 3-line name/email/phone block', () => {
+    expect(p.customer).toBe('Jane Doe\njane@example.com\n555 123 4567')
+  })
+  it('shipping field joins lines with \\n and skips blanks', () => {
+    expect(p.shipping).toBe('12 King St\nAustin, TX 78701\nUnited States')
+  })
+  it('items field is one line per item with · price', () => {
+    expect(p.items).toBe('2 × Altamofen — 1 pack · $60.00\n1 × Anazole — 5 packs · $143.00')
+  })
+  it('totals field has Subtotal/Shipping/Loyalty/TOTAL on four lines', () => {
+    expect(p.totals).toBe(
+      'Subtotal · $203.00\nShipping · $35.00\nLoyalty credit · $40.00\nTOTAL · $238.00',
+    )
   })
   it('order_total kept as a top-level sortable field', () => {
     expect(p.order_total).toBe('$238.00')
-  })
-  it('message contains the rich body — sections, customer, totals, notes', () => {
-    expect(p.message).toMatch(/NEW NAPSGEAR ORDER/)
-    expect(p.message).toMatch(/Customer:.*Jane Doe/)
-    expect(p.message).toMatch(/TOTAL:.*\$238\.00/)
-    expect(p.message).toMatch(/ORDER NOTES/)
   })
   it('does NOT contain access_key', () => {
     expect('access_key' in p).toBe(false)
   })
   it('does NOT contain the legacy fragmentary order_* fields', () => {
-    // These were merged into `message` to avoid duplicating data in the inbox.
-    for (const k of ['order_items', 'order_subtotal', 'order_shipping', 'order_loyalty_credit', 'order_notes']) {
+    // The old per-fragment fields (order_items, order_subtotal, ...) AND the
+    // mega `message` field have all been removed to keep the inbox tight.
+    for (const k of [
+      'order_items', 'order_subtotal', 'order_shipping', 'order_loyalty_credit',
+      'order_notes', 'message',
+      // separate name/email/phone/address fields — collapsed into customer/shipping
+      'customer_name', 'customer_email', 'customer_phone', 'shipping_address',
+    ]) {
       expect(k in p).toBe(false)
     }
+  })
+  it('omits the notes field entirely when the user left it blank', () => {
+    const blank = buildOrderPayload({ ...valid, notes: '' }, items)
+    expect('notes' in blank).toBe(false)
+  })
+  it('includes notes only when the user typed something', () => {
+    const withNotes = buildOrderPayload({ ...valid, notes: '  Leave at door.  ' }, items)
+    expect(withNotes.notes).toBe('Leave at door.')
   })
 })

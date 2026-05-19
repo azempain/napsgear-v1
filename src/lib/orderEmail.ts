@@ -1,40 +1,28 @@
-// Composes the human-facing body of the order-notification email.
+// Per-field composers for the Web3Forms order email.
 //
-// Why plain text? Web3Forms' API has no field for a custom HTML body — the
-// surrounding email template lives in their dashboard. A well-formatted
-// monospace plain-text body, however, renders identically across Gmail,
-// Outlook, Apple Mail, mobile clients, and plain-text-only inboxes. Sectioned
-// dividers + right-aligned dollar columns make the order scannable at a
-// glance with no rendering quirks to debug.
+// Web3Forms renders every JSON key as its own labeled block in the inbox,
+// with its own divider and blue header. Earlier versions of this file shipped
+// a single `message` field full of box-drawing dividers — which, stacked on
+// top of Web3Forms' own per-field separators, produced a noisy multi-page
+// receipt. We now lean entirely on Web3Forms' native field rendering and keep
+// each value tight: one-line per fact, no ASCII art, no duplication.
+//
+// Target aesthetic: Anthropic invoice tight.
 
 import type { CartItem } from '@/context/CartContext'
 import { subtotal, shippingFee, loyaltyCredit, total, formatCartLine } from './cart'
 import type { CheckoutForm } from './checkout'
 
-const WIDTH = 63
-const DIVIDER = '─'.repeat(WIDTH)
-const DOUBLE = '═'.repeat(WIDTH)
-const SUBLINE = '─'.repeat(WIDTH - 8)
-
 const fmt = (n: number) => `$${n.toFixed(2)}`
 
-/** Pad a left/right pair onto a single line with dot-leaders so eyes track
- *  the value column. Falls back to a wide space gap if the line is too long
- *  for any dots to fit. */
-function dottedLine(left: string, right: string): string {
-  const inner = WIDTH - 2 - left.length - right.length
-  if (inner < 4) {
-    // Long line — drop to a single space; better than wrapping mid-cell.
-    return `  ${left} ${right}`
-  }
-  return `  ${left} ${'.'.repeat(inner - 2)} ${right}`
+/** "Flux\njane@example.com\n8002428478" — one tight block instead of three
+ *  separate Customer name / Customer email / Customer phone fields. */
+export function renderCustomer(f: CheckoutForm): string {
+  return [f.fullName, f.email, f.phone].filter(s => s && s.trim()).join('\n')
 }
 
-function indent(s: string, prefix = '  '): string {
-  return s.split('\n').map(l => l ? prefix + l : l).join('\n')
-}
-
-function buildAddressBlock(f: CheckoutForm): string {
+/** Multi-line address; blanks dropped. */
+export function renderShipping(f: CheckoutForm): string {
   return [
     f.address1,
     f.address2,
@@ -43,85 +31,25 @@ function buildAddressBlock(f: CheckoutForm): string {
   ].filter(s => s && s.trim()).join('\n')
 }
 
-function buildItemsBlock(items: CartItem[]): string {
-  if (items.length === 0) return '  (no items)'
-  return items.map(i => {
-    const left  = `${i.qty} × ${formatCartLine(i)}`
-    const right = fmt(i.price * i.qty)
-    return dottedLine(left, right)
-  }).join('\n')
+/** One line per item: "2 × Altamofen — 1 pack · $60.00". Long product names
+ *  wrap naturally in the inbox; the price is at the end so it stays findable. */
+export function renderItems(items: CartItem[]): string {
+  if (items.length === 0) return '(no items)'
+  return items
+    .map(i => `${i.qty} × ${formatCartLine(i)} · ${fmt(i.price * i.qty)}`)
+    .join('\n')
 }
 
-function buildTotalsBlock(items: CartItem[]): string {
-  const lines = [
-    dottedLine('Subtotal:',              fmt(subtotal(items))),
-    dottedLine('Shipping & Handling:',   fmt(shippingFee(items))),
-    dottedLine('Loyalty Credit Earned:', fmt(loyaltyCredit(items))),
-    '  ' + SUBLINE,
-    dottedLine('TOTAL:',                 fmt(total(items))),
-  ]
-  return lines.join('\n')
-}
-
-export interface RenderOrderEmailOpts {
-  /** Injected for tests; defaults to new Date() at call time. */
-  now?: Date
-}
-
-export function renderOrderEmail(
-  f: CheckoutForm,
-  items: CartItem[],
-  opts: RenderOrderEmailOpts = {},
-): string {
-  const now = opts.now ?? new Date()
-  const submitted = now.toISOString().replace('T', ' ').slice(0, 16) + ' UTC'
-  const itemCount = items.reduce((s, i) => s + i.qty, 0)
-  const notes = f.notes.trim() || '(none)'
-
+/** Subtotal / Shipping / Loyalty / TOTAL — middle-dot separator, no
+ *  decorative rule. The final TOTAL line is uppercased so it pops without
+ *  needing a divider above it. */
+export function renderTotals(items: CartItem[]): string {
   return [
-    DOUBLE,
-    centered('NEW NAPSGEAR ORDER'),
-    DOUBLE,
-    '',
-    `  Submitted: ${submitted}`,
-    '',
-    dottedLine('Customer:', f.fullName),
-    dottedLine('Email:',    f.email),
-    dottedLine('Phone:',    f.phone),
-    dottedLine('Items:',    String(itemCount)),
-    dottedLine('Total:',    fmt(total(items))),
-    '',
-    DIVIDER,
-    '  SHIPPING ADDRESS',
-    DIVIDER,
-    '',
-    indent(buildAddressBlock(f)),
-    '',
-    DIVIDER,
-    '  ITEMS',
-    DIVIDER,
-    '',
-    buildItemsBlock(items),
-    '',
-    DIVIDER,
-    '  TOTALS',
-    DIVIDER,
-    '',
-    buildTotalsBlock(items),
-    '',
-    DIVIDER,
-    '  ORDER NOTES',
-    DIVIDER,
-    '',
-    indent(notes),
-    '',
-    DOUBLE,
+    `Subtotal · ${fmt(subtotal(items))}`,
+    `Shipping · ${fmt(shippingFee(items))}`,
+    `Loyalty credit · ${fmt(loyaltyCredit(items))}`,
+    `TOTAL · ${fmt(total(items))}`,
   ].join('\n')
-}
-
-function centered(s: string): string {
-  const pad = Math.max(0, Math.floor((WIDTH - s.length) / 2))
-  return ' '.repeat(pad) + s
 }
 
 /** Short, scannable subject for inbox triage. */
