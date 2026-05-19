@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { renderOrderEmail, buildOrderSubject } from './orderEmail'
+import {
+  renderCustomer, renderShipping, renderItems, renderTotals, buildOrderSubject,
+} from './orderEmail'
 import type { CheckoutForm } from './checkout'
 import type { CartItem } from '@/context/CartContext'
 
@@ -21,73 +23,52 @@ const ITEMS: CartItem[] = [
   { id: 'b__5', productName: 'Anazole',   packCount: 5, slug: 'b', price: 143, qty: 1 },
 ]
 
-// Frozen now for deterministic snapshot of the submitted-at stamp
-const FROZEN_NOW = new Date('2026-05-19T04:23:00.000Z')
-
-describe('renderOrderEmail', () => {
-  const body = renderOrderEmail(FORM, ITEMS, { now: FROZEN_NOW })
-
-  it('contains all section headers', () => {
-    expect(body).toMatch(/NEW NAPSGEAR ORDER/)
-    expect(body).toMatch(/SHIPPING ADDRESS/)
-    expect(body).toMatch(/ITEMS/)
-    expect(body).toMatch(/TOTALS/)
-    expect(body).toMatch(/ORDER NOTES/)
+describe('renderCustomer', () => {
+  it('packs name, email, phone onto separate lines', () => {
+    expect(renderCustomer(FORM)).toBe('Jane Doe\njane@example.com\n555 123 4567')
   })
-
-  it('contains the submitted-at stamp in UTC', () => {
-    expect(body).toMatch(/Submitted:\s+2026-05-19 04:23 UTC/)
+  it('drops blank fields rather than emitting empty lines', () => {
+    const out = renderCustomer({ ...FORM, phone: '' })
+    expect(out).toBe('Jane Doe\njane@example.com')
+    expect(out).not.toMatch(/\n\n/)
   })
+})
 
-  it('shows the customer block (name, email, phone)', () => {
-    expect(body).toMatch(/Customer:\s+\.+\s+Jane Doe/) // dot-leader pattern
-    expect(body).toContain('jane@example.com')
-    expect(body).toContain('555 123 4567')
+describe('renderShipping', () => {
+  it('renders four-line address block when address2 present', () => {
+    expect(renderShipping(FORM)).toBe(
+      '12 King St\nApt 3\nAustin, TX 78701\nUnited States',
+    )
   })
-
-  it('renders the shipping address block including address2', () => {
-    expect(body).toContain('12 King St')
-    expect(body).toContain('Apt 3')
-    expect(body).toContain('Austin, TX 78701')
-    expect(body).toContain('United States')
+  it('skips blank address2 cleanly', () => {
+    expect(renderShipping({ ...FORM, address2: '' })).toBe(
+      '12 King St\nAustin, TX 78701\nUnited States',
+    )
   })
+})
 
-  it('skips blank address lines (no double newline gap)', () => {
-    const noApt = renderOrderEmail({ ...FORM, address2: '' }, ITEMS, { now: FROZEN_NOW })
-    expect(noApt).not.toMatch(/\n\n12 King St\n\n/)
-    expect(noApt).toContain('12 King St\n  Austin, TX 78701')
+describe('renderItems', () => {
+  it('one line per item, qty × name · $lineTotal', () => {
+    expect(renderItems(ITEMS)).toBe(
+      '2 × Altamofen — 1 pack · $60.00\n1 × Anazole — 5 packs · $143.00',
+    )
   })
-
-  it('renders items with qty × name and right-aligned line totals', () => {
-    expect(body).toMatch(/2 × Altamofen — 1 pack/)
-    expect(body).toMatch(/1 × Anazole — 5 packs/)
-    // dollar amounts should appear on the item lines
-    expect(body).toMatch(/\$60\.00/)
-    expect(body).toMatch(/\$143\.00/)
+  it('shows "(no items)" rather than an empty string for empty carts', () => {
+    expect(renderItems([])).toBe('(no items)')
   })
-
-  it('renders totals block with subtotal/shipping/loyalty/TOTAL', () => {
-    expect(body).toMatch(/Subtotal:.*\$203\.00/)
-    expect(body).toMatch(/Shipping & Handling:.*\$35\.00/)
-    expect(body).toMatch(/Loyalty Credit Earned:.*\$40\.00/)
-    expect(body).toMatch(/TOTAL:.*\$238\.00/)
+  it('contains no ASCII box-drawing characters', () => {
+    expect(renderItems(ITEMS)).not.toMatch(/[═─]/)
   })
+})
 
-  it('renders notes as-is, or "(none)" when blank', () => {
-    expect(body).toContain('Please leave at the door.')
-    const blank = renderOrderEmail({ ...FORM, notes: '' }, ITEMS, { now: FROZEN_NOW })
-    expect(blank).toMatch(/ORDER NOTES[\s\S]*\(none\)/)
+describe('renderTotals', () => {
+  it('Subtotal / Shipping / Loyalty credit / TOTAL on four lines', () => {
+    expect(renderTotals(ITEMS)).toBe(
+      'Subtotal · $203.00\nShipping · $35.00\nLoyalty credit · $40.00\nTOTAL · $238.00',
+    )
   })
-
-  it('uses box-drawing dividers (Unicode safe across mail clients)', () => {
-    expect(body).toContain('═')
-    expect(body).toContain('─')
-  })
-
-  it('handles an empty cart without throwing', () => {
-    const empty = renderOrderEmail(FORM, [], { now: FROZEN_NOW })
-    expect(empty).toContain('(no items)')
-    expect(empty).toMatch(/TOTAL:.*\$0\.00/)
+  it('uppercased TOTAL line stands out without a divider above it', () => {
+    expect(renderTotals(ITEMS)).toMatch(/\nTOTAL · /)
   })
 })
 
