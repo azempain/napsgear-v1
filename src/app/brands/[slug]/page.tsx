@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { brands, products, ingredients } from '@/data'
-import BrandListing from '@/components/BrandListing'
+import ProductTable from '@/components/ProductTable'
 
 export const dynamicParams = false
 
@@ -27,18 +27,16 @@ export default async function BrandPage({
   return (
     <main className="main">
       <div className="container">
-        {brandProducts.length === 0 ? (
-          <div className="py-5">
-            <h2 className="category-title">{brand.name}</h2>
-            <p className="text-muted">No products grabbed yet for this brand.</p>
-          </div>
-        ) : (
-          <BrandListing
-            brandName={brand.name}
-            products={brandProducts}
-            ingredients={brandIngredients}
-          />
-        )}
+        <ProductTable
+          title={brand.name}
+          products={brandProducts}
+          ingredients={brandIngredients}
+          emptyMessage={
+            brandProducts.length === 0
+              ? 'No products grabbed yet for this brand.'
+              : 'No products match your filters.'
+          }
+        />
       </div>
     </main>
   )
