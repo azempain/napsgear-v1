@@ -1,9 +1,10 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useForm } from '@tanstack/react-form'
 import { useCart } from '@/context/CartContext'
 import {
-  validateCheckout, buildOrderPayload, type CheckoutForm,
+  buildOrderPayload, type CheckoutForm,
 } from '@/lib/checkout'
 import CheckoutFormView from '@/components/CheckoutForm'
 import OrderSummary from '@/components/OrderSummary'
@@ -20,10 +21,46 @@ type Status = 'form' | 'submitting' | 'success' | 'error'
 export default function CheckoutPage() {
   const { items, clearCart } = useCart()
   const router = useRouter()
-  const [form, setForm] = useState<CheckoutForm>(EMPTY)
-  const [errors, setErrors] = useState<Record<string, string>>({})
   const [status, setStatus] = useState<Status>('form')
-  const snapshot = useRef<{ count: number; total: string } | null>(null)
+  // Captured at submit time so the confirmation screen survives clearCart.
+  const snapshot = useRef<{ count: number; total: string; email: string } | null>(null)
+
+  const form = useForm({
+    defaultValues: EMPTY,
+    onSubmit: async ({ value }) => {
+      // CheckoutForm already wired per-field onBlur+onSubmit validators using
+      // checkoutFieldValidators, so by the time we land here the form is valid.
+      const key = process.env.NEXT_PUBLIC_WEB3FORMS_KEY
+      if (!key) {
+        console.warn('[checkout] NEXT_PUBLIC_WEB3FORMS_KEY is not set — see .env.local.example')
+        setStatus('error')
+        return
+      }
+      setStatus('submitting')
+      snapshot.current = {
+        count: items.reduce((s, i) => s + i.qty, 0),
+        total: `$${total(items).toFixed(2)}`,
+        email: value.email,
+      }
+      const ctrl = new AbortController()
+      const timer = setTimeout(() => ctrl.abort(), 15000)
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ access_key: key, ...buildOrderPayload(value, items) }),
+          signal: ctrl.signal,
+        })
+        const data = await res.json().catch(() => ({ success: false }))
+        if (res.ok && data.success) setStatus('success')
+        else setStatus('error')
+      } catch {
+        setStatus('error')
+      } finally {
+        clearTimeout(timer)
+      }
+    },
+  })
 
   // Clear cart + auto-redirect once we reach success.
   useEffect(() => {
@@ -32,48 +69,6 @@ export default function CheckoutPage() {
     const t = setTimeout(() => router.push('/catalog/'), 5000)
     return () => clearTimeout(t)
   }, [status, clearCart, router])
-
-  function update(name: keyof CheckoutForm, value: string) {
-    setForm(prev => ({ ...prev, [name]: value }))
-  }
-
-  async function placeOrder() {
-    const errs = validateCheckout(form)
-    setErrors(errs)
-    if (Object.keys(errs).length > 0) {
-      const first = Object.keys(errs)[0]
-      document.getElementById(first)?.focus()
-      return
-    }
-    const key = process.env.NEXT_PUBLIC_WEB3FORMS_KEY
-    if (!key) {
-      console.warn('[checkout] NEXT_PUBLIC_WEB3FORMS_KEY is not set — see .env.local.example')
-      setStatus('error')
-      return
-    }
-    setStatus('submitting')
-    snapshot.current = {
-      count: items.reduce((s, i) => s + i.qty, 0),
-      total: `$${total(items).toFixed(2)}`,
-    }
-    const ctrl = new AbortController()
-    const timer = setTimeout(() => ctrl.abort(), 15000)
-    try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ access_key: key, ...buildOrderPayload(form, items) }),
-        signal: ctrl.signal,
-      })
-      const data = await res.json().catch(() => ({ success: false }))
-      if (res.ok && data.success) setStatus('success')
-      else setStatus('error')
-    } catch {
-      setStatus('error')
-    } finally {
-      clearTimeout(timer)
-    }
-  }
 
   // success takes precedence over the empty-cart guard (cart is now empty by design)
   if (status === 'success') {
@@ -84,7 +79,7 @@ export default function CheckoutPage() {
           <h1 className="ngc-confirm__title">Order received — thank you!</h1>
           <p className="ngc-confirm__sub">
             We&apos;ve emailed your order to the NapsGear team. You&apos;ll hear
-            back at <strong>{form.email}</strong>.
+            back at <strong>{snapshot.current?.email}</strong>.
           </p>
           {snapshot.current && (
             <p className="ngc-confirm__meta">
@@ -129,12 +124,9 @@ export default function CheckoutPage() {
           <div className="ngc-head">
             <span>Checkout</span>
           </div>
-          <CheckoutFormView
-            form={form}
-            errors={errors}
-            disabled={submitting}
-            onChange={update}
-          />
+          <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit() }}>
+            <CheckoutFormView form={form} disabled={submitting} />
+          </form>
         </div>
 
         <aside className="ngc-totals" aria-label="Order summary column">
@@ -149,7 +141,7 @@ export default function CheckoutPage() {
             className="ngc-btn ngc-btn--dark ngc-btn--block"
             id="placeOrderBtn"
             disabled={submitting}
-            onClick={placeOrder}
+            onClick={() => form.handleSubmit()}
           >
             {submitting ? 'Placing order…' : 'Place Order'}
           </button>

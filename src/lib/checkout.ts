@@ -32,18 +32,40 @@ export interface OrderPayload {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+/** Per-field validators. Each returns `undefined` when valid, or a user-facing
+ *  error string. Used at field-level by TanStack Form (onBlur) and aggregated
+ *  by validateCheckout() at submit time. */
+export const checkoutFieldValidators: {
+  [K in keyof CheckoutForm]: (value: string) => string | undefined
+} = {
+  fullName: (v) => v.trim() ? undefined : 'Full name is required',
+  email: (v) => {
+    const t = v.trim()
+    if (!t) return 'Email is required'
+    if (!EMAIL_RE.test(t)) return 'Enter a valid email address'
+    return undefined
+  },
+  phone: (v) => {
+    const t = v.trim()
+    if (!t) return 'Phone is required'
+    if (t.replace(/\D/g, '').length < 7) return 'Enter a valid phone number'
+    return undefined
+  },
+  address1:   (v) => v.trim() ? undefined : 'Address is required',
+  address2:   () => undefined,
+  city:       (v) => v.trim() ? undefined : 'City is required',
+  state:      (v) => v.trim() ? undefined : 'State/Region is required',
+  postalCode: (v) => v.trim() ? undefined : 'Postal code is required',
+  country:    (v) => v.trim() ? undefined : 'Country is required',
+  notes:      () => undefined,
+}
+
 export function validateCheckout(f: CheckoutForm): Record<string, string> {
   const e: Record<string, string> = {}
-  if (!f.fullName.trim()) e.fullName = 'Full name is required'
-  if (!f.email.trim()) e.email = 'Email is required'
-  else if (!EMAIL_RE.test(f.email.trim())) e.email = 'Enter a valid email address'
-  if (!f.phone.trim()) e.phone = 'Phone is required'
-  else if (f.phone.replace(/\D/g, '').length < 7) e.phone = 'Enter a valid phone number'
-  if (!f.address1.trim()) e.address1 = 'Address is required'
-  if (!f.city.trim()) e.city = 'City is required'
-  if (!f.state.trim()) e.state = 'State/Region is required'
-  if (!f.postalCode.trim()) e.postalCode = 'Postal code is required'
-  if (!f.country.trim()) e.country = 'Country is required'
+  ;(Object.keys(checkoutFieldValidators) as (keyof CheckoutForm)[]).forEach(k => {
+    const msg = checkoutFieldValidators[k](f[k])
+    if (msg) e[k] = msg
+  })
   return e
 }
 
