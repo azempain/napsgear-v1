@@ -1179,3 +1179,11 @@ body.has-sticky-header {
     margin-top: 4px;
   }
 }
+
+/* F1: reserve space under the page for the fixed mobile action bar so it never
+   covers the last row, the totals card, or the empty-cart CTA. */
+@media (max-width: 767px) {
+  .cart-main {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+}
