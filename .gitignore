@@ -13,6 +13,9 @@ next-env.d.ts
 # Local reference material (saved browser dumps, 8.6MB+ — not shipped)
 saved pages/
 
+# Repomix bundled-codebase exports (regenerated locally, not for version control)
+repomix-output.*
+
 # Claude / AI tooling
 .claude/
 .cursor/
