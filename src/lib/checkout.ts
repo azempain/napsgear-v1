@@ -1,5 +1,5 @@
 import type { CartItem } from '@/context/CartContext'
-import { subtotal, shippingFee, loyaltyCredit, total } from './cart'
+import { subtotal, shippingFee, loyaltyCredit, total, formatCartLine } from './cart'
 
 export interface CheckoutForm {
   fullName: string
@@ -67,7 +67,7 @@ export function buildOrderPayload(f: CheckoutForm, items: CartItem[]): OrderPayl
     shipping_address: address,
     order_notes: f.notes.trim() || '(none)',
     order_items: items
-      .map(i => `${i.qty}× ${i.name}  ${fmt(i.price * i.qty)}`)
+      .map(i => `${i.qty}× ${formatCartLine(i)}  ${fmt(i.price * i.qty)}`)
       .join('\n'),
     order_subtotal: fmt(subtotal(items)),
     order_shipping: fmt(shippingFee(items)),
