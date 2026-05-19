@@ -21,3 +21,14 @@ export function loyaltyCredit(items: LineItem[]): number {
 export function total(items: LineItem[]): number {
   return subtotal(items) + shippingFee(items)
 }
+
+export interface CartLineParts {
+  productName: string
+  packCount: number
+  packLabel?: string
+}
+
+export function formatCartLine(p: CartLineParts): string {
+  const packs = `${p.packCount} pack${p.packCount === 1 ? '' : 's'}`
+  return `${p.productName} — ${packs}${p.packLabel ? ` (${p.packLabel})` : ''}`
+}
