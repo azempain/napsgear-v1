@@ -7,6 +7,7 @@ import {
 } from '@/lib/checkout'
 import CheckoutFormView from '@/components/CheckoutForm'
 import OrderSummary from '@/components/OrderSummary'
+import EmptyCart from '@/components/EmptyCart'
 import { total } from '@/lib/cart'
 
 const EMPTY: CheckoutForm = {
@@ -101,10 +102,13 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <main className="main">
-        <div className="container py-5 text-center">
-          <h1 className="mb-3">Your cart is empty</h1>
-          <a className="btn btn-dark" href="/catalog/">Continue shopping</a>
+      <main className="main cart-main">
+        <div className="container py-5">
+          <EmptyCart
+            heading="Nothing to check out yet"
+            sub="Your cart is empty — add a product before placing an order."
+            ctaLabel="Browse Catalog"
+          />
         </div>
       </main>
     )
