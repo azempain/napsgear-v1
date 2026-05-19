@@ -1,5 +1,6 @@
 import type { CartItem } from '@/context/CartContext'
-import { subtotal, shippingFee, loyaltyCredit, total, formatCartLine } from './cart'
+import { total } from './cart'
+import { renderOrderEmail, buildOrderSubject } from './orderEmail'
 
 export interface CheckoutForm {
   fullName: string
@@ -22,11 +23,10 @@ export interface OrderPayload {
   customer_email: string
   customer_phone: string
   shipping_address: string
-  order_notes: string
-  order_items: string
-  order_subtotal: string
-  order_shipping: string
-  order_loyalty_credit: string
+  /** The full pretty-printed order body. This is what makes the inbox view
+   *  readable — see renderOrderEmail. */
+  message: string
+  /** Kept as a top-level field so the Web3Forms dashboard can sort by it. */
   order_total: string
 }
 
@@ -71,7 +71,21 @@ export function validateCheckout(f: CheckoutForm): Record<string, string> {
 
 const fmt = (n: number) => `$${n.toFixed(2)}`
 
-export function buildOrderPayload(f: CheckoutForm, items: CartItem[]): OrderPayload {
+/** Build the Web3Forms payload. The richly formatted email body lives in
+ *  `message`; the redundant order_items / order_subtotal / etc. fields were
+ *  removed because Web3Forms renders ALL JSON keys into the email — having
+ *  the same data twice made the inbox noisy. `order_total` is kept so the
+ *  Web3Forms dashboard can sort/filter by it. */
+export interface BuildOrderPayloadOpts {
+  /** Injected for tests — drives the "Submitted" timestamp in the body. */
+  now?: Date
+}
+
+export function buildOrderPayload(
+  f: CheckoutForm,
+  items: CartItem[],
+  opts: BuildOrderPayloadOpts = {},
+): OrderPayload {
   const address = [
     f.address1,
     f.address2,
@@ -80,20 +94,14 @@ export function buildOrderPayload(f: CheckoutForm, items: CartItem[]): OrderPayl
   ].filter(s => s && s.trim()).join('\n')
 
   return {
-    subject: `New NapsGear order — ${f.fullName}`,
+    subject: buildOrderSubject(f, items),
     from_name: 'NapsGear Checkout',
     replyto: f.email,
     customer_name: f.fullName,
     customer_email: f.email,
     customer_phone: f.phone,
     shipping_address: address,
-    order_notes: f.notes.trim() || '(none)',
-    order_items: items
-      .map(i => `${i.qty}× ${formatCartLine(i)}  ${fmt(i.price * i.qty)}`)
-      .join('\n'),
-    order_subtotal: fmt(subtotal(items)),
-    order_shipping: fmt(shippingFee(items)),
-    order_loyalty_credit: fmt(loyaltyCredit(items)),
+    message: renderOrderEmail(f, items, { now: opts.now }),
     order_total: fmt(total(items)),
   }
 }
