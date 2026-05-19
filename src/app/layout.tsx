@@ -9,6 +9,7 @@ import Header from '@/components/Header'
 import CartDrawer from '@/components/CartDrawer'
 import Footer from '@/components/Footer'
 import NavInteractions from '@/components/NavInteractions'
+import ScrollToTop from '@/components/ScrollToTop'
 
 export const metadata: Metadata = {
   title: 'NapsGear',
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </svg>
 
         <CartProvider>
+          <ScrollToTop />
           <Header />
           <CartDrawer />
           <div className='min-h-screen'>
