@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { categories, products } from '@/data'
-import ProductCard from '@/components/ProductCard'
+import ProductTable from '@/components/ProductTable'
 
 export const dynamicParams = false
 
@@ -17,20 +17,19 @@ export default async function CategoryPage({
   const category = categories.find((c) => c.slug === slug)
   if (!category) notFound()
 
+  // Until per-category product data is captured, the grid falls back to
+  // showing a sampling of all products so the route isn't empty in dev.
+  // ProductTable's toolbar still lets visitors narrow what they see.
+  const list = products
+
   return (
     <main className="main">
-      <div className="container py-5">
-        <h1 className="mb-4">{category.name}</h1>
-        <p className="text-muted mb-4">No products grabbed yet for this category.</p>
-        {products.length > 0 && (
-          <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
-            {products.slice(0, 20).map((p) => (
-              <div key={p.slug} className="col">
-                <ProductCard product={p} />
-              </div>
-            ))}
-          </div>
-        )}
+      <div className="container">
+        <ProductTable
+          title={category.name}
+          products={list}
+          emptyMessage="No products available for this category yet."
+        />
       </div>
     </main>
   )
