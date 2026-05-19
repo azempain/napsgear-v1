@@ -1620,3 +1620,53 @@ body.has-sticky-header {
   gap: 12px;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────
+   Toast notification — override legacy main.css which used a low-contrast
+   #ced4da background that disappeared against the page and the green banners.
+   Solid dark navy + white text + green accent stripe so it's readable on any
+   background.
+   ───────────────────────────────────────────────────────────────────────── */
+.notification {
+  background-color: #1a1f29 !important;
+  border: 0 !important;
+  border-left: 4px solid #16a34a !important;
+  border-radius: 6px !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28), 0 2px 6px rgba(0, 0, 0, 0.18) !important;
+  max-width: 320px !important;
+  z-index: 1100;
+}
+.notification .body {
+  padding: 12px 18px !important;
+}
+.notification .body span.title {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 0 !important;
+}
+.notification .body p.message {
+  color: #e6e6e6 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  margin-top: 2px !important;
+  line-height: 1.4;
+}
+@media (max-width: 575px) {
+  .notification {
+    left: 16px !important;
+    right: 16px !important;
+    max-width: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .notification.ease,
+  .notification.ease-in,
+  .notification.ease-out,
+  .notification.ease-in-out,
+  .notification.linear {
+    transition: none !important;
+  }
+}
+
