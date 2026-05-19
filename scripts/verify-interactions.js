@@ -226,6 +226,47 @@ const CHECKS = [
       if (!cta) throw new Error('EmptyCart CTA missing or not pointing to /catalog/')
     },
   },
+  // ─── F2a checks ─────────────────────────────────────────────────────────
+  {
+    name: 'F2a: /catalog/ search narrows the product grid (TanStack Table)',
+    route: '/catalog/',
+    async assert(page) {
+      await page.waitForSelector('[data-testid="product-grid"]', { timeout: 8000 })
+      const before = await page.$$eval('[data-testid="product-grid"] .product-item', els => els.length)
+      if (before < 2) throw new Error(`expected at least 2 products to narrow, got ${before}`)
+      // Type a unique-ish query
+      await page.fill('[data-testid="product-search"]', 'altamofen')
+      await page.waitForFunction(
+        (b) => {
+          const items = document.querySelectorAll('[data-testid="product-grid"] .product-item')
+          return items.length > 0 && items.length < b
+        },
+        before,
+        { timeout: 3000 },
+      )
+      const after = await page.$$eval('[data-testid="product-grid"] .product-item', els => els.length)
+      if (!(after >= 1 && after < before)) {
+        throw new Error(`search did not narrow: before=${before} after=${after}`)
+      }
+    },
+  },
+  {
+    name: 'F2a: /catalog/ sort dropdown reorders products (name asc vs desc)',
+    route: '/catalog/',
+    async assert(page) {
+      await page.waitForSelector('[data-testid="product-grid"]', { timeout: 8000 })
+      const firstName = async () =>
+        (await page.textContent('[data-testid="product-grid"] .product-item:first-child .product-item__title'))?.trim()
+      await page.selectOption('[data-testid="product-sort"]', 'name-asc')
+      await page.waitForTimeout(100)
+      const asc = await firstName()
+      await page.selectOption('[data-testid="product-sort"]', 'name-desc')
+      await page.waitForTimeout(100)
+      const desc = await firstName()
+      if (!asc || !desc) throw new Error('could not read product names')
+      if (asc === desc) throw new Error(`sort did not change order: still "${asc}"`)
+    },
+  },
   {
     name: 'F1: mobile /cart/ reserves padding-bottom for the sticky action bar',
     route: '/',
