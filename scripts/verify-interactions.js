@@ -151,7 +151,7 @@ const CHECKS = [
       // Seed a cart in localStorage, then load /checkout/.
       await page.addInitScript(() => {
         localStorage.setItem('napsgear_cart', JSON.stringify([
-          { id: 'x__1', name: 'Test Product — 1 pack', price: 30, qty: 2 },
+          { id: 'x__1', productName: 'Test Product', packCount: 1, slug: 'x', price: 30, qty: 2 },
         ]))
       })
       // Mock the Web3Forms endpoint so no real key/network is needed.
@@ -168,7 +168,7 @@ const CHECKS = [
 
       // Empty submit -> inline validation, no navigation
       await page.click('#placeOrderBtn')
-      await page.waitForSelector('.invalid-feedback', { timeout: 3000 })
+      await page.waitForSelector('.ngc-field__err', { timeout: 3000 })
 
       // Fill required fields
       const fill = async (id, val) => page.fill(`#${id}`, val)
@@ -190,6 +190,59 @@ const CHECKS = [
       if (Array.isArray(parsed) && parsed.length !== 0) {
         throw new Error('cart not cleared after order')
       }
+    },
+  },
+  // ─── F1 checks ─────────────────────────────────────────────────────────
+  {
+    name: 'F1: /cart/ renders .ngc-item__variant under each item name (structured CartItem)',
+    route: '/',
+    async assert(page) {
+      await page.addInitScript(() => {
+        localStorage.setItem('napsgear_cart', JSON.stringify([
+          { id: 'a__1', productName: 'Altamofen', packCount: 1, packLabel: '50 tabs (20mg/tab)', slug: 'a', price: 30, qty: 1 },
+          { id: 'b__5', productName: 'Anazole', packCount: 5, slug: 'b', price: 143, qty: 1 },
+        ]))
+      })
+      await page.goto(BASE + '/cart/', { waitUntil: 'load' })
+      await page.waitForSelector('.ngc-item', { timeout: 8000 })
+      const variants = await page.$$eval('.ngc-item__variant', els => els.map(e => e.textContent.trim()))
+      if (variants.length !== 2) throw new Error(`expected 2 .ngc-item__variant rows, got ${variants.length}`)
+      if (!variants[0].includes('1 pack')) throw new Error(`row 0 variant missing '1 pack': ${variants[0]}`)
+      if (!variants[1].includes('5 packs')) throw new Error(`row 1 variant missing '5 packs': ${variants[1]}`)
+    },
+  },
+  {
+    name: 'F1: /checkout/ empty state renders shared <EmptyCart> (not the bootstrap stub)',
+    route: '/',
+    async assert(page) {
+      await page.addInitScript(() => localStorage.removeItem('napsgear_cart'))
+      await page.goto(BASE + '/checkout/', { waitUntil: 'load' })
+      const title = await page.waitForSelector('.ngc-empty .ngc-empty__title', { timeout: 8000 })
+      const text = (await title.textContent() || '').trim()
+      if (!text.toLowerCase().includes('check out')) {
+        throw new Error(`expected checkout-specific empty heading, got: "${text}"`)
+      }
+      const cta = await page.$('.ngc-empty .ngc-btn--dark[href="/catalog/"]')
+      if (!cta) throw new Error('EmptyCart CTA missing or not pointing to /catalog/')
+    },
+  },
+  {
+    name: 'F1: mobile /cart/ reserves padding-bottom for the sticky action bar',
+    route: '/',
+    async assert(page) {
+      await page.setViewportSize({ width: 375, height: 720 })
+      await page.addInitScript(() => {
+        localStorage.setItem('napsgear_cart', JSON.stringify([
+          { id: 'a__1', productName: 'Altamofen', packCount: 1, slug: 'a', price: 30, qty: 1 },
+        ]))
+      })
+      await page.goto(BASE + '/cart/', { waitUntil: 'load' })
+      await page.waitForSelector('.cart-main', { timeout: 8000 })
+      const pad = await page.$eval('.cart-main', el =>
+        parseFloat(getComputedStyle(el).paddingBottom))
+      if (!(pad >= 72)) throw new Error(`expected padding-bottom >= 72px on mobile, got ${pad}px`)
+      // Restore default viewport so subsequent checks aren't affected.
+      await page.setViewportSize({ width: 1280, height: 800 })
     },
   },
 ]
