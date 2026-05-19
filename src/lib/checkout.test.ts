@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { validateCheckout, buildOrderPayload, type CheckoutForm } from './checkout'
+import { validateCheckout, buildOrderPayload, checkoutFieldValidators, type CheckoutForm } from './checkout'
 import type { CartItem } from '@/context/CartContext'
 
 const valid: CheckoutForm = {
@@ -31,6 +31,35 @@ describe('validateCheckout', () => {
   })
   it('address2 and notes are optional', () => {
     expect(validateCheckout({ ...valid, address2: '', notes: '' })).toEqual({})
+  })
+})
+
+describe('checkoutFieldValidators (per-field)', () => {
+  it('fullName: required', () => {
+    expect(checkoutFieldValidators.fullName('')).toBe('Full name is required')
+    expect(checkoutFieldValidators.fullName('  ')).toBe('Full name is required')
+    expect(checkoutFieldValidators.fullName('Jane')).toBeUndefined()
+  })
+  it('email: required + format', () => {
+    expect(checkoutFieldValidators.email('')).toBe('Email is required')
+    expect(checkoutFieldValidators.email('not-an-email')).toBe('Enter a valid email address')
+    expect(checkoutFieldValidators.email('a@b')).toBe('Enter a valid email address')
+    expect(checkoutFieldValidators.email('jane@example.com')).toBeUndefined()
+  })
+  it('phone: required + at least 7 digits', () => {
+    expect(checkoutFieldValidators.phone('')).toBe('Phone is required')
+    expect(checkoutFieldValidators.phone('12345')).toBe('Enter a valid phone number')
+    expect(checkoutFieldValidators.phone('555-123-4567')).toBeUndefined()
+  })
+  it('address2 + notes are optional (always undefined)', () => {
+    expect(checkoutFieldValidators.address2('')).toBeUndefined()
+    expect(checkoutFieldValidators.notes('')).toBeUndefined()
+  })
+  it('plain required fields', () => {
+    for (const k of ['address1', 'city', 'state', 'postalCode', 'country'] as const) {
+      expect(checkoutFieldValidators[k]('')).toBeTruthy()
+      expect(checkoutFieldValidators[k]('value')).toBeUndefined()
+    }
   })
 })
 
