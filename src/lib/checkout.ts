@@ -1,6 +1,8 @@
 import type { CartItem } from '@/context/CartContext'
 import { total } from './cart'
-import { renderOrderEmail, buildOrderSubject } from './orderEmail'
+import {
+  renderCustomer, renderShipping, renderItems, renderTotals, buildOrderSubject,
+} from './orderEmail'
 
 export interface CheckoutForm {
   fullName: string
@@ -15,18 +17,27 @@ export interface CheckoutForm {
   notes: string
 }
 
+/**
+ * Tight, Anthropic-invoice-style payload. Web3Forms renders each JSON key as
+ * its own labeled block in the inbox, so we lean on its native field
+ * rendering instead of stacking our own dividers on top. Order of keys here
+ * is the order the inbox shows them.
+ */
 export interface OrderPayload {
   subject: string
   from_name: string
   replyto: string
-  customer_name: string
-  customer_email: string
-  customer_phone: string
-  shipping_address: string
-  /** The full pretty-printed order body. This is what makes the inbox view
-   *  readable — see renderOrderEmail. */
-  message: string
-  /** Kept as a top-level field so the Web3Forms dashboard can sort by it. */
+  /** Multi-line: name / email / phone */
+  customer: string
+  /** Multi-line: address block, blanks dropped */
+  shipping: string
+  /** One line per item: "N × Name · $line_total" */
+  items: string
+  /** Subtotal / Shipping / Loyalty / TOTAL on separate lines */
+  totals: string
+  /** Omitted from the payload entirely when the user didn't type anything */
+  notes?: string
+  /** Single-line scalar so the Web3Forms dashboard can sort/filter by it */
   order_total: string
 }
 
@@ -71,37 +82,18 @@ export function validateCheckout(f: CheckoutForm): Record<string, string> {
 
 const fmt = (n: number) => `$${n.toFixed(2)}`
 
-/** Build the Web3Forms payload. The richly formatted email body lives in
- *  `message`; the redundant order_items / order_subtotal / etc. fields were
- *  removed because Web3Forms renders ALL JSON keys into the email — having
- *  the same data twice made the inbox noisy. `order_total` is kept so the
- *  Web3Forms dashboard can sort/filter by it. */
-export interface BuildOrderPayloadOpts {
-  /** Injected for tests — drives the "Submitted" timestamp in the body. */
-  now?: Date
-}
-
-export function buildOrderPayload(
-  f: CheckoutForm,
-  items: CartItem[],
-  opts: BuildOrderPayloadOpts = {},
-): OrderPayload {
-  const address = [
-    f.address1,
-    f.address2,
-    `${f.city}, ${f.state} ${f.postalCode}`,
-    f.country,
-  ].filter(s => s && s.trim()).join('\n')
-
-  return {
+export function buildOrderPayload(f: CheckoutForm, items: CartItem[]): OrderPayload {
+  const payload: OrderPayload = {
     subject: buildOrderSubject(f, items),
     from_name: 'NapsGear Checkout',
     replyto: f.email,
-    customer_name: f.fullName,
-    customer_email: f.email,
-    customer_phone: f.phone,
-    shipping_address: address,
-    message: renderOrderEmail(f, items, { now: opts.now }),
+    customer: renderCustomer(f),
+    shipping: renderShipping(f),
+    items: renderItems(items),
+    totals: renderTotals(items),
     order_total: fmt(total(items)),
   }
+  const trimmed = f.notes.trim()
+  if (trimmed) payload.notes = trimmed
+  return payload
 }
