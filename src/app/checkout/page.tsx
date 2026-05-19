@@ -9,6 +9,7 @@ import {
 import CheckoutFormView from '@/components/CheckoutForm'
 import OrderSummary from '@/components/OrderSummary'
 import EmptyCart from '@/components/EmptyCart'
+import CartSkeleton from '@/components/CartSkeleton'
 import { total } from '@/lib/cart'
 
 const EMPTY: CheckoutForm = {
@@ -19,7 +20,7 @@ const EMPTY: CheckoutForm = {
 type Status = 'form' | 'submitting' | 'success' | 'error'
 
 export default function CheckoutPage() {
-  const { items, clearCart } = useCart()
+  const { items, hydrated, clearCart } = useCart()
   const router = useRouter()
   const [status, setStatus] = useState<Status>('form')
   // Captured at submit time so the confirmation screen survives clearCart.
@@ -89,6 +90,16 @@ export default function CheckoutPage() {
           <p className="ngc-confirm__hint">Redirecting you to the shop…</p>
           <a className="ngc-btn ngc-btn--dark" href="/catalog/">Continue shopping now &rarr;</a>
         </div>
+      </main>
+    )
+  }
+
+  // Pre-hydration: render skeleton tree so the empty-state CTA doesn't flash
+  // before localStorage is read.
+  if (!hydrated) {
+    return (
+      <main className="main cart-main">
+        <CartSkeleton />
       </main>
     )
   }
