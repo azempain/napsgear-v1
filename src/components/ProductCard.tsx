@@ -1,4 +1,5 @@
 import type { Product } from '@/data/types'
+import ProductImage from './ProductImage'
 
 export default function ProductCard({ product }: { product: Product }) {
   const thumb = product.images[0] ?? ''
@@ -28,7 +29,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
         <a className="product-item__image" href={href} title={product.name}>
           {thumb ? (
-            <img src={thumb} alt={product.name} loading="lazy" />
+            <ProductImage src={thumb} alt={product.name} />
           ) : (
             <span className="product-image-photo bg-gray-100" aria-hidden="true" />
           )}
