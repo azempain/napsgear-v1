@@ -41,6 +41,10 @@ function migrateItem(raw: unknown): CartItem | null {
 export interface CartContextValue {
   items: CartItem[]
   count: number
+  /** False on first render of every page, true after localStorage has been
+   *  read. Consumers use this to render skeletons instead of "0 items" while
+   *  the persisted cart is being rehydrated. */
+  hydrated: boolean
   addItem: (item: CartItem) => void
   removeItem: (id: string) => void
   updateQty: (id: string, qty: number) => void
@@ -113,7 +117,7 @@ export default function CartProvider({ children }: { children: ReactNode }) {
   const clearCart = useCallback(() => setItems([]), [])
 
   return (
-    <CartContext.Provider value={{ items, count, addItem, removeItem, updateQty, clearCart }}>
+    <CartContext.Provider value={{ items, count, hydrated, addItem, removeItem, updateQty, clearCart }}>
       {children}
     </CartContext.Provider>
   )

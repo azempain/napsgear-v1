@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useCart } from '@/context/CartContext'
 import { subtotal, shippingFee, loyaltyCredit, total } from '@/lib/cart'
 import EmptyCart from './EmptyCart'
+import CartSkeleton from './CartSkeleton'
 
 const money = (n: number) =>
   n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
@@ -27,7 +28,7 @@ function MobileCartActions({ totalLabel }: { totalLabel: string }) {
 }
 
 export default function CartView() {
-  const { items, updateQty, removeItem, clearCart } = useCart()
+  const { items, hydrated, updateQty, removeItem, clearCart } = useCart()
   const [toast, setToast] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -40,6 +41,20 @@ export default function CartView() {
     setToast(true)
     if (toastTimer.current) clearTimeout(toastTimer.current)
     toastTimer.current = setTimeout(() => setToast(false), 2500)
+  }
+
+  // Pre-hydration: render skeleton tree so the empty-state CTA doesn't flash
+  // before localStorage is read.
+  if (!hydrated) {
+    return (
+      <>
+        <nav className="ngc-crumbs" aria-label="Breadcrumb">
+          <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
+          <span>CART CONTENTS</span>
+        </nav>
+        <CartSkeleton />
+      </>
+    )
   }
 
   if (items.length === 0) {
