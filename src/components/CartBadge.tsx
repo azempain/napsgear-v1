@@ -7,10 +7,17 @@ export default function CartBadge() {
   // Until localStorage has been read, render a small skeleton dot inside the
   // badge instead of flashing "0" then the real count.
   if (!hydrated) {
+    // Render the skeleton WITHOUT the legacy .cart-count.badge-circle wrapper —
+    // that wrapper paints a red background + min-width that made the loading
+    // state look like an empty red disc instead of a small shimmer dot.
     return (
-      <span className="cart-count badge-circle" aria-label="Loading cart">
-        <Skeleton className="ngc-cart-badge-skel" radius="50%" label="" />
-      </span>
+      <Skeleton
+        className="ngc-cart-badge-skel"
+        width={18}
+        height={18}
+        radius="50%"
+        label="Loading cart"
+      />
     )
   }
   return <span className="cart-count badge-circle">{count}</span>

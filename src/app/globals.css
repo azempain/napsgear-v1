@@ -24,6 +24,89 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 
+/* Global responsiveness guard — keep every page within the viewport on every
+   device. Legacy main.css contains some large fixed widths (1140px+); cap them
+   here so they never produce a horizontal scrollbar on narrow screens. */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+img, video, iframe, canvas, object, embed {
+  max-width: 100%;
+  height: auto;
+}
+table { max-width: 100%; }
+pre, code { overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+.container, .container-fluid {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+@media (min-width: 576px)  { .container { max-width: 540px !important; } }
+@media (min-width: 768px)  { .container { max-width: 720px !important; } }
+@media (min-width: 992px)  { .container { max-width: 960px !important; } }
+@media (min-width: 1200px) { .container { max-width: 1140px !important; } }
+@media (min-width: 1400px) { .container { max-width: 1320px !important; } }
+
+/* ── Sticky top header (sitewide) ────────────────────────────────────────
+   Pin the whole header to the top of the viewport on every page. We use
+   position:fixed (not sticky) because the global `body { overflow-x: hidden }`
+   guard turns body into a scroll container in some browsers, which breaks
+   position:sticky on body's children. Fixed sidesteps that entirely.
+
+   Legacy main.css only pinned `.header-middle.sticky-header.fixed` (toggled
+   by JS past 80px of scroll); we neutralise that inner `.fixed` so it doesn't
+   double up against our outer fixed header. We reserve space below with a
+   CSS var so content never disappears under the header. */
+:root {
+  --header-h: 60px;
+}
+@media (min-width: 992px) {
+  :root { --header-h: 120px; }
+}
+.header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1040;
+  background: #fff;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
+}
+body {
+  padding-top: var(--header-h);
+}
+.header .header-middle.sticky-header.fixed {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+body.has-sticky-header { padding-top: var(--header-h) !important; }
+
+/* Mobile drawer brand logo — give the SVG a fixed height so it sits inline
+   with the close button. The shared NapsGearLogo's `.letter-main` paths are
+   white-on-blue in the header; on the drawer's white background we need the
+   wordmark in brand blue. We don't override the un-classed PRO box (stays
+   dark) or the inline-styled white "PRO" letters. */
+.mobile-drawer__brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.mobile-drawer__brand svg {
+  height: 22px;
+  width: auto;
+}
+.mobile-drawer__brand svg .letter-main {
+  fill: #0a66c2;
+}
+
 .icon-sprite { display: none !important; }
 .product-image { max-width: 400px; }
 
@@ -988,7 +1071,18 @@ html, body { margin: 0; padding: 0; }
     gap: 10px;
     padding: 18px 0;
   }
-  .cart-main .ngc-item__product { align-items: flex-start; }
+  .cart-main .ngc-item__product {
+    align-items: flex-start;
+    /* Reserve room for the absolute-positioned remove button at top-right so
+       long product names don't wrap into it. */
+    padding-right: 44px;
+  }
+  .cart-main .ngc-item__name {
+    /* On narrow screens, allow long product names to break gracefully without
+       overflowing the column. */
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
   .cart-main .ngc-item__price,
   .cart-main .ngc-item__qty,
   .cart-main .ngc-item__total {
@@ -1629,7 +1723,6 @@ body.has-sticky-header {
 .notification {
   background-color: #1a1f29 !important;
   border: 0 !important;
-  border-left: 4px solid #16a34a !important;
   border-radius: 6px !important;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28), 0 2px 6px rgba(0, 0, 0, 0.18) !important;
   max-width: 320px !important;
