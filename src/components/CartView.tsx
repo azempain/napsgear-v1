@@ -109,14 +109,20 @@ export default function CartView() {
                   <div className="ngc-item__product">
                     <figure className="ngc-item__image">
                       {item.image ? (
-                        <img src={item.image} alt={item.name} referrerPolicy="no-referrer" />
+                        <img src={item.image} alt={item.productName} referrerPolicy="no-referrer" />
                       ) : (
                         <div className="ngc-item__placeholder" aria-hidden="true" />
                       )}
                     </figure>
 
                     <div className="ngc-item__details">
-                      <h3 className="ngc-item__name"><a href="/catalog/">{item.name}</a></h3>
+                      <h3 className="ngc-item__name">
+                        <a href={`/${item.slug}/`}>{item.productName}</a>
+                      </h3>
+                      <div className="ngc-item__variant">
+                        {item.packCount} pack{item.packCount === 1 ? '' : 's'}
+                        {item.packLabel ? ` · ${item.packLabel}` : ''}
+                      </div>
                       {item.brand && (
                         <div className="ngc-item__brand">{item.brand}</div>
                       )}
@@ -126,7 +132,7 @@ export default function CartView() {
                   <div className="ngc-item__price" data-label="Price">{money(item.price)}</div>
 
                   <div className="ngc-item__qty" data-label="Qty">
-                    <div className="ngc-stepper" role="group" aria-label={`Quantity for ${item.name}`}>
+                    <div className="ngc-stepper" role="group" aria-label={`Quantity for ${item.productName}`}>
                       <button
                         type="button"
                         className="ngc-stepper__btn"
@@ -139,7 +145,7 @@ export default function CartView() {
                         value={item.qty}
                         onChange={e => updateQty(item.id, Number(e.target.value))}
                         className="ngc-stepper__input"
-                        aria-label={`Quantity for ${item.name}`}
+                        aria-label={`Quantity for ${item.productName}`}
                       />
                       <button
                         type="button"
@@ -157,7 +163,7 @@ export default function CartView() {
                       type="button"
                       className="ngc-item__remove"
                       onClick={() => handleRemove(item.id)}
-                      aria-label={`Remove ${item.name}`}
+                      aria-label={`Remove ${item.productName}`}
                       title="Remove Product"
                     >
                       <TrashIcon />
