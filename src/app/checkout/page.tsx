@@ -63,10 +63,15 @@ export default function CheckoutPage() {
     },
   })
 
-  // Clear cart + auto-redirect once we reach success.
+  // Clear cart + scroll the success screen into view + auto-redirect once we
+  // reach success. Without the scroll, users who submit from a long form land
+  // on the success screen below the fold and don't see the confirmation.
   useEffect(() => {
     if (status !== 'success') return
     clearCart()
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
     const t = setTimeout(() => router.push('/catalog/'), 5000)
     return () => clearTimeout(t)
   }, [status, clearCart, router])
@@ -75,6 +80,7 @@ export default function CheckoutPage() {
   if (status === 'success') {
     return (
       <main className="main cart-main">
+        <div className="container">
         <div className="ngc-confirm" role="status" aria-live="polite">
           <div className="ngc-confirm__check" aria-hidden="true">&#10003;</div>
           <h1 className="ngc-confirm__title">Order received — thank you!</h1>
@@ -89,6 +95,7 @@ export default function CheckoutPage() {
           )}
           <p className="ngc-confirm__hint">Redirecting you to the shop…</p>
           <a className="ngc-btn ngc-btn--dark" href="/catalog/">Continue shopping now &rarr;</a>
+        </div>
         </div>
       </main>
     )
@@ -120,43 +127,64 @@ export default function CheckoutPage() {
 
   const submitting = status === 'submitting'
 
+  const grandTotal = `$${total(items).toFixed(2)}`
+
   return (
     <main className="main cart-main">
-      <nav className="ngc-crumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
-        <a href="/cart/">Cart</a>
-        <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
-        <span>CHECKOUT</span>
-      </nav>
+      <div className="container">
+        <nav className="ngc-crumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
+          <a href="/cart/">Cart</a>
+          <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
+          <span>CHECKOUT</span>
+        </nav>
 
-      <div className="ngc-page">
-        <div className="ngc-content">
-          <div className="ngc-head">
-            <span>Checkout</span>
-          </div>
-          <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit() }}>
-            <CheckoutFormView form={form} disabled={submitting} />
-          </form>
-        </div>
-
-        <aside className="ngc-totals" aria-label="Order summary column">
-          <OrderSummary items={items} />
-          {status === 'error' && (
-            <div className="ngc-alert" role="alert">
-              Couldn&apos;t submit your order — please try again.
+        <div className="ngc-page">
+          <div className="ngc-content">
+            <div className="ngc-head">
+              <span>Checkout</span>
             </div>
-          )}
-          <button
-            type="button"
-            className="ngc-btn ngc-btn--dark ngc-btn--block"
-            id="placeOrderBtn"
-            disabled={submitting}
-            onClick={() => form.handleSubmit()}
-          >
-            {submitting ? 'Placing order…' : 'Place Order'}
-          </button>
-        </aside>
+            <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit() }}>
+              <CheckoutFormView form={form} disabled={submitting} />
+            </form>
+          </div>
+
+          <aside className="ngc-totals" aria-label="Order summary column">
+            <OrderSummary items={items} />
+            {status === 'error' && (
+              <div className="ngc-alert" role="alert">
+                Couldn&apos;t submit your order — please try again.
+              </div>
+            )}
+            <button
+              type="button"
+              className="ngc-btn ngc-btn--dark ngc-btn--block d-none d-md-block"
+              id="placeOrderBtn"
+              disabled={submitting}
+              onClick={() => form.handleSubmit()}
+            >
+              {submitting ? 'Placing order…' : 'Place Order'}
+            </button>
+          </aside>
+        </div>
+      </div>
+
+      {/* Mobile sticky action bar — mirrors the cart pattern so the Place
+          Order button is always reachable without scrolling the long form. */}
+      <div className="ngc-cart-mobile-actions d-md-none" role="region" aria-label="Checkout actions">
+        <div className="ngc-cart-mobile-actions__total">
+          <span>Total</span>
+          <strong>{grandTotal}</strong>
+        </div>
+        <button
+          type="button"
+          className="ngc-btn ngc-btn--dark"
+          disabled={submitting}
+          onClick={() => form.handleSubmit()}
+        >
+          {submitting ? 'Placing…' : 'Place Order'}
+        </button>
       </div>
     </main>
   )
