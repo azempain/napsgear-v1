@@ -1549,3 +1549,74 @@ body.has-sticky-header {
   white-space: nowrap; border: 0;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────
+   F3: <Skeleton> — generic shimmering placeholder
+   ───────────────────────────────────────────────────────────────────────── */
+@keyframes ngc-skeleton-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.ngc-skeleton {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    #eceff3 0%,
+    #f6f7f9 50%,
+    #eceff3 100%
+  );
+  background-size: 200% 100%;
+  animation: ngc-skeleton-shimmer 1.4s ease-in-out infinite;
+  /* Don't let inner text accidentally show through */
+  color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.ngc-skeleton--fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ngc-skeleton {
+    animation: none;
+    background: #eceff3;
+  }
+}
+
+/* F3: ProductCard image wrapper needs a positioned parent for overlay fill */
+.product-item__image {
+  position: relative;
+}
+
+/* F3: cart-badge skeleton dot (header) */
+.ngc-cart-badge-skel {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+/* F3: page-level skeleton trees for /cart/ and /checkout/ */
+.ngc-page-skel {
+  padding: 24px 0;
+}
+.ngc-page-skel__row {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr) 80px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.ngc-page-skel__totals {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
