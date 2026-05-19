@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { subtotal, shippingFee, loyaltyCredit, total, type LineItem } from './cart'
+import { subtotal, shippingFee, loyaltyCredit, total, formatCartLine, type LineItem } from './cart'
 
 const items: LineItem[] = [
   { price: 30, qty: 1 },
@@ -26,5 +26,20 @@ describe('cart math', () => {
   it('total is subtotal + shipping', () => {
     expect(total(items)).toBe(85) // 50 + 35
     expect(total([])).toBe(0)
+  })
+})
+
+describe('formatCartLine', () => {
+  it('singular pack, no label', () => {
+    expect(formatCartLine({ productName: 'Altamofen', packCount: 1 }))
+      .toBe('Altamofen — 1 pack')
+  })
+  it('plural packs, no label', () => {
+    expect(formatCartLine({ productName: 'Anazole', packCount: 5 }))
+      .toBe('Anazole — 5 packs')
+  })
+  it('includes packLabel in parens when present', () => {
+    expect(formatCartLine({ productName: 'Altamofen', packCount: 1, packLabel: '50 tabs (20mg/tab)' }))
+      .toBe('Altamofen — 1 pack (50 tabs (20mg/tab))')
   })
 })
