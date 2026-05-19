@@ -8,8 +8,8 @@ const valid: CheckoutForm = {
   state: 'TX', postalCode: '78701', country: 'United States', notes: '',
 }
 const items: CartItem[] = [
-  { id: 'a__1', name: 'Altamofen — 1 pack', price: 30, qty: 2 },
-  { id: 'b__5', name: 'Anazole — 5 packs', price: 143, qty: 1 },
+  { id: 'a__1', productName: 'Altamofen', packCount: 1, slug: 'a', price: 30, qty: 2 },
+  { id: 'b__5', productName: 'Anazole', packCount: 5, slug: 'b', price: 143, qty: 1 },
 ]
 
 describe('validateCheckout', () => {

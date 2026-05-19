@@ -23,11 +23,15 @@ export default function CartDrawer() {
                   <li key={item.id} className="cart-product">
                     {item.image && (
                       <figure className="product-image-container">
-                        <img src={item.image} alt={item.name} width={80} height={80} />
+                        <img src={item.image} alt={item.productName} width={80} height={80} />
                       </figure>
                     )}
                     <div className="product-details">
-                      <h4 className="product-title">{item.name}</h4>
+                      <h4 className="product-title">{item.productName}</h4>
+                      <div className="cart-product-variant">
+                        {item.packCount} pack{item.packCount === 1 ? '' : 's'}
+                        {item.packLabel ? ` · ${item.packLabel}` : ''}
+                      </div>
                       <div className="product-action">
                         <div className="product-qty">
                           <button
@@ -48,7 +52,7 @@ export default function CartDrawer() {
                         <button
                           className="btn-remove"
                           onClick={() => removeItem(item.id)}
-                          aria-label={`Remove ${item.name}`}
+                          aria-label={`Remove ${item.productName}`}
                         >&#215;</button>
                       </div>
                     </div>

@@ -7,6 +7,7 @@ import {
 } from '@/lib/checkout'
 import CheckoutFormView from '@/components/CheckoutForm'
 import OrderSummary from '@/components/OrderSummary'
+import EmptyCart from '@/components/EmptyCart'
 import { total } from '@/lib/cart'
 
 const EMPTY: CheckoutForm = {
@@ -77,23 +78,21 @@ export default function CheckoutPage() {
   // success takes precedence over the empty-cart guard (cart is now empty by design)
   if (status === 'success') {
     return (
-      <main className="main">
-        <div className="container py-5">
-          <div className="checkout-confirm text-center py-5">
-            <div className="checkout-confirm__check" aria-hidden="true">&#10003;</div>
-            <h1 className="mt-3">Order received — thank you!</h1>
-            <p className="text-muted">
-              We&apos;ve emailed your order to the NapsGear team. You&apos;ll hear
-              back at <strong>{form.email}</strong>.
+      <main className="main cart-main">
+        <div className="ngc-confirm" role="status" aria-live="polite">
+          <div className="ngc-confirm__check" aria-hidden="true">&#10003;</div>
+          <h1 className="ngc-confirm__title">Order received — thank you!</h1>
+          <p className="ngc-confirm__sub">
+            We&apos;ve emailed your order to the NapsGear team. You&apos;ll hear
+            back at <strong>{form.email}</strong>.
+          </p>
+          {snapshot.current && (
+            <p className="ngc-confirm__meta">
+              {snapshot.current.count} item(s) · Total {snapshot.current.total}
             </p>
-            {snapshot.current && (
-              <p className="mt-3">
-                {snapshot.current.count} item(s) · Total {snapshot.current.total}
-              </p>
-            )}
-            <p className="text-muted mt-4">Redirecting you to the shop…</p>
-            <a className="btn btn-dark mt-2" href="/catalog/">Continue shopping now &rarr;</a>
-          </div>
+          )}
+          <p className="ngc-confirm__hint">Redirecting you to the shop…</p>
+          <a className="ngc-btn ngc-btn--dark" href="/catalog/">Continue shopping now &rarr;</a>
         </div>
       </main>
     )
@@ -101,10 +100,13 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <main className="main">
-        <div className="container py-5 text-center">
-          <h1 className="mb-3">Your cart is empty</h1>
-          <a className="btn btn-dark" href="/catalog/">Continue shopping</a>
+      <main className="main cart-main">
+        <div className="container py-5">
+          <EmptyCart
+            heading="Nothing to check out yet"
+            sub="Your cart is empty — add a product before placing an order."
+            ctaLabel="Browse Catalog"
+          />
         </div>
       </main>
     )
@@ -113,43 +115,45 @@ export default function CheckoutPage() {
   const submitting = status === 'submitting'
 
   return (
-    <main className="main">
-      <div className="container py-5">
-        <nav aria-label="breadcrumb" className="mb-4">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item"><a href="/">Home</a></li>
-            <li className="breadcrumb-item"><a href="/cart/">Cart</a></li>
-            <li className="breadcrumb-item active" aria-current="page">Checkout</li>
-          </ol>
-        </nav>
-        <h1 className="mb-4">Checkout</h1>
-        <div className="row g-4">
-          <div className="col-lg-7">
-            <CheckoutFormView
-              form={form}
-              errors={errors}
-              disabled={submitting}
-              onChange={update}
-            />
+    <main className="main cart-main">
+      <nav className="ngc-crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
+        <a href="/cart/">Cart</a>
+        <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
+        <span>CHECKOUT</span>
+      </nav>
+
+      <div className="ngc-page">
+        <div className="ngc-content">
+          <div className="ngc-head">
+            <span>Checkout</span>
           </div>
-          <div className="col-lg-5">
-            <OrderSummary items={items} />
-            {status === 'error' && (
-              <div className="alert alert-danger mt-3" role="alert">
-                Couldn&apos;t submit your order — please try again.
-              </div>
-            )}
-            <button
-              type="button"
-              className="btn btn-dark w-100 mt-3"
-              id="placeOrderBtn"
-              disabled={submitting}
-              onClick={placeOrder}
-            >
-              {submitting ? 'Placing order…' : 'Place Order'}
-            </button>
-          </div>
+          <CheckoutFormView
+            form={form}
+            errors={errors}
+            disabled={submitting}
+            onChange={update}
+          />
         </div>
+
+        <aside className="ngc-totals" aria-label="Order summary column">
+          <OrderSummary items={items} />
+          {status === 'error' && (
+            <div className="ngc-alert" role="alert">
+              Couldn&apos;t submit your order — please try again.
+            </div>
+          )}
+          <button
+            type="button"
+            className="ngc-btn ngc-btn--dark ngc-btn--block"
+            id="placeOrderBtn"
+            disabled={submitting}
+            onClick={placeOrder}
+          >
+            {submitting ? 'Placing order…' : 'Place Order'}
+          </button>
+        </aside>
       </div>
     </main>
   )
