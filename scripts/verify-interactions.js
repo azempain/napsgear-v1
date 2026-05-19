@@ -226,6 +226,54 @@ const CHECKS = [
       if (!cta) throw new Error('EmptyCart CTA missing or not pointing to /catalog/')
     },
   },
+  // ─── F3 checks ──────────────────────────────────────────────────────────
+  {
+    name: 'F3: /cart/ SSR HTML includes the skeleton tree (visible pre-hydration)',
+    route: '/',
+    async assert(page) {
+      // Disable JS so React never hydrates — the SSR skeleton stays on screen.
+      const ctx = page.context()
+      await ctx.setOffline(false)
+      // page.emulateMedia + JS disable via newPage; cleaner: emulate JS off via route
+      // Workaround: load the built HTML directly and check the source.
+      const res = await page.request.get(BASE + '/cart/')
+      if (!res.ok()) throw new Error(`/cart/ request failed: ${res.status()}`)
+      const html = await res.text()
+      if (!/ngc-page-skel/.test(html)) {
+        throw new Error('SSR /cart/ HTML missing ngc-page-skel markup')
+      }
+      if (!/ngc-skeleton/.test(html)) {
+        throw new Error('SSR /cart/ HTML missing ngc-skeleton class')
+      }
+    },
+  },
+  {
+    name: 'F3: header cart-count contains a skeleton until hydrated, then a number',
+    route: '/',
+    async assert(page) {
+      await page.addInitScript(() => localStorage.removeItem('napsgear_cart'))
+      const res = await page.request.get(BASE + '/')
+      const html = await res.text()
+      if (!/ngc-cart-badge-skel/.test(html)) {
+        throw new Error('SSR /  HTML missing ngc-cart-badge-skel (badge skeleton)')
+      }
+      // After hydration the badge should be a plain number — open the page,
+      // wait for hydration, and confirm the skeleton is gone.
+      await page.goto(BASE + '/', { waitUntil: 'load' })
+      await page.waitForFunction(
+        () => {
+          const el = document.querySelector('.cart-count')
+          return el && !el.querySelector('.ngc-cart-badge-skel')
+        },
+        null,
+        { timeout: 5000 },
+      )
+      const text = (await page.textContent('.cart-count'))?.trim()
+      if (!text || !/^\d+$/.test(text)) {
+        throw new Error(`post-hydration cart-count not numeric: "${text}"`)
+      }
+    },
+  },
   // ─── F2b checks ─────────────────────────────────────────────────────────
   {
     name: 'F2b: /checkout/ shows field-level error on blur (TanStack Form)',
