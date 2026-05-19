@@ -226,6 +226,34 @@ const CHECKS = [
       if (!cta) throw new Error('EmptyCart CTA missing or not pointing to /catalog/')
     },
   },
+  // ─── F2b checks ─────────────────────────────────────────────────────────
+  {
+    name: 'F2b: /checkout/ shows field-level error on blur (TanStack Form)',
+    route: '/',
+    async assert(page) {
+      await page.addInitScript(() => {
+        localStorage.setItem('napsgear_cart', JSON.stringify([
+          { id: 'x__1', productName: 'Test Product', packCount: 1, slug: 'x', price: 30, qty: 1 },
+        ]))
+      })
+      await page.goto(BASE + '/checkout/', { waitUntil: 'load' })
+      await page.waitForSelector('#fullName', { timeout: 8000 })
+      // Focus fullName, do not type, blur by pressing Tab.
+      await page.focus('#fullName')
+      await page.keyboard.press('Tab')
+      await page.waitForSelector('#fullName-err', { timeout: 3000 })
+      const msg = (await page.textContent('#fullName-err'))?.trim()
+      if (!msg || !/required/i.test(msg)) {
+        throw new Error(`expected required-message on blur, got: "${msg}"`)
+      }
+      // No submit happened, so other fields should NOT have errors yet.
+      const otherErrs = await page.$$eval('.ngc-field__err', els =>
+        els.map(e => e.id).filter(id => id && id !== 'fullName-err'))
+      if (otherErrs.length > 0) {
+        throw new Error(`other fields errored prematurely: ${otherErrs.join(',')}`)
+      }
+    },
+  },
   // ─── F2a checks ─────────────────────────────────────────────────────────
   {
     name: 'F2a: /catalog/ search narrows the product grid (TanStack Table)',
