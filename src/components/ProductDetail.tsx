@@ -30,7 +30,10 @@ export default function ProductDetail({ product }: { product: Product }) {
     const tier = tiers[selected]
     addItem({
       id: `${product.slug}__${tier.packs}`,
-      name: `${product.name} — ${tier.packs} pack${tier.packs > 1 ? 's' : ''}`,
+      productName: product.name,
+      packCount: tier.packs,
+      packLabel: tier.label,
+      slug: product.slug,
       price: tier.total,
       qty: 1,
       image: product.images[0],

@@ -22,17 +22,23 @@ export default function CheckoutForm({
   onChange: (name: keyof CheckoutForm, value: string) => void
 }) {
   return (
-    <div className="checkout-form">
-      <h2 className="section-title">Contact &amp; Shipping</h2>
-      <div className="row g-3">
+    <section className="ngc-checkout-form" aria-label="Contact and shipping">
+      <h2 className="ngc-section-title">Contact &amp; Shipping</h2>
+      <div className="ngc-form-grid">
         {FIELDS.map(f => (
-          <div key={f.name} className={f.full ? 'col-12' : 'col-sm-6'}>
-            <label htmlFor={f.name} className="form-label">{f.label}</label>
+          <div
+            key={f.name}
+            className={`ngc-field${f.full ? ' ngc-field--full' : ''}${errors[f.name] ? ' is-invalid' : ''}`}
+          >
+            <label htmlFor={f.name} className="ngc-field__label">
+              {f.label}
+              {f.required && <span aria-hidden="true" className="ngc-field__req">*</span>}
+            </label>
             <input
               id={f.name}
               name={f.name}
               type={f.type ?? 'text'}
-              className={`form-control${errors[f.name] ? ' is-invalid' : ''}`}
+              className={`ngc-input${errors[f.name] ? ' is-invalid' : ''}`}
               value={form[f.name]}
               required={f.required}
               disabled={disabled}
@@ -41,18 +47,18 @@ export default function CheckoutForm({
               onChange={e => onChange(f.name, e.target.value)}
             />
             {errors[f.name] && (
-              <div id={`${f.name}-err`} className="invalid-feedback d-block">
+              <div id={`${f.name}-err`} className="ngc-field__err" role="alert">
                 {errors[f.name]}
               </div>
             )}
           </div>
         ))}
-        <div className="col-12">
-          <label htmlFor="notes" className="form-label">Order notes (optional)</label>
+        <div className="ngc-field ngc-field--full">
+          <label htmlFor="notes" className="ngc-field__label">Order notes (optional)</label>
           <textarea
             id="notes"
             name="notes"
-            className="form-control"
+            className="ngc-input ngc-input--area"
             rows={3}
             value={form.notes}
             disabled={disabled}
@@ -60,6 +66,6 @@ export default function CheckoutForm({
           />
         </div>
       </div>
-    </div>
+    </section>
   )
 }

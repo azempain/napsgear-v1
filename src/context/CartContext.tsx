@@ -4,12 +4,38 @@ import {
 } from 'react'
 
 export interface CartItem {
-  id: string
-  name: string
+  id: string            // `${slug}__${packCount}`
+  productName: string
+  packCount: number
+  packLabel?: string
   price: number
   qty: number
   image?: string
   brand?: string
+  slug: string
+}
+
+// Map a possibly-legacy persisted entry to the structured shape.
+function migrateItem(raw: unknown): CartItem | null {
+  if (!raw || typeof raw !== 'object') return null
+  const o = raw as Record<string, unknown>
+  if (typeof o.productName === 'string' && typeof o.packCount === 'number') {
+    return o as unknown as CartItem
+  }
+  if (typeof o.name === 'string' && typeof o.price === 'number' && typeof o.qty === 'number') {
+    const id = typeof o.id === 'string' ? o.id : ''
+    return {
+      id,
+      productName: o.name,
+      packCount: 1,
+      slug: id.split('__')[0] || '',
+      price: o.price,
+      qty: o.qty,
+      image: typeof o.image === 'string' ? o.image : undefined,
+      brand: typeof o.brand === 'string' ? o.brand : undefined,
+    }
+  }
+  return null
 }
 
 export interface CartContextValue {
@@ -40,7 +66,9 @@ export default function CartProvider({ children }: { children: ReactNode }) {
       const raw = window.localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const parsed = JSON.parse(raw)
-        if (Array.isArray(parsed)) setItems(parsed as CartItem[])
+        if (Array.isArray(parsed)) {
+          setItems(parsed.map(migrateItem).filter((x): x is CartItem => x !== null))
+        }
       }
     } catch {
       /* corrupt storage — start empty */
