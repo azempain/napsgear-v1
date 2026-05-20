@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "extract": "tsx scripts/extract-brand.ts"
+    "extract": "tsx scripts/extract-brand.ts",
+    "scrape": "tsx scripts/scrape-napsgear.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",

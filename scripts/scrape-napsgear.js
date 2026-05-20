@@ -11,18 +11,47 @@ const os = require('os')
 const DATA_DIR = path.join(__dirname, '../src/data')
 const BASE_URL = 'https://www.napsgear.org'
 const DUMP_DIR = path.join(os.tmpdir(), 'napsgear-dump')
+// Persistent profile so the Cloudflare clearance cookie sticks across runs —
+// solve the challenge once, then every subsequent navigation/run uses the
+// same profile and skips it.
+const PROFILE_DIR = path.join(os.tmpdir(), 'napsgear-profile')
 fs.mkdirSync(DUMP_DIR, { recursive: true })
+fs.mkdirSync(PROFILE_DIR, { recursive: true })
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-async function waitForCloudflare(page, timeout = 60000) {
+// Returns true when the page is past Cloudflare. Detects both the classic
+// interstitial (title contains "Just a moment" / "Checking your") and the
+// embedded Turnstile widget that doesn't change the page title.
+async function isOnCloudflareChallenge(page) {
+  try {
+    const title = await page.title()
+    if (/just a moment|checking your|attention required/i.test(title)) return true
+    // Turnstile / managed-challenge iframes + the visible challenge form
+    const blocked = await page.evaluate(() => {
+      if (document.querySelector('#challenge-form, #challenge-running, #cf-challenge-running')) return true
+      if (document.querySelector('iframe[src*="challenges.cloudflare.com"]')) return true
+      if (document.querySelector('iframe[src*="/cdn-cgi/challenge-platform/"]')) return true
+      return false
+    })
+    return blocked
+  } catch { return false }
+}
+
+// Wait until the page is past any Cloudflare gate. Long timeout so a human
+// can solve the Turnstile checkbox in the visible browser window if asked.
+async function waitForCloudflare(page, timeout = 300000) {
   const start = Date.now()
+  let warned = false
   while (Date.now() - start < timeout) {
-    const title = await page.title().catch(() => '')
-    if (!title.includes('Just a moment') && !title.includes('Checking your')) return
+    if (!(await isOnCloudflareChallenge(page))) return
+    if (!warned && Date.now() - start > 8000) {
+      console.log('   🛂  Cloudflare challenge visible — solve it in the browser window if asked.')
+      warned = true
+    }
     await page.waitForTimeout(2000)
   }
-  throw new Error('Cloudflare challenge did not clear within 60 s')
+  throw new Error('Cloudflare challenge did not clear within 5 min')
 }
 
 async function dumpHtml(page, name) {
@@ -210,27 +239,29 @@ async function getNavUrls(page) {
 
 ;(async () => {
   console.log('🚀  napsgear.org scraper')
-  console.log('   A browser window will open. Cloudflare challenge usually auto-clears.')
+  console.log('   A Chromium window will open. If a Cloudflare challenge appears,')
+  console.log('   click the checkbox manually — the clearance cookie is persisted')
+  console.log(`   to ${PROFILE_DIR} so future runs skip it.`)
   console.log(`   HTML dumps → ${DUMP_DIR}\n`)
 
-  const browser = await chromium.launch({
+  // Persistent context = real Chromium profile on disk. Cloudflare cookies
+  // (cf_clearance) survive between runs, so you only solve the challenge once.
+  const ctx = await chromium.launchPersistentContext(PROFILE_DIR, {
     headless: false,
+    viewport: { width: 1280, height: 900 },
+    locale: 'en-US',
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    extraHTTPHeaders: { 'Accept-Language': 'en-US,en;q=0.9' },
     args: ['--disable-blink-features=AutomationControlled', '--no-sandbox'],
   })
 
-  const ctx = await browser.newContext({
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    viewport: { width: 1280, height: 900 },
-    locale: 'en-US',
-    extraHTTPHeaders: { 'Accept-Language': 'en-US,en;q=0.9' },
-  })
-
-  const page = await ctx.newPage()
-
-  // Hide navigator.webdriver
+  // Hide navigator.webdriver before any page script runs.
   await ctx.addInitScript(() => {
     Object.defineProperty(navigator, 'webdriver', { get: () => false })
   })
+
+  // launchPersistentContext owns the browser; use ctx.pages()[0] or open one.
+  const page = ctx.pages()[0] || await ctx.newPage()
 
   try {
     // ── Videos ────────────────────────────────────────────────────────────────
@@ -283,7 +314,8 @@ async function getNavUrls(page) {
     }
 
   } finally {
-    await browser.close()
+    // launchPersistentContext: close the context, not browser (which may be null).
+    await ctx.close().catch(() => {})
     console.log('\n🏁  Done.')
     console.log(`\n📁  HTML dumps saved to: ${DUMP_DIR}`)
     console.log('   If data is missing, open the dump files and check what selectors match.')
