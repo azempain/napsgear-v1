@@ -38,39 +38,67 @@ function download(url, dest) {
   })
 }
 
+// napsgear catalog images live at:
+//   https://www.napsgear.org/images/catalog/<productId>/<basename>
+// where <productId> is the trailing -p<digits> in the product slug.
+// Rebuild that URL when the JSON only carries a local /images/products/ path.
+function remoteUrlFor(product, basename) {
+  const m = product.slug?.match(/-p(\d+)$/)
+  if (!m) return null
+  return `https://www.napsgear.org/images/catalog/${m[1]}/${basename}`
+}
+
 ;(async () => {
   const products = JSON.parse(fs.readFileSync(PRODUCTS_PATH, 'utf8'))
   let changed = 0
+  let failed = 0
 
   for (const product of products) {
     const newImages = []
     for (const imgUrl of product.images) {
-      if (!imgUrl || imgUrl.startsWith('/')) { newImages.push(imgUrl); continue }
+      if (!imgUrl) { newImages.push(imgUrl); continue }
 
-      const filename = path.basename(new URL(imgUrl).pathname)
+      // Figure out (a) the filename to save as, (b) the remote URL to fetch.
+      let filename, remote
+      if (imgUrl.startsWith('/images/products/')) {
+        filename = path.basename(imgUrl)
+        remote = remoteUrlFor(product, filename)
+      } else if (imgUrl.startsWith('/')) {
+        // Other site-relative path — skip, can't reconstruct
+        newImages.push(imgUrl); continue
+      } else {
+        try { filename = path.basename(new URL(imgUrl).pathname) }
+        catch { newImages.push(imgUrl); continue }
+        remote = imgUrl
+      }
+      if (!filename) { newImages.push(imgUrl); continue }
       const localPath = path.join(OUT_DIR, filename)
       const publicPath = `/images/products/${filename}`
 
       if (fs.existsSync(localPath)) {
-        console.log(`  skip (exists): ${filename}`)
         newImages.push(publicPath)
         continue
       }
+      if (!remote) {
+        // Couldn't build a URL (no -p<id> in slug). Leave path as-is.
+        newImages.push(imgUrl); continue
+      }
 
-      process.stdout.write(`  downloading: ${filename} ... `)
+      process.stdout.write(`  ${product.slug}: ${filename} ... `)
       try {
-        await download(imgUrl, localPath)
+        await download(remote, localPath)
         console.log('ok')
         newImages.push(publicPath)
         changed++
       } catch (e) {
-        console.log(`FAILED (${e.message}) — keeping original URL`)
+        console.log(`FAILED (${e.message})`)
         newImages.push(imgUrl)
+        failed++
       }
     }
     product.images = newImages
   }
 
   fs.writeFileSync(PRODUCTS_PATH, JSON.stringify(products, null, 2))
-  console.log(`\nDone. ${changed} images downloaded. products.json updated.`)
+  console.log(`\nDone. ${changed} downloaded, ${failed} failed. products.json updated.`)
 })()
