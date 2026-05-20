@@ -1,4 +1,10 @@
-export const metadata = { title: 'All Promotions — NapsGear' }
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Promotions',
+  description: 'Current deals, discounts, and pack bundles at NapsGear.',
+  alternates: { canonical: '/promotions/' },
+}
 
 export default function PromotionsPage() {
   return (
