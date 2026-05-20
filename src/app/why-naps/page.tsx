@@ -1,4 +1,10 @@
-export const metadata = { title: 'Why NapsGear' }
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Why NapsGear',
+  description: 'Why customers choose NapsGear — service, selection, shipping.',
+  alternates: { canonical: '/why-naps/' },
+}
 
 export default function WhyNapsPage() {
   return (

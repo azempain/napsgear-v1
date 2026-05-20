@@ -1,7 +1,12 @@
+import type { Metadata } from 'next'
 import { qaPosts } from '@/data'
 import QaForum from '@/components/QaForum'
 
-export const metadata = { title: 'Q & A — NapsGear' }
+export const metadata: Metadata = {
+  title: 'Q & A',
+  description: 'Community questions and answers about training, cycles, and ordering.',
+  alternates: { canonical: '/qa/' },
+}
 
 export default function QaPage() {
   return (

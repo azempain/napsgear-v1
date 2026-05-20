@@ -65,7 +65,7 @@ const CHECKS = [
     async assert(page) {
       const requests = []
       page.on('request', r => requests.push(r.url()))
-      await page.reload({ waitUntil: 'networkidle' })
+      await page.reload({ waitUntil: 'load' })
       const offline = requests.filter(u =>
         /\/js\/(runtime|main|vendors|bootstrap|swiper|dayjs|patch)\.js/.test(u),
       )
@@ -109,7 +109,7 @@ const CHECKS = [
     async assert(page) {
       const firstProduct = await page.getAttribute('.products-grid a[href^="/"]', 'href')
       if (!firstProduct) throw new Error('no product link on /catalog/')
-      await page.goto(BASE + firstProduct, { waitUntil: 'networkidle' })
+      await page.goto(BASE + firstProduct, { waitUntil: 'load' })
       await page.waitForSelector('#addToCartBtn', { timeout: 8000 })
       const radios = await page.$$('input[name="pack"]')
       if (radios.length !== 5) throw new Error(`expected 5 pack radios, got ${radios.length}`)
@@ -126,7 +126,7 @@ const CHECKS = [
       // Start clean so badge math is deterministic
       await page.evaluate(() => window.localStorage.removeItem('napsgear_cart'))
       const firstProduct = await page.getAttribute('.products-grid a[href^="/"]', 'href')
-      await page.goto(BASE + firstProduct, { waitUntil: 'networkidle' })
+      await page.goto(BASE + firstProduct, { waitUntil: 'load' })
       await page.waitForSelector('#addToCartBtn', { timeout: 8000 })
       const before = parseInt((await page.textContent('.cart-count')) || '0', 10)
       await page.click('#addToCartBtn')
@@ -139,7 +139,7 @@ const CHECKS = [
         before,
         { timeout: 3000 },
       )
-      await page.reload({ waitUntil: 'networkidle' })
+      await page.reload({ waitUntil: 'load' })
       const after = parseInt((await page.textContent('.cart-count')) || '0', 10)
       if (after !== before + 1) throw new Error(`cart not persisted: before=${before} after=${after}`)
     },
@@ -224,6 +224,51 @@ const CHECKS = [
       }
       const cta = await page.$('.ngc-empty .ngc-btn--dark[href="/catalog/"]')
       if (!cta) throw new Error('EmptyCart CTA missing or not pointing to /catalog/')
+    },
+  },
+  // ─── P2.6 checks — per-route metadata + JSON-LD ────────────────────────
+  {
+    name: 'P2.6: / emits Organization + WebSite JSON-LD with title template',
+    route: '/',
+    async assert(page) {
+      const res = await page.request.get(BASE + '/')
+      const html = await res.text()
+      if (!/<title>NapsGear<\/title>/.test(html)) {
+        throw new Error('root <title> not exactly "NapsGear"')
+      }
+      if (!/"@type":"Organization"/.test(html)) throw new Error('missing Organization JSON-LD')
+      if (!/"@type":"WebSite"/.test(html))      throw new Error('missing WebSite JSON-LD')
+    },
+  },
+  {
+    name: 'P2.6: product page emits Product + AggregateOffer + BreadcrumbList JSON-LD',
+    route: '/catalog/',
+    async assert(page) {
+      const firstHref = await page.getAttribute('.products-grid a[href^="/"]', 'href')
+      if (!firstHref) throw new Error('no product link on /catalog/')
+      const res = await page.request.get(BASE + firstHref)
+      const html = await res.text()
+      if (!/"@type":"Product"/.test(html))          throw new Error('missing Product JSON-LD')
+      if (!/"@type":"AggregateOffer"/.test(html))   throw new Error('missing AggregateOffer JSON-LD')
+      if (!/"@type":"BreadcrumbList"/.test(html))   throw new Error('missing BreadcrumbList JSON-LD')
+      // Title template "%s · NapsGear" should be applied
+      const m = html.match(/<title>([^<]+)<\/title>/)
+      if (!m || !m[1].endsWith(' · NapsGear')) {
+        throw new Error(`product <title> doesn't follow template: "${m && m[1]}"`)
+      }
+    },
+  },
+  {
+    name: 'P2.6: /cart/ and /checkout/ set robots noindex meta',
+    route: '/',
+    async assert(page) {
+      for (const path of ['/cart/', '/checkout/']) {
+        const res = await page.request.get(BASE + path)
+        const html = await res.text()
+        if (!/<meta[^>]+name="robots"[^>]+content="[^"]*noindex/i.test(html)) {
+          throw new Error(`${path} missing robots noindex meta`)
+        }
+      }
     },
   },
   // ─── P2.7 checks — sitemap.xml + robots.txt ────────────────────────────
@@ -407,7 +452,11 @@ const CHECKS = [
 
   for (const check of CHECKS) {
     try {
-      await page.goto(BASE + check.route, { waitUntil: 'networkidle', timeout: 30000 })
+      // 'domcontentloaded' instead of 'networkidle' — the catalog grew to
+      // 700+ products and the network never settles within 30s on heavier
+      // pages. Individual checks own their own waitForSelector calls for
+      // the bits of UI they actually assert on.
+      await page.goto(BASE + check.route, { waitUntil: 'domcontentloaded', timeout: 30000 })
       await page.waitForTimeout(1500)
       await check.assert(page)
       console.log(`  ✓ ${check.name}`)

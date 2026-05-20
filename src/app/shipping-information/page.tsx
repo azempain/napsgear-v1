@@ -1,4 +1,10 @@
-export const metadata = { title: 'Shipping & Returns — NapsGear' }
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Shipping & Returns',
+  description: 'Shipping policy, delivery times, and return process at NapsGear.',
+  alternates: { canonical: '/shipping-information/' },
+}
 
 interface Section {
   heading: string

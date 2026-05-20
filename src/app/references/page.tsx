@@ -1,4 +1,10 @@
-export const metadata = { title: 'References — NapsGear' }
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'References',
+  description: 'Customer references and testimonials.',
+  alternates: { canonical: '/references/' },
+}
 
 export default function ReferencesPage() {
   return (
