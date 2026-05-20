@@ -226,6 +226,40 @@ const CHECKS = [
       if (!cta) throw new Error('EmptyCart CTA missing or not pointing to /catalog/')
     },
   },
+  // ─── P2.7 checks — sitemap.xml + robots.txt ────────────────────────────
+  {
+    name: 'P2.7: /sitemap.xml serves XML with product/brand/category URLs',
+    route: '/',
+    async assert(page) {
+      const res = await page.request.get(BASE + '/sitemap.xml')
+      if (!res.ok()) throw new Error(`sitemap.xml status ${res.status()}`)
+      const xml = await res.text()
+      if (!xml.startsWith('<?xml')) throw new Error('sitemap.xml not XML-prologued')
+      const urlCount = (xml.match(/<url>/g) || []).length
+      if (urlCount < 100) throw new Error(`sitemap has only ${urlCount} URLs — expected 100+`)
+      if (!/\/catalog\//.test(xml)) throw new Error('sitemap missing /catalog/')
+      if (!/\/brands\//.test(xml))  throw new Error('sitemap missing /brands/*')
+      // cart and checkout MUST NOT appear (PRIVATE_ROUTES)
+      if (/\/cart\//.test(xml))     throw new Error('sitemap leaks /cart/ (should be private)')
+      if (/\/checkout\//.test(xml)) throw new Error('sitemap leaks /checkout/ (should be private)')
+    },
+  },
+  {
+    name: 'P2.7: /robots.txt allows crawlers but disallows /cart/ + /checkout/',
+    route: '/',
+    async assert(page) {
+      const res = await page.request.get(BASE + '/robots.txt')
+      if (!res.ok()) throw new Error(`robots.txt status ${res.status()}`)
+      const txt = await res.text()
+      if (!/User-Agent:\s*\*/i.test(txt)) throw new Error('robots.txt missing User-Agent: *')
+      if (!/Allow:\s*\//.test(txt))       throw new Error('robots.txt missing Allow: /')
+      if (!/Disallow:\s*\/cart\//.test(txt))     throw new Error('robots.txt does not disallow /cart/')
+      if (!/Disallow:\s*\/checkout\//.test(txt)) throw new Error('robots.txt does not disallow /checkout/')
+      if (!/Sitemap:\s*https?:\/\/[^\s]+\/sitemap\.xml/.test(txt)) {
+        throw new Error('robots.txt missing Sitemap pointer')
+      }
+    },
+  },
   // ─── F3 checks ──────────────────────────────────────────────────────────
   {
     name: 'F3: /cart/ SSR HTML includes the skeleton tree (visible pre-hydration)',
@@ -310,8 +344,10 @@ const CHECKS = [
       await page.waitForSelector('[data-testid="product-grid"]', { timeout: 8000 })
       const before = await page.$$eval('[data-testid="product-grid"] .product-item', els => els.length)
       if (before < 2) throw new Error(`expected at least 2 products to narrow, got ${before}`)
-      // Type a unique-ish query
-      await page.fill('[data-testid="product-search"]', 'altamofen')
+      // Type a query specific enough to narrow but with known matches in the
+      // current dataset. (Originally 'altamofen' — broke once the catalog
+      // grew past 24 products and that brand was no longer present.)
+      await page.fill('[data-testid="product-search"]', 'dianabol')
       await page.waitForFunction(
         (b) => {
           const items = document.querySelectorAll('[data-testid="product-grid"] .product-item')
