@@ -93,6 +93,9 @@ describe('buildOrderPayload', () => {
   it('does NOT contain access_key', () => {
     expect('access_key' in p).toBe(false)
   })
+  it('includes botcheck honeypot as an empty string (Web3Forms anti-spam)', () => {
+    expect(p.botcheck).toBe('')
+  })
   it('does NOT contain the legacy fragmentary order_* fields', () => {
     // The old per-fragment fields (order_items, order_subtotal, ...) AND the
     // mega `message` field have all been removed to keep the inbox tight.
