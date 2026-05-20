@@ -27,6 +27,11 @@ export interface OrderPayload {
   subject: string
   from_name: string
   replyto: string
+  /** Web3Forms honeypot — must be empty for legitimate submissions. Bots
+   *  that auto-fill every form field will populate this, and Web3Forms
+   *  server-side rejects any submission where botcheck is non-empty.
+   *  See https://docs.web3forms.com/getting-started/spam-protection */
+  botcheck: string
   /** Multi-line: name / email / phone */
   customer: string
   /** Multi-line: address block, blanks dropped */
@@ -87,6 +92,7 @@ export function buildOrderPayload(f: CheckoutForm, items: CartItem[]): OrderPayl
     subject: buildOrderSubject(f, items),
     from_name: 'NapsGear Checkout',
     replyto: f.email,
+    botcheck: '',
     customer: renderCustomer(f),
     shipping: renderShipping(f),
     items: renderItems(items),
