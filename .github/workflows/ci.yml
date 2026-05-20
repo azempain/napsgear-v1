@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# Cancel any in-flight run for the same ref so PR rebases / force-pushes
+# don't pile up redundant work.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-build:
+    name: typecheck · vitest · build · verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck (tsc --noEmit)
+        run: pnpm exec tsc --noEmit
+
+      - name: Unit tests (vitest)
+        run: pnpm test
+
+      - name: Static export build
+        run: pnpm build
+
+      # Playwright browser cache — keyed on lockfile so we only re-download
+      # Chromium when the playwright version actually changes.
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright Chromium
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Install Playwright OS deps (cached browser path)
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      - name: Verify interactions (static server + Playwright harness)
+        run: |
+          node scripts/static-server.js ./out 4173 &
+          SERVER_PID=$!
+          # Wait for the server to start accepting connections.
+          for i in {1..20}; do
+            if curl -sf http://localhost:4173/ > /dev/null; then break; fi
+            sleep 0.5
+          done
+          VERIFY_BASE=http://localhost:4173 node scripts/verify-interactions.js
+          STATUS=$?
+          kill $SERVER_PID 2>/dev/null || true
+          exit $STATUS
