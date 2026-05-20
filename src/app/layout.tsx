@@ -10,10 +10,36 @@ import CartDrawer from '@/components/CartDrawer'
 import Footer from '@/components/Footer'
 import NavInteractions from '@/components/NavInteractions'
 import ScrollToTop from '@/components/ScrollToTop'
+import JsonLd from '@/components/JsonLd'
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/site'
+import { organizationJsonLd, websiteJsonLd } from '@/lib/jsonld'
 
 export const metadata: Metadata = {
-  title: 'NapsGear',
-  description: 'NapsGear — The largest marketplace for pharmaceuticals',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_NAME,
+    template: `%s · ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    type: 'website',
+    siteName: SITE_NAME,
+    url: SITE_URL,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export const viewport: Viewport = {
@@ -50,6 +76,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
           </symbol>
         </svg>
+
+        {/* Site-wide schema.org JSON-LD — Organization (knowledge panel) and
+            WebSite (sitelinks search box). Per-route schemas (Product,
+            BreadcrumbList) ship from their own page files. */}
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
 
         <CartProvider>
           <ScrollToTop />

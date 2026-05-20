@@ -1,4 +1,10 @@
-export const metadata = { title: 'NapsHelp — Support' }
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Help',
+  description: 'NapsGear customer support and ticket portal.',
+  alternates: { canonical: '/help/' },
+}
 
 export default function HelpPage() {
   return (
