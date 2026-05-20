@@ -62,11 +62,18 @@ pre, code { overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
    double up against our outer fixed header. We reserve space below with a
    CSS var so content never disappears under the header. */
 :root {
-  --header-h: 60px;
+  --header-h: 72px;
+}
+@media (min-width: 768px) {
+  :root { --header-h: 140px; }
 }
 @media (min-width: 992px) {
-  :root { --header-h: 120px; }
+  :root { --header-h: 160px; }
 }
+/* NavInteractions overrides --header-h with the real measured height after
+   hydration via ResizeObserver. The values above are SSR fallbacks so the
+   first paint reserves enough room and content doesn't slide under the
+   fixed header before JS runs. */
 .header {
   position: fixed !important;
   top: 0;

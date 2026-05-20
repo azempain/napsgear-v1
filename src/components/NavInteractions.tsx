@@ -20,6 +20,28 @@ import { useStickyHeader } from '@/hooks/useStickyHeader'
  */
 export default function NavInteractions() {
   useStickyHeader()
+
+  // Sync --header-h to the real rendered height of the fixed header so the
+  // body's padding-top is always correct, even if the header gains a row or
+  // a font swap changes its size. SSR ships static fallbacks in globals.css;
+  // this just refines them once hydration finishes.
+  useEffect(() => {
+    const el = document.getElementById('header')
+    if (!el) return
+    const apply = () => {
+      const h = el.offsetHeight
+      if (h > 0) document.documentElement.style.setProperty('--header-h', `${h}px`)
+    }
+    apply()
+    const ro = new ResizeObserver(apply)
+    ro.observe(el)
+    window.addEventListener('resize', apply)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', apply)
+    }
+  }, [])
+
   useEffect(() => {
     // ── DROPDOWNS ────────────────────────────────────────────────────────
     function getMenuFor(button: Element): HTMLElement | null {
