@@ -1,4 +1,10 @@
-export const metadata = { title: 'Contact Us — NapsGear' }
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Contact Us',
+  description: 'Get in touch with NapsGear support.',
+  alternates: { canonical: '/contact-us/' },
+}
 
 export default function ContactPage() {
   return (

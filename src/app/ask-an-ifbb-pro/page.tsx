@@ -1,7 +1,12 @@
+import type { Metadata } from 'next'
 import VideoCard from '@/components/VideoCard'
 import { videos } from '@/data'
 
-export const metadata = { title: 'Ask an IFBB Pro — NapsGear' }
+export const metadata: Metadata = {
+  title: 'Ask an IFBB Pro',
+  description: 'Q&A videos from IFBB pros — training, nutrition, recovery.',
+  alternates: { canonical: '/ask-an-ifbb-pro/' },
+}
 
 export default function AskIfbbProPage() {
   return (
