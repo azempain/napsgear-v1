@@ -43,6 +43,9 @@ jobs:
       - name: Static export build
         run: pnpm build
 
+      - name: Bundle-size budget
+        run: pnpm bundle-budget
+
       # Playwright browser cache — keyed on lockfile so we only re-download
       # Chromium when the playwright version actually changes.
       - name: Cache Playwright browsers
