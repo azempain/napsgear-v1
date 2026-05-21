@@ -13,7 +13,8 @@
     "test": "vitest run",
     "extract": "tsx scripts/extract-brand.ts",
     "scrape": "tsx scripts/scrape-napsgear.ts",
-    "optimize-images": "tsx scripts/optimize-images.ts"
+    "optimize-images": "tsx scripts/optimize-images.ts",
+    "bundle-budget": "node scripts/check-bundle-size.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
