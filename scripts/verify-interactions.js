@@ -443,6 +443,66 @@ const CHECKS = [
       await page.setViewportSize({ width: 1280, height: 800 })
     },
   },
+  // ─── P4 checks ──────────────────────────────────────────────────────────
+  {
+    name: 'P4: /faq/ renders at least 5 Q&A entries (with NapsHelp sourceUrl links)',
+    route: '/faq/',
+    async assert(page) {
+      await page.waitForSelector('[data-faq-q]', { timeout: 8000 })
+      const count = await page.$$eval('[data-faq-q]', els => els.length)
+      if (count < 5) throw new Error(`expected >= 5 FAQ entries, got ${count}`)
+      // Every entry has a question (anchor or strong)
+      const titles = await page.$$eval('[data-faq-q]', els => els.map(e => (e.textContent ?? '').trim().length))
+      if (titles.some(l => l === 0)) throw new Error('some FAQ entries have empty question text')
+    },
+  },
+  {
+    name: 'P4: /aas-diaries/ lists at least 5 diary cards with external sourceUrl links',
+    route: '/aas-diaries/',
+    async assert(page) {
+      await page.waitForSelector('main .card', { timeout: 8000 })
+      const cardCount = await page.$$eval('main .card', els => els.length)
+      if (cardCount < 5) throw new Error(`expected >= 5 diary cards, got ${cardCount}`)
+      // Each diary card links out to napsgear.org via h2 a
+      const linkedOut = await page.$$eval(
+        'main .card h2 a[href*="napsgear.org"]',
+        els => els.length,
+      )
+      if (linkedOut < cardCount - 1) {
+        throw new Error(`expected most diary cards to link out, got ${linkedOut}/${cardCount}`)
+      }
+    },
+  },
+  {
+    name: 'P4: /categories/oral-steroids-c23/ filter engages (1 page vs many on /catalog/)',
+    route: '/catalog/',
+    async assert(page) {
+      // Both pages SSR at 24 items (one ProductTable page). Distinguish by
+      // pagination button count: catalog has ~32 pages over 761 products;
+      // oral-steroids has 24 productSlugs → fits in 1 page → 0 buttons.
+      const catalogPages = await page.$$eval(
+        '.ngc-pagination__num, nav.toolbox-pagination .page-link',
+        els => els.length,
+      )
+      if (catalogPages < 5) {
+        throw new Error(`/catalog/ pagination too small (${catalogPages}) — expected many pages over 700+ products`)
+      }
+      await page.goto(
+        (process.env.VERIFY_BASE || 'http://localhost:3000') + '/categories/oral-steroids-c23/',
+        { waitUntil: 'load' },
+      )
+      await page.waitForSelector('[data-testid="product-grid"]', { timeout: 8000 })
+      const oralPages = await page.$$eval(
+        '.ngc-pagination__num, nav.toolbox-pagination .page-link',
+        els => els.length,
+      )
+      if (oralPages >= catalogPages) {
+        throw new Error(
+          `expected oral-steroids pagination (${oralPages}) < catalog pagination (${catalogPages}) — productSlugs filter did not engage`,
+        )
+      }
+    },
+  },
 ]
 
 ;(async () => {

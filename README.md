@@ -36,11 +36,14 @@ pnpm dev                           # http://localhost:3000
 
 ```bash
 pnpm dev            # Next dev server
-pnpm build          # Static export -> ./out
+pnpm build          # Static export -> ./out (postbuild runs PurgeCSS)
 pnpm test           # Vitest (run mode)
 pnpm lint           # Next ESLint
-pnpm extract        # scripts/extract-brand.ts — pulls a single brand
+pnpm extract        # scripts/extract/index.ts — full saved-pages → src/data/ pipeline
+pnpm extract:saved  # alias of `pnpm extract`
+pnpm extract:brand  # scripts/extract-brand.ts — legacy single-brand extractor
 pnpm scrape         # scripts/scrape-napsgear.ts — full product crawl
+pnpm bundle-budget  # asserts gzipped chunks stay within budget
 ```
 
 ### Verification harness (Playwright)
@@ -63,12 +66,20 @@ src/
 │   ├── catalog/          # /catalog/ — all products (TanStack Table)
 │   ├── checkout/         # /checkout/ — TanStack Form + Web3Forms submit
 │   ├── brands/[slug]/    # /brands/<brand>/ — filtered listing
-│   ├── categories/[slug]/# /categories/<slug>/
+│   ├── categories/[slug]/# /categories/<slug>/ (filters by productSlugs when present)
 │   ├── [productSlug]/    # /<product-slug>/ — PDP with pack tiers
+│   ├── faq/              # /faq/ — categorised questions linking to NapsHelp
+│   ├── promotions/       # /promotions/ — sectioned promo cards
+│   ├── contact-us/       # /contact-us/
+│   ├── shipping-information/ # /shipping-information/
+│   ├── affiliate-program/    # /affiliate-program/
+│   ├── aas-diaries/      # /aas-diaries/ — community cycle diary listing
 │   └── globals.css       # .ngc- design system + overrides (~1.6k lines)
 ├── components/           # Reusable client components
 ├── context/CartContext.tsx # Cart state + localStorage persistence
-├── data/                 # Bundled product/brand/category JSON
+├── data/                 # Bundled JSON (products, categories, brands, ingredients,
+│                         #   videos, qa-posts, gearpics, faq, shipping, promotions,
+│                         #   contact, affiliate, diaries)
 ├── hooks/                # useSwiper, useStickyHeader
 └── lib/                  # Pure helpers (all vitest-tested)
     ├── cart.ts           # subtotal, shipping, loyalty, total
@@ -77,11 +88,29 @@ src/
     ├── orderEmail.ts     # render* composers for the Web3Forms body
     └── productTable.helper.ts # filter/sort predicates for TanStack Table
 public/
-├── css/                  # Legacy Bootstrap (vendors.css) + scraped main.css
-├── images/products/      # Product thumbnails
+├── css/                  # Legacy Bootstrap (vendors.css) + scraped main.css (PurgeCSS-trimmed at build)
+├── images/products/      # Product thumbnails (copied by scripts/extract/products.ts)
+├── images/diaries/       # Diary thumbnails
 └── ...
-scripts/                  # Build-time data extraction and verification
-.github/workflows/        # CI: typecheck · vitest · build · Playwright
+scripts/
+├── extract/              # Saved-pages extraction pipeline (per-content scripts + driver)
+│   ├── lib/              # loadHtml · sanitize · slugify · mergeBySlug · copyAsset
+│   ├── products.ts       # PDP + brand listing → products.json (merge by slug)
+│   ├── categories.ts     # category page → categories.json with productSlugs[]
+│   ├── ingredients.ts    # derived from products[].ingredient
+│   ├── faq.ts            # FAQ knowledgebase → faq.json
+│   ├── shipping.ts       # shipping page → shipping.json
+│   ├── promotions.ts     # promotions hub → promotions.json
+│   ├── contact.ts        # NapsHelp contact → contact.json
+│   ├── ama.ts            # AMA videos → videos.json (deduped by url)
+│   ├── affiliate.ts      # affiliate page → affiliate.json
+│   ├── diaries.ts        # AAS Diaries → diaries.json (+ thumbnails)
+│   └── index.ts          # driver — run via `pnpm extract`
+├── purge-css.js          # PurgeCSS pass over out/css/ (postbuild)
+├── check-bundle-size.js  # gzip-budget gate
+├── static-server.js      # local server for verify-interactions
+└── verify-interactions.js # Playwright E2E
+.github/workflows/        # CI: typecheck · vitest · build · bundle-budget · Playwright
 ```
 
 ## Conventions
