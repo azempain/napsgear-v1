@@ -3,12 +3,17 @@ export interface Brand {
   name: string
   id: number | null
   url: string
+  /** Optional brand bio HTML (sanitized via scripts/extract/lib/sanitize) */
+  bioHtml?: string
 }
 
 export interface Category {
   slug: string
   name: string
   url: string
+  /** When present, /categories/[slug]/ filters products to this list.
+   *  Absent = fallback to showing the full catalog. */
+  productSlugs?: string[]
 }
 
 export interface Video {
@@ -76,4 +81,56 @@ export interface Ingredient {
   name: string
   count: number
   brand: string
+}
+
+// ─── Content types (populated by scripts/extract/) ──────────────────────────
+
+export interface FaqEntry {
+  id: string
+  question: string
+  answer: string
+  category?: string
+}
+
+export interface ShippingDoc {
+  sections: Array<{
+    heading: string
+    paras?: string[]
+    list?: string[]
+  }>
+}
+
+export interface Promotion {
+  id: string
+  title: string
+  body: string
+  cta?: { label: string; href: string }
+  image?: string
+  validUntil?: string
+}
+
+export interface DiaryEntry {
+  slug: string
+  title: string
+  author?: string
+  date: string
+  excerpt: string
+  /** Sanitized HTML — see scripts/extract/lib/sanitize.ts. The /aas-diaries/[slug]/
+   *  renderer is the one place dangerouslySetInnerHTML is allowed in the codebase. */
+  bodyHtml: string
+}
+
+export interface AffiliateDoc {
+  heading: string
+  intro: string
+  sections: Array<{ heading: string; paras: string[] }>
+  cta?: { label: string; href: string }
+}
+
+export interface ContactInfo {
+  email: string
+  phone?: string
+  address?: string
+  hours?: string
+  formAction?: string
 }

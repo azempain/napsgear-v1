@@ -15,4 +15,8 @@ export const qaPosts:     QaPost[]     = qaPostsJson     as QaPost[]
 export const gearpics:    Gearpic[]    = gearpicsJson    as Gearpic[]
 export const ingredients: Ingredient[] = ingredientsJson as Ingredient[]
 
-export type { Brand, Category, Video, Product, QaPost, Gearpic, Ingredient }
+export type {
+  Brand, Category, Video, Product, QaPost, Gearpic, Ingredient,
+  FaqEntry, ShippingDoc, Promotion, DiaryEntry, AffiliateDoc, ContactInfo,
+  PackTier, Review, QAItem,
+} from './types'
