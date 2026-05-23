@@ -11,8 +11,9 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "extract": "tsx scripts/extract-brand.ts",
+    "extract": "tsx scripts/extract/index.ts",
     "extract:saved": "tsx scripts/extract/index.ts",
+    "extract:brand": "tsx scripts/extract-brand.ts",
     "scrape": "tsx scripts/scrape-napsgear.ts",
     "optimize-images": "tsx scripts/optimize-images.ts",
     "bundle-budget": "node scripts/check-bundle-size.js"
