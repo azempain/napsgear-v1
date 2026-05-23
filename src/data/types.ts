@@ -133,9 +133,16 @@ export interface AffiliateDoc {
 }
 
 export interface ContactInfo {
-  email: string
+  /** Optional — saved Contact page is currently a NapsHelp portal without an
+   *  inline email. May be populated by hand if we later need it. */
+  email?: string
   phone?: string
   address?: string
   hours?: string
+  /** URL the support form on the saved page posts to. */
   formAction?: string
+  /** Optional heading text from the saved page ("Welcome to NapsGear Support"). */
+  heading?: string
+  /** Optional URL to the external support portal (NapsHelp). */
+  portalUrl?: string
 }
