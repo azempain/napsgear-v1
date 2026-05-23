@@ -2,7 +2,7 @@
 // brand-listing HTML structure (confirmed via grep before implementation).
 // The file shell in runProducts() (Task 6) handles I/O + image copying.
 
-import { loadHtml } from './lib/loadHtml'
+import { loadHtml, loadHtmlFromFile } from './lib/loadHtml'
 import type { Product, PackTier, Review } from '@/data/types'
 
 /** Strip a trailing slug+id from a product URL.
@@ -145,14 +145,17 @@ export function extractListingProducts(html: string): Product[] {
     const thumbSrc = $item.find('a.product-item__image img, .product-item__image img').first().attr('src')
     const images = thumbSrc ? [thumbSrc] : []
 
+    // Don't emit description here — listing cards don't have one, and
+    // emitting '' would clobber a PDP's full description during merge.
+    // mergeBySlug skips undefined fields, so omitting it preserves prev.
     out.push({
       slug,
       name,
-      description: '',
+      description: undefined as unknown as string,
       images,
       ...(brand ? { brand } : {}),
       ...(price ? { price } : {}),
-    })
+    } as Product)
   })
 
   return out
@@ -162,7 +165,6 @@ export function extractListingProducts(html: string): Product[] {
 
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import { loadHtmlFromFile } from './lib/loadHtml'
 import { mergeBySlug } from './lib/mergeBySlug'
 import { copyAsset } from './lib/copyAsset'
 
@@ -198,9 +200,10 @@ async function resolveSavedAssetPath(htmlFile: string, src: string): Promise<str
 async function relocateImages(
   p: Product,
   sourceHtmlFile: string,
-): Promise<{ images: string[]; copied: number }> {
+): Promise<{ images: string[] | undefined; copied: number }> {
   const out: string[] = []
   let copied = 0
+  let unresolved = 0
   for (const src of p.images) {
     // If src already points at a deployed asset (/images/...), keep it
     if (src.startsWith('/images/')) {
@@ -209,8 +212,10 @@ async function relocateImages(
     }
     const absSrc = await resolveSavedAssetPath(sourceHtmlFile, src)
     if (!absSrc) {
-      // Source image missing — leave the path so the failure is visible
-      out.push(src)
+      // Source image not in this saved bundle — skip rather than push a
+      // broken raw path. A subsequent listing iteration for the same SKU
+      // might resolve correctly, OR the merge will preserve prev.images.
+      unresolved++
       continue
     }
     const ext = (path.extname(absSrc) || '.jpg').toLowerCase()
@@ -219,6 +224,11 @@ async function relocateImages(
     const result = await copyAsset(absSrc, dst)
     if (result.copied) copied++
     out.push(`/images/products/${publicName}`)
+  }
+  // If we had image sources but couldn't resolve ANY of them, return undefined
+  // so mergeBySlug skips the images field and prev's value is preserved.
+  if (out.length === 0 && unresolved > 0) {
+    return { images: undefined, copied }
   }
   return { images: out, copied }
 }
@@ -245,7 +255,13 @@ export async function runProducts(): Promise<ProductsSummary> {
     const $ = await loadHtmlFromFile(path.join(SAVED_DIR, f))
     const p = extractPdp($.html() ?? '')
     const r = await relocateImages(p, f)
-    p.images = r.images
+    // When relocateImages returns undefined (no images resolved), drop the
+    // field so mergeBySlug preserves prev.images instead of clobbering it.
+    if (r.images === undefined) {
+      ;(p as unknown as { images?: string[] }).images = undefined
+    } else {
+      p.images = r.images
+    }
     copiedImages += r.copied
     incoming.push(p)
   }
