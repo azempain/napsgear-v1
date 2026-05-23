@@ -7,6 +7,7 @@ import { runCategories } from './categories'
 import { runIngredients } from './ingredients'
 import { runFaq } from './faq'
 import { runShipping } from './shipping'
+import { runPromotions } from './promotions'
 
 function pad(s: string, w = 16): string {
   return s.length >= w ? s : s + ' '.repeat(w - s.length)
@@ -29,6 +30,9 @@ async function main() {
 
   const s = await runShipping()
   console.log(`${pad('shipping')}${s.sections} sections (${s.items} items)`)
+
+  const pr = await runPromotions()
+  console.log(`${pad('promotions')}+${pr.count} promotions (${pr.copiedImages} images copied)`)
 
   console.log('\n✓ done.')
 }
