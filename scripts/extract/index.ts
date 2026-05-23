@@ -9,6 +9,8 @@ import { runFaq } from './faq'
 import { runShipping } from './shipping'
 import { runPromotions } from './promotions'
 import { runContact } from './contact'
+import { runAma } from './ama'
+import { runAffiliate } from './affiliate'
 
 function pad(s: string, w = 16): string {
   return s.length >= w ? s : s + ' '.repeat(w - s.length)
@@ -37,6 +39,12 @@ async function main() {
 
   await runContact()
   console.log(`${pad('contact')}written`)
+
+  const a = await runAma()
+  console.log(`${pad('ama')}+${a.added} videos (${a.total} total)`)
+
+  await runAffiliate()
+  console.log(`${pad('affiliate')}written`)
 
   console.log('\n✓ done.')
 }
