@@ -11,6 +11,7 @@ import { runPromotions } from './promotions'
 import { runContact } from './contact'
 import { runAma } from './ama'
 import { runAffiliate } from './affiliate'
+import { runDiaries } from './diaries'
 
 function pad(s: string, w = 16): string {
   return s.length >= w ? s : s + ' '.repeat(w - s.length)
@@ -45,6 +46,9 @@ async function main() {
 
   await runAffiliate()
   console.log(`${pad('affiliate')}written`)
+
+  const d = await runDiaries()
+  console.log(`${pad('diaries')}+${d.count} entries (${d.copiedImages} images copied)`)
 
   console.log('\n✓ done.')
 }
