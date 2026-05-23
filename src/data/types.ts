@@ -120,9 +120,14 @@ export interface DiaryEntry {
   author?: string
   date: string
   excerpt: string
-  /** Sanitized HTML — see scripts/extract/lib/sanitize.ts. The /aas-diaries/[slug]/
-   *  renderer is the one place dangerouslySetInnerHTML is allowed in the codebase. */
-  bodyHtml: string
+  /** Sanitized HTML — see scripts/extract/lib/sanitize.ts. Present only when
+   *  we have the full diary body (the AAS Diaries index page only carries
+   *  excerpts; the full bodies live behind sourceUrl). */
+  bodyHtml?: string
+  /** External URL of the full diary on napsgear.org. */
+  sourceUrl?: string
+  /** Thumbnail path (rewritten by the extractor shell into /images/diaries/...). */
+  thumbnail?: string
 }
 
 export interface AffiliateDoc {
