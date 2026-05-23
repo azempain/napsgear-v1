@@ -41,10 +41,13 @@ export default async function CategoryPage({
   const category = categories.find((c) => c.slug === slug)
   if (!category) notFound()
 
-  // Until per-category product data is captured, the grid falls back to
-  // showing a sampling of all products so the route isn't empty in dev.
-  // ProductTable's toolbar still lets visitors narrow what they see.
-  const list = products
+  // When the category has a productSlugs allowlist (populated by the saved-
+  // pages extractor for categories with a captured product grid), filter to
+  // those SKUs. Otherwise fall back to showing the full catalog so the route
+  // isn't empty in dev.
+  const list = category.productSlugs && category.productSlugs.length > 0
+    ? products.filter(p => category.productSlugs!.includes(p.slug))
+    : products
 
   const crumbs = breadcrumbJsonLd([
     { name: 'Home', href: '/' },
