@@ -1,4 +1,8 @@
 import type { Metadata } from 'next'
+import promosJson from '@/data/promotions.json'
+import type { Promotion } from '@/data/types'
+
+const promos: Promotion[] = promosJson as Promotion[]
 
 export const metadata: Metadata = {
   title: 'Promotions',
@@ -7,55 +11,46 @@ export const metadata: Metadata = {
 }
 
 export default function PromotionsPage() {
+  // Group by body (section heading) so we render Earn Store Credit /
+  // Products on Sale / Ask Me Anything as distinct columns.
+  const groups = new Map<string, Promotion[]>()
+  for (const p of promos) {
+    const k = p.body || 'General'
+    const arr = groups.get(k) ?? []
+    arr.push(p)
+    groups.set(k, arr)
+  }
+
   return (
     <main className="main">
       <div className="container py-5">
         <h1 className="mb-4">All Promotions</h1>
-
-        <p>
-          NapsGear works exclusively with the most reputable suppliers in this
-          market. And for that, we are one of the largest and most trusted online
-          retailers. Our suppliers go through a review process of quality control
-          and maintenance of reputation before we allow them in our store. We have
-          carefully selected these brands to ensure the highest product quality and
-          longevity.
-        </p>
-        <p>
-          Our available payment options are bank wire transfer (USA only), Card
-          Payment, Venmo, Zelle, Bitcoin, Litecoin, Monero, USDT-ERC20, USDT-TRC20,
-          Western Union and Moneygram (USD only). Debit cards may be used to fill
-          your Bitcoin and Litecoin wallets. Any unlisted payment methods are not
-          accepted. Detailed directions are provided in checkout, once your
-          selection is made.
-        </p>
-        <p>
-          Below you will find a list of all current promotions. Some are ongoing and
-          some are for a limited time.
-        </p>
-
-        <h2 className="section-title mt-5">Earn Store Credit</h2>
-        <ul>
-          <li>Affiliate Partner Program</li>
-          <li>Reviews for Cash</li>
-          <li>Share Your Gear Pics</li>
-          <li>NapsGear AAS Diaries</li>
-          <li>Refer NapsGear for Cash</li>
-          <li>Flat 20% Cashback</li>
-        </ul>
-
-        <h2 className="section-title mt-5">Products on Sale</h2>
-        <ul>
-          <li>Supplier Super Deals</li>
-          <li>Product of the Week</li>
-          <li>Ask Me Anything</li>
-        </ul>
-
-        <p className="text-muted mt-4">
-          <small>
-            Offer may not be combined with any other sale, promotions, coupon, bulk
-            discounts, and/or offer.
-          </small>
-        </p>
+        {promos.length === 0 ? (
+          <p className="text-muted">No active promotions right now.</p>
+        ) : (
+          [...groups.entries()].map(([heading, items]) => (
+            <section key={heading} className="mb-4">
+              <h2 className="h5">{heading}</h2>
+              <div className="row row-cols-1 row-cols-md-2 g-3">
+                {items.map(p => (
+                  <div key={p.id} className="col">
+                    <article className="card h-100">
+                      {p.image && <img src={p.image} alt="" className="card-img-top" />}
+                      <div className="card-body">
+                        <h3 className="h6 mb-2">{p.title}</h3>
+                        {p.cta && (
+                          <a className="btn btn-sm btn-dark" href={p.cta.href}>
+                            {p.cta.label}
+                          </a>
+                        )}
+                      </div>
+                    </article>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))
+        )}
       </div>
     </main>
   )

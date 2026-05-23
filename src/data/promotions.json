@@ -1,0 +1,83 @@
+[
+  {
+    "id": "affiliate-partner-program",
+    "title": "Affiliate Partner Program",
+    "body": "Earn Store Credit",
+    "cta": {
+      "label": "Affiliate Partner Program",
+      "href": "https://www.napsgear.org/pap/affiliates/"
+    }
+  },
+  {
+    "id": "reviews-for-cash",
+    "title": "Reviews for Cash",
+    "body": "Earn Store Credit",
+    "cta": {
+      "label": "Reviews for Cash",
+      "href": "https://www.napsgear.org/discount_coupons-page.html"
+    }
+  },
+  {
+    "id": "share-your-gear-pics",
+    "title": "Share Your Gear Pics",
+    "body": "Earn Store Credit",
+    "cta": {
+      "label": "Share Your Gear Pics",
+      "href": "https://www.napsgear.org/gearpics.php"
+    }
+  },
+  {
+    "id": "napsgear-aas-diaries",
+    "title": "NapsGear AAS Diaries",
+    "body": "Earn Store Credit",
+    "cta": {
+      "label": "NapsGear AAS Diaries",
+      "href": "https://www.napsgear.org/aas_diaries.php"
+    }
+  },
+  {
+    "id": "refer-napsgear-for-cash",
+    "title": "Refer NapsGear for Cash",
+    "body": "Earn Store Credit",
+    "cta": {
+      "label": "Refer NapsGear for Cash",
+      "href": "https://www.napsgear.org/rewards_credit-page.html"
+    }
+  },
+  {
+    "id": "flat-20-cashback",
+    "title": "Flat 20% Cashback",
+    "body": "Earn Store Credit",
+    "cta": {
+      "label": "Flat 20% Cashback",
+      "href": "https://www.napsgear.org/loyalty_credit-page.html"
+    }
+  },
+  {
+    "id": "supplier-super-deals",
+    "title": "Supplier Super Deals",
+    "body": "Products on Sale",
+    "cta": {
+      "label": "Supplier Super Deals",
+      "href": "https://www.napsgear.org/super_deals.php"
+    }
+  },
+  {
+    "id": "product-of-the-week",
+    "title": "Product of the Week",
+    "body": "Products on Sale",
+    "cta": {
+      "label": "Product of the Week",
+      "href": "https://www.napsgear.org/week_product.php"
+    }
+  },
+  {
+    "id": "ask-me-anything",
+    "title": "Ask Me Anything",
+    "body": "",
+    "cta": {
+      "label": "View",
+      "href": "https://www.napsgear.org/ama.php"
+    }
+  }
+]

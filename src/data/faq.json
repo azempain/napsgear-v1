@@ -1,0 +1,68 @@
+[
+  {
+    "id": "how-do-i-contact-naps",
+    "question": "How do I contact Naps?",
+    "category": "Contact Us",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/95/11/how-do-i-contact-naps"
+  },
+  {
+    "id": "how-do-i-reset-my-password",
+    "question": "How do I reset my password?",
+    "category": "My Account",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/14/5/how-do-i-reset-my-password"
+  },
+  {
+    "id": "how-do-i-create-an-account",
+    "question": "How do I create an account?",
+    "category": "My Account",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/15/5/how-do-i-create-an-account"
+  },
+  {
+    "id": "what-if-something-is-out-of-stock",
+    "question": "What if something is out of stock?",
+    "category": "Ordering Process",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/19/6/what-if-something-is-out-of-stock"
+  },
+  {
+    "id": "how-do-i-view-my-order-history",
+    "question": "How do I view my order history?",
+    "category": "Ordering Process",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/21/6/how-do-i-view-my-order-history"
+  },
+  {
+    "id": "what-forms-of-payment-do-you-accept",
+    "question": "What forms of payment do you accept?",
+    "category": "Payment Process",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/87/9/what-forms-of-payment-do-you-accept"
+  },
+  {
+    "id": "how-do-i-pay-for-my-order",
+    "question": "How do I pay for my order?",
+    "category": "Payment Process",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/98/9/how-do-i-pay-for-my-order"
+  },
+  {
+    "id": "what-if-my-items-were-wrong-or-damaged",
+    "question": "What if my items were wrong or damaged?",
+    "category": "Returns and Refunds",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/30/8/what-if-my-items-were-wrong-or-damaged"
+  },
+  {
+    "id": "what-is-your-policy-for-high-risk-countries",
+    "question": "What is your policy for \"high-risk\" countries?",
+    "category": "Returns and Refunds",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/34/8/what-is-your-policy-for-high-risk-countries"
+  },
+  {
+    "id": "how-long-does-the-shipping-process-take",
+    "question": "How long does the shipping process take?",
+    "category": "Shipping Process",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/13/7/how-long-does-the-shipping-process-take"
+  },
+  {
+    "id": "how-do-i-track-my-package",
+    "question": "How do I track my package?",
+    "category": "Shipping Process",
+    "sourceUrl": "https://napshelp.com/index.php?/Knowledgebase/Article/View/20/7/how-do-i-track-my-package"
+  }
+]

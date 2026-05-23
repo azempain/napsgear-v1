@@ -5,6 +5,10 @@
 import { runProducts } from './products'
 import { runCategories } from './categories'
 import { runIngredients } from './ingredients'
+import { runFaq } from './faq'
+import { runShipping } from './shipping'
+import { runPromotions } from './promotions'
+import { runContact } from './contact'
 
 function pad(s: string, w = 16): string {
   return s.length >= w ? s : s + ' '.repeat(w - s.length)
@@ -21,6 +25,18 @@ async function main() {
 
   const i = await runIngredients()
   console.log(`${pad('ingredients')}rebuilt   ${i.distinct} distinct`)
+
+  const f = await runFaq()
+  console.log(`${pad('faq')}+${f.entries} entries`)
+
+  const s = await runShipping()
+  console.log(`${pad('shipping')}${s.sections} sections (${s.items} items)`)
+
+  const pr = await runPromotions()
+  console.log(`${pad('promotions')}+${pr.count} promotions (${pr.copiedImages} images copied)`)
+
+  await runContact()
+  console.log(`${pad('contact')}written`)
 
   console.log('\n✓ done.')
 }
