@@ -88,8 +88,13 @@ export interface Ingredient {
 export interface FaqEntry {
   id: string
   question: string
-  answer: string
+  /** Optional — full answer body when extracted. The current saved FAQ index
+   *  links to NapsHelp articles rather than inlining answers, so this is
+   *  often absent in favor of `sourceUrl`. */
+  answer?: string
   category?: string
+  /** External URL where the full answer lives (typically a NapsHelp article). */
+  sourceUrl?: string
 }
 
 export interface ShippingDoc {
