@@ -124,6 +124,8 @@ export function extractPdp(html: string): Product {
   }
 }
 
+// ─── Listing parser ─────────────────────────────────────────────────────────
+
 /** Returns one summary Product per card in a brand or category listing page. */
 export function extractListingProducts(html: string): Product[] {
   const $ = loadHtml(html)
@@ -154,4 +156,117 @@ export function extractListingProducts(html: string): Product[] {
   })
 
   return out
+}
+
+// ─── Shell (filesystem + image copy + merge) ───────────────────────────────
+
+import { promises as fs } from 'node:fs'
+import path from 'node:path'
+import { loadHtmlFromFile } from './lib/loadHtml'
+import { mergeBySlug } from './lib/mergeBySlug'
+import { copyAsset } from './lib/copyAsset'
+
+const SAVED_DIR  = 'saved pages'
+const PUBLIC_DIR = 'public/images/products'
+const DATA_FILE  = 'src/data/products.json'
+
+const PDP_FILES = [
+  'NapsGear  -  ALPHA-PHARMA HEALTHCARE PAGE - Details Page.html',
+]
+const LISTING_FILES = [
+  'NapsGear  -  ALPHA-PHARMA HEALTHCARE PAGE.html',
+  'NapsGear - Alpha-Pharma Healthcare.html',
+  'NapsGear - AvoGen Lab.html',
+  'NapsGear - Oral steroids.html',
+]
+
+async function resolveSavedAssetPath(htmlFile: string, src: string): Promise<string | null> {
+  // Saved-page _files/ images use relative paths like
+  // "./NapsGear  -  ALPHA-PHARMA HEALTHCARE PAGE_files/alpha-pharma-altamofen.jpg".
+  // Resolve against the saved-page parent dir and verify the file exists.
+  const baseDir = path.dirname(path.resolve(SAVED_DIR, htmlFile))
+  const cleaned = src.replace(/^\.?\/+/, '')
+  const candidate = path.resolve(baseDir, cleaned)
+  try {
+    await fs.stat(candidate)
+    return candidate
+  } catch {
+    return null
+  }
+}
+
+async function relocateImages(
+  p: Product,
+  sourceHtmlFile: string,
+): Promise<{ images: string[]; copied: number }> {
+  const out: string[] = []
+  let copied = 0
+  for (const src of p.images) {
+    // If src already points at a deployed asset (/images/...), keep it
+    if (src.startsWith('/images/')) {
+      out.push(src)
+      continue
+    }
+    const absSrc = await resolveSavedAssetPath(sourceHtmlFile, src)
+    if (!absSrc) {
+      // Source image missing — leave the path so the failure is visible
+      out.push(src)
+      continue
+    }
+    const ext = (path.extname(absSrc) || '.jpg').toLowerCase()
+    const publicName = `${p.slug}${ext}`
+    const dst = path.join(PUBLIC_DIR, publicName)
+    const result = await copyAsset(absSrc, dst)
+    if (result.copied) copied++
+    out.push(`/images/products/${publicName}`)
+  }
+  return { images: out, copied }
+}
+
+export interface ProductsSummary {
+  added: number
+  updated: number
+  unchanged: number
+  copiedImages: number
+}
+
+export async function runProducts(): Promise<ProductsSummary> {
+  let existing: Product[] = []
+  try {
+    existing = JSON.parse(await fs.readFile(DATA_FILE, 'utf8')) as Product[]
+  } catch {
+    existing = []
+  }
+
+  const incoming: Product[] = []
+  let copiedImages = 0
+
+  for (const f of PDP_FILES) {
+    const $ = await loadHtmlFromFile(path.join(SAVED_DIR, f))
+    const p = extractPdp($.html() ?? '')
+    const r = await relocateImages(p, f)
+    p.images = r.images
+    copiedImages += r.copied
+    incoming.push(p)
+  }
+  for (const f of LISTING_FILES) {
+    const $ = await loadHtmlFromFile(path.join(SAVED_DIR, f))
+    const rows = extractListingProducts($.html() ?? '')
+    for (const p of rows) {
+      const r = await relocateImages(p, f)
+      p.images = r.images
+      copiedImages += r.copied
+      incoming.push(p)
+    }
+  }
+
+  const result = mergeBySlug(existing, incoming)
+  await fs.writeFile(DATA_FILE, JSON.stringify(result.merged, null, 2) + '\n', 'utf8')
+
+  return {
+    added: result.added,
+    updated: result.updated,
+    unchanged: result.unchanged,
+    copiedImages,
+  }
 }
