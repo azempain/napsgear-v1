@@ -5,6 +5,7 @@
 import { runProducts } from './products'
 import { runCategories } from './categories'
 import { runIngredients } from './ingredients'
+import { runFaq } from './faq'
 
 function pad(s: string, w = 16): string {
   return s.length >= w ? s : s + ' '.repeat(w - s.length)
@@ -21,6 +22,9 @@ async function main() {
 
   const i = await runIngredients()
   console.log(`${pad('ingredients')}rebuilt   ${i.distinct} distinct`)
+
+  const f = await runFaq()
+  console.log(`${pad('faq')}+${f.entries} entries`)
 
   console.log('\n✓ done.')
 }
