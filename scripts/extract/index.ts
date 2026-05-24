@@ -5,6 +5,7 @@
 import { runProducts } from './products'
 import { runCategories } from './categories'
 import { runIngredients } from './ingredients'
+import { runNormalize } from './normalize'
 import { runFaq } from './faq'
 import { runShipping } from './shipping'
 import { runPromotions } from './promotions'
@@ -25,6 +26,12 @@ async function main() {
 
   const c = await runCategories()
   console.log(`${pad('categories')}+${c.added} new   ${c.updated} updated   ${c.unchanged} unchanged`)
+
+  // Self-heal products.json: dedupe duplicate brand+name entries, strip image
+  // refs to files that don't exist on disk. Must run BEFORE ingredients so
+  // they derive from the cleaned product set.
+  const n = await runNormalize()
+  console.log(`${pad('normalize')}-${n.removed} dupes   -${n.brokenStripped} broken images   (${n.total} kept)`)
 
   const i = await runIngredients()
   console.log(`${pad('ingredients')}rebuilt   ${i.distinct} distinct`)
