@@ -45,9 +45,13 @@ export default async function CategoryPage({
   // pages extractor for categories with a captured product grid), filter to
   // those SKUs. Otherwise fall back to showing the full catalog so the route
   // isn't empty in dev.
-  const list = category.productSlugs && category.productSlugs.length > 0
-    ? products.filter(p => category.productSlugs!.includes(p.slug))
-    : products
+  let list: typeof products
+  if (category.productSlugs && category.productSlugs.length > 0) {
+    const slugSet = new Set(category.productSlugs)
+    list = products.filter(p => slugSet.has(p.slug))
+  } else {
+    list = products
+  }
 
   const crumbs = breadcrumbJsonLd([
     { name: 'Home', href: '/' },

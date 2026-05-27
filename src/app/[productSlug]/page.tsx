@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { products } from '@/data'
+import { products, productsBySlug } from '@/data'
 import ProductDetail from '@/components/ProductDetail'
 import JsonLd from '@/components/JsonLd'
 import { productJsonLd, breadcrumbJsonLd } from '@/lib/jsonld'
@@ -18,7 +18,7 @@ export async function generateMetadata(
   { params }: { params: Promise<{ productSlug: string }> },
 ): Promise<Metadata> {
   const { productSlug } = await params
-  const product = products.find((p) => p.slug === productSlug)
+  const product = productsBySlug.get(productSlug)
   if (!product) return { title: 'Product not found' }
 
   const description = product.description
@@ -53,7 +53,7 @@ export default async function ProductPage({
   params: Promise<{ productSlug: string }>
 }) {
   const { productSlug } = await params
-  const product = products.find((p) => p.slug === productSlug)
+  const product = productsBySlug.get(productSlug)
   if (!product) notFound()
 
   const crumbs = [

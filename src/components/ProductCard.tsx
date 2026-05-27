@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import type { Product } from '@/data/types'
 import ProductImage from './ProductImage'
 
-export default function ProductCard({ product }: { product: Product }) {
+export default memo(function ProductCard({ product }: { product: Product }) {
   const thumb = product.images[0] ?? ''
   const href = `/${product.slug}/`
   return (
@@ -56,4 +57,4 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
     </div>
   )
-}
+})
