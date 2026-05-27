@@ -1,6 +1,6 @@
 'use client'
 import {
-  createContext, useContext, useState, useCallback, useEffect, type ReactNode,
+  createContext, useContext, useState, useCallback, useMemo, useEffect, type ReactNode,
 } from 'react'
 
 export interface CartItem {
@@ -89,7 +89,7 @@ export default function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [items, hydrated])
 
-  const count = items.reduce((sum, i) => sum + i.qty, 0)
+  const count = useMemo(() => items.reduce((sum, i) => sum + i.qty, 0), [items])
 
   const addItem = useCallback((item: CartItem) => {
     if (item.qty <= 0) return
@@ -116,8 +116,13 @@ export default function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => setItems([]), [])
 
+  const value = useMemo<CartContextValue>(
+    () => ({ items, count, hydrated, addItem, removeItem, updateQty, clearCart }),
+    [items, count, hydrated, addItem, removeItem, updateQty, clearCart],
+  )
+
   return (
-    <CartContext.Provider value={{ items, count, hydrated, addItem, removeItem, updateQty, clearCart }}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   )

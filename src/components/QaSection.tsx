@@ -2,7 +2,10 @@
 import { useRef } from 'react'
 import { Autoplay, Pagination } from 'swiper/modules'
 import type { SwiperOptions } from 'swiper/types'
-import { qaPosts } from '@/data'
+import qaPostsJson from '@/data/qa-posts.json'
+import type { QaPost } from '@/data/types'
+
+const qaPosts: QaPost[] = qaPostsJson as QaPost[]
 import { useSwiper } from '@/hooks/useSwiper'
 import QaPostCard from './QaPostCard'
 

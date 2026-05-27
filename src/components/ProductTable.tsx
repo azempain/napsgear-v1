@@ -7,7 +7,7 @@
 // which owns pagination state. This gives us the Table abstraction's lifecycle
 // (page index, page size, row model) without fighting it for filter semantics.
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
   useReactTable,
   getCoreRowModel,
@@ -74,23 +74,23 @@ export default function ProductTable({
   const total = filtered.length
   const grandTotal = products.length
 
-  function toggleLabel(name: keyof LabelFilters) {
+  const toggleLabel = useCallback((name: keyof LabelFilters) => {
     setLabels((prev) => ({ ...prev, [name]: !prev[name] }))
-  }
-  function toggleIngredient(name: string) {
+  }, [])
+  const toggleIngredient = useCallback((name: string) => {
     setIngSet((prev) => {
       const next = new Set(prev)
       if (next.has(name)) next.delete(name)
       else next.add(name)
       return next
     })
-  }
-  function reset() {
+  }, [])
+  const reset = useCallback(() => {
     setSearch('')
     setLabels(EMPTY_LABEL_FILTERS)
     setIngSet(new Set())
     setSortKey('name-asc')
-  }
+  }, [])
 
   const anyChipActive = labels.new || labels.sale || ingSet.size > 0 || search.length > 0
 

@@ -11,6 +11,10 @@ export const brands:      Brand[]      = brandsJson      as Brand[]
 export const categories:  Category[]   = categoriesJson  as Category[]
 export const videos:      Video[]      = videosJson      as Video[]
 export const products:    Product[]    = productsJson    as Product[]
+/** O(1) product lookup by slug — avoids repeated Array.find() in dynamic routes. */
+export const productsBySlug: Map<string, Product> = new Map(
+  (productsJson as Product[]).map(p => [p.slug, p]),
+)
 export const qaPosts:     QaPost[]     = qaPostsJson     as QaPost[]
 export const gearpics:    Gearpic[]    = gearpicsJson    as Gearpic[]
 export const ingredients: Ingredient[] = ingredientsJson as Ingredient[]
