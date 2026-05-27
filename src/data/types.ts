@@ -124,7 +124,7 @@ export interface DiaryEntry {
    *  we have the full diary body (the AAS Diaries index page only carries
    *  excerpts; the full bodies live behind sourceUrl). */
   bodyHtml?: string
-  /** External URL of the full diary on napsgear.org. */
+  /** URL of the full diary. */
   sourceUrl?: string
   /** Thumbnail path (rewritten by the extractor shell into /images/diaries/...). */
   thumbnail?: string
