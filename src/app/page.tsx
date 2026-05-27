@@ -19,7 +19,7 @@ export default function HomePage() {
         </div>
 
         <div className="welcome-text">
-          <strong>NapsGear.Org</strong> The largest marketplace for pharmaceuticals!
+          <strong>NapsGear</strong> The largest marketplace for pharmaceuticals!
         </div>
 
         <div className="container">

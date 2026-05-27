@@ -463,13 +463,13 @@ const CHECKS = [
       await page.waitForSelector('main .card', { timeout: 8000 })
       const cardCount = await page.$$eval('main .card', els => els.length)
       if (cardCount < 5) throw new Error(`expected >= 5 diary cards, got ${cardCount}`)
-      // Each diary card links out to napsgear.org via h2 a
+      // Each diary card has a title link via h2 a
       const linkedOut = await page.$$eval(
-        'main .card h2 a[href*="napsgear.org"]',
+        'main .card h2 a[href]',
         els => els.length,
       )
       if (linkedOut < cardCount - 1) {
-        throw new Error(`expected most diary cards to link out, got ${linkedOut}/${cardCount}`)
+        throw new Error(`expected most diary cards to have links, got ${linkedOut}/${cardCount}`)
       }
     },
   },

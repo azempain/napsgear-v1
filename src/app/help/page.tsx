@@ -12,7 +12,7 @@ export default function HelpPage() {
       <div className="container py-5">
         <h1 className="mb-2">NapsHelp</h1>
         <p className="mb-4">
-          <a href="/">&larr; Back to NapsGear.org</a>
+          <a href="/">&larr; Back to NapsGear</a>
         </p>
 
         <h2 className="section-title">Welcome to NapsGear Support</h2>
