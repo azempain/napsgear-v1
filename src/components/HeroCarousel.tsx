@@ -31,7 +31,7 @@ export default function HeroCarousel() {
     <div ref={ref} className="hp-slider swiper" suppressHydrationWarning>
       <div className="swiper-wrapper" suppressHydrationWarning>
         <HeroSlideBanner
-          href="#"
+          href="/help/"
           src="/img/banners/homepage/phishing-warning.jpg"
           alt="Beware of Phishing Clones"
         />

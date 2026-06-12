@@ -1,5 +1,27 @@
 {
   "heading": "Welcome to NapsGear Support",
   "formAction": "https://napshelp.com/index.php?/Base/User/Login",
-  "portalUrl": "https://napshelp.com"
+  "portalUrl": "https://napshelp.com",
+  "actions": [
+    {
+      "label": "Register",
+      "href": "https://napshelp.com/index.php?/Base/UserRegistration/Register",
+      "description": "Register a new account to submit new tickets or manage subscriptions."
+    },
+    {
+      "label": "Submit a Ticket",
+      "href": "https://napshelp.com/index.php?/Tickets/Submit",
+      "description": "Submit a new issue to a department. Please register first."
+    },
+    {
+      "label": "Knowledgebase",
+      "href": "https://napshelp.com/index.php?/Knowledgebase/List",
+      "description": "View categorized listing of all common frequently asked questions."
+    },
+    {
+      "label": "Q&A",
+      "href": "/qa/",
+      "description": "Questions & Answers with NapsGear Customers"
+    }
+  ]
 }

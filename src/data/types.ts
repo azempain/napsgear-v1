@@ -150,4 +150,9 @@ export interface ContactInfo {
   heading?: string
   /** Optional URL to the external support portal (NapsHelp). */
   portalUrl?: string
+  actions?: Array<{
+    label: string
+    description: string
+    href: string
+  }>
 }

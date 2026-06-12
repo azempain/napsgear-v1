@@ -4,6 +4,10 @@ A Next.js 16 static-export storefront. Catalog, product detail, cart, and
 checkout — all pre-rendered at build time and served from a CDN with no
 backend.
 
+This repository is maintained for educational and software-development
+purposes. That statement intentionally lives in project documentation rather
+than customer-facing storefront UI.
+
 > ⚠ This repo clones the look and content of a third-party site. Before
 > deploying to a real domain, review the legal and brand-rights situation
 > for your jurisdiction.

@@ -107,7 +107,10 @@ const CHECKS = [
     name: 'Product page: pack selector + total updates on tier change',
     route: '/catalog/',
     async assert(page) {
-      const firstProduct = await page.getAttribute('.products-grid a[href^="/"]', 'href')
+      const firstProduct = await page.getAttribute(
+        '[data-testid="product-grid"] .product-item__title a[href^="/"]',
+        'href',
+      )
       if (!firstProduct) throw new Error('no product link on /catalog/')
       await page.goto(BASE + firstProduct, { waitUntil: 'load' })
       await page.waitForSelector('#addToCartBtn', { timeout: 8000 })
@@ -503,6 +506,83 @@ const CHECKS = [
       }
     },
   },
+  {
+    name: 'F4: header search submits to /catalog/?q= and filters results',
+    route: '/',
+    async assert(page) {
+      await page.fill('.header-search-input', 'dianabol')
+      await Promise.all([
+        page.waitForURL('**/catalog/?q=dianabol'),
+        page.click('.btn-search'),
+      ])
+      await page.waitForSelector('[data-testid="product-grid"]', { timeout: 8000 })
+      const value = await page.inputValue('[data-testid="product-search"]')
+      if (value !== 'dianabol') throw new Error(`catalog search did not hydrate from URL: "${value}"`)
+    },
+  },
+  {
+    name: 'F4: currency selection converts prices and persists after reload',
+    route: '/catalog/',
+    async assert(page) {
+      const trigger = await page.waitForSelector('#dropdownCurrency', { timeout: 8000 })
+      await trigger.click()
+      const euro = page.locator('.header-currency .dropdown-item').filter({ hasText: 'Euro (EUR)' })
+      if (await euro.count() !== 1) throw new Error('Euro currency option missing or duplicated')
+      await euro.click()
+      await page.waitForFunction(() => {
+        const price = document.querySelector('.product-price')
+        return price && /€/.test(price.textContent || '')
+      }, null, { timeout: 3000 })
+      await page.reload({ waitUntil: 'load' })
+      const selected = (await page.textContent('#dropdownCurrency'))?.trim()
+      if (selected !== 'EUR') throw new Error(`currency did not persist: "${selected}"`)
+    },
+  },
+  {
+    name: 'F4: hosted-auth account routes render in the static export',
+    route: '/login/',
+    async assert(page) {
+      await page.waitForSelector('.ngc-auth-card', { timeout: 8000 })
+      if (!(await page.$('input[type="email"]'))) throw new Error('login email field missing')
+      for (const path of ['/signup/', '/forgot-password/', '/reset-password/', '/account/']) {
+        const response = await page.request.get(BASE + path)
+        if (!response.ok()) throw new Error(`${path} returned ${response.status()}`)
+      }
+    },
+  },
+  {
+    name: 'F4: new promotion and community routes are present',
+    route: '/why-naps/',
+    async assert(page) {
+      const paths = [
+        '/store-credit/',
+        '/reviews-for-cash/',
+        '/share-your-gear-pics/',
+        '/refer-a-friend/',
+        '/cashback/',
+        '/supplier-super-deals/',
+        '/product-of-the-week/',
+        '/laboratory-tests/',
+        '/project-get-shredded/',
+        '/community-gearpics/',
+      ]
+      for (const path of paths) {
+        const response = await page.request.get(BASE + path)
+        if (!response.ok()) throw new Error(`${path} returned ${response.status()}`)
+      }
+      const body = await page.textContent('main')
+      if (!body || body.includes('Content TBD')) throw new Error('/why-naps/ is still incomplete')
+    },
+  },
+  {
+    name: 'F4: uncaptured category does not show the full unrelated catalog',
+    route: '/categories/accordo-rx-c144205/',
+    async assert(page) {
+      await page.waitForSelector('.ngc-list__empty', { timeout: 8000 })
+      const productCount = await page.$$eval('[data-testid="product-grid"] .product-item', els => els.length)
+      if (productCount !== 0) throw new Error(`expected empty uncaptured category, got ${productCount} products`)
+    },
+  },
 ]
 
 ;(async () => {
@@ -512,6 +592,14 @@ const CHECKS = [
 
   for (const check of CHECKS) {
     try {
+      // Keep checks independent. Currency and cart preferences intentionally
+      // persist in the app, but one check must not change another check's
+      // assumptions when the harness reuses a single browser page.
+      await page.goto(BASE + '/', { waitUntil: 'domcontentloaded', timeout: 30000 })
+      await page.evaluate(() => {
+        localStorage.clear()
+        sessionStorage.clear()
+      })
       // 'domcontentloaded' instead of 'networkidle' — the catalog grew to
       // 700+ products and the network never settles within 30s on heavier
       // pages. Individual checks own their own waitForSelector calls for
