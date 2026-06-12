@@ -14,6 +14,7 @@ import ScrollToTop from '@/components/ScrollToTop'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/site'
 import { organizationJsonLd, websiteJsonLd } from '@/lib/jsonld'
+import Providers from '@/components/Providers'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -83,17 +84,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             BreadcrumbList) ship from their own page files. */}
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
 
-        <CurrencyProvider>
-          <CartProvider>
-            <ScrollToTop />
-            <Header />
-            <CartDrawer />
-            <div className='min-h-screen'>
-              {children}
-            </div>
-            <Footer />
-          </CartProvider>
-        </CurrencyProvider>
+        <Providers>
+          <CurrencyProvider>
+            <CartProvider>
+              <ScrollToTop />
+              <Header />
+              <CartDrawer />
+              <div className='min-h-screen'>
+                {children}
+              </div>
+              <Footer />
+            </CartProvider>
+          </CurrencyProvider>
+        </Providers>
         <NavInteractions />
       </body>
     </html>

@@ -3,19 +3,26 @@ import { total } from './cart'
 import {
   renderCustomer, renderShipping, renderItems, renderTotals, buildOrderSubject,
 } from './orderEmail'
+import { z } from 'zod'
 
-export interface CheckoutForm {
-  fullName: string
-  email: string
-  phone: string
-  address1: string
-  address2: string
-  city: string
-  state: string
-  postalCode: string
-  country: string
-  notes: string
-}
+export const checkoutSchema = z.object({
+  fullName: z.string().trim().min(1, 'Full name is required'),
+  email: z.string().trim()
+    .min(1, 'Email is required')
+    .email('Enter a valid email address'),
+  phone: z.string().trim()
+    .min(1, 'Phone is required')
+    .refine(value => value.replace(/\D/g, '').length >= 7, 'Enter a valid phone number'),
+  address1: z.string().trim().min(1, 'Address is required'),
+  address2: z.string().trim(),
+  city: z.string().trim().min(1, 'City is required'),
+  state: z.string().trim().min(1, 'State/Region is required'),
+  postalCode: z.string().trim().min(1, 'Postal code is required'),
+  country: z.string().trim().min(1, 'Country is required'),
+  notes: z.string().trim().max(2000, 'Order notes must be 2,000 characters or fewer'),
+})
+
+export type CheckoutForm = z.infer<typeof checkoutSchema>
 
 /**
  * Tight, Anthropic-invoice-style payload. Web3Forms renders each JSON key as
@@ -46,60 +53,55 @@ export interface OrderPayload {
   order_total: string
 }
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 /** Per-field validators. Each returns `undefined` when valid, or a user-facing
  *  error string. Used at field-level by TanStack Form (onBlur) and aggregated
  *  by validateCheckout() at submit time. */
 export const checkoutFieldValidators: {
   [K in keyof CheckoutForm]: (value: string) => string | undefined
 } = {
-  fullName: (v) => v.trim() ? undefined : 'Full name is required',
-  email: (v) => {
-    const t = v.trim()
-    if (!t) return 'Email is required'
-    if (!EMAIL_RE.test(t)) return 'Enter a valid email address'
-    return undefined
-  },
-  phone: (v) => {
-    const t = v.trim()
-    if (!t) return 'Phone is required'
-    if (t.replace(/\D/g, '').length < 7) return 'Enter a valid phone number'
-    return undefined
-  },
-  address1:   (v) => v.trim() ? undefined : 'Address is required',
-  address2:   () => undefined,
-  city:       (v) => v.trim() ? undefined : 'City is required',
-  state:      (v) => v.trim() ? undefined : 'State/Region is required',
-  postalCode: (v) => v.trim() ? undefined : 'Postal code is required',
-  country:    (v) => v.trim() ? undefined : 'Country is required',
-  notes:      () => undefined,
+  fullName: value => fieldError('fullName', value),
+  email: value => fieldError('email', value),
+  phone: value => fieldError('phone', value),
+  address1: value => fieldError('address1', value),
+  address2: value => fieldError('address2', value),
+  city: value => fieldError('city', value),
+  state: value => fieldError('state', value),
+  postalCode: value => fieldError('postalCode', value),
+  country: value => fieldError('country', value),
+  notes: value => fieldError('notes', value),
 }
 
 export function validateCheckout(f: CheckoutForm): Record<string, string> {
-  const e: Record<string, string> = {}
-  ;(Object.keys(checkoutFieldValidators) as (keyof CheckoutForm)[]).forEach(k => {
-    const msg = checkoutFieldValidators[k](f[k])
-    if (msg) e[k] = msg
-  })
-  return e
+  const result = checkoutSchema.safeParse(f)
+  if (result.success) return {}
+  return result.error.issues.reduce<Record<string, string>>((errors, issue) => {
+    const key = issue.path[0]
+    if (typeof key === 'string' && !errors[key]) errors[key] = issue.message
+    return errors
+  }, {})
+}
+
+function fieldError<K extends keyof CheckoutForm>(field: K, value: CheckoutForm[K]) {
+  const result = checkoutSchema.shape[field].safeParse(value)
+  return result.success ? undefined : result.error.issues[0]?.message
 }
 
 const fmt = (n: number) => `$${n.toFixed(2)}`
 
 export function buildOrderPayload(f: CheckoutForm, items: CartItem[]): OrderPayload {
+  const validForm = checkoutSchema.parse(f)
   const payload: OrderPayload = {
-    subject: buildOrderSubject(f, items),
+    subject: buildOrderSubject(validForm, items),
     from_name: 'NapsGear Checkout',
-    replyto: f.email,
+    replyto: validForm.email,
     botcheck: '',
-    customer: renderCustomer(f),
-    shipping: renderShipping(f),
+    customer: renderCustomer(validForm),
+    shipping: renderShipping(validForm),
     items: renderItems(items),
     totals: renderTotals(items),
     order_total: fmt(total(items)),
   }
-  const trimmed = f.notes.trim()
+  const trimmed = validForm.notes
   if (trimmed) payload.notes = trimmed
   return payload
 }

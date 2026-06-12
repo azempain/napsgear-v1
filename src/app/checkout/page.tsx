@@ -1,17 +1,18 @@
 'use client'
 import { useRef, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useForm } from '@tanstack/react-form'
 import { useCart } from '@/context/CartContext'
-import {
-  buildOrderPayload, type CheckoutForm,
-} from '@/lib/checkout'
+import type { CheckoutForm } from '@/lib/checkout'
 import CheckoutFormView from '@/components/CheckoutForm'
 import OrderSummary from '@/components/OrderSummary'
 import EmptyCart from '@/components/EmptyCart'
 import CartSkeleton from '@/components/CartSkeleton'
 import { total } from '@/lib/cart'
 import { useCurrency } from '@/context/CurrencyContext'
+import { useMutation } from '@tanstack/react-query'
+import { submitOrder } from '@/lib/orderSubmission'
 
 const EMPTY: CheckoutForm = {
   fullName: '', email: '', phone: '', address1: '', address2: '',
@@ -26,7 +27,12 @@ export default function CheckoutPage() {
   const router = useRouter()
   const [status, setStatus] = useState<Status>('form')
   // Captured at submit time so the confirmation screen survives clearCart.
-  const snapshot = useRef<{ count: number; total: string; email: string } | null>(null)
+  const snapshot = useRef<{ count: number; total: string; email: string; reference: string } | null>(null)
+
+  const orderMutation = useMutation({
+    mutationFn: ({ value, accessKey }: { value: CheckoutForm; accessKey: string }) =>
+      submitOrder({ accessKey, form: value, items }),
+  })
 
   const form = useForm({
     defaultValues: EMPTY,
@@ -40,27 +46,17 @@ export default function CheckoutPage() {
         return
       }
       setStatus('submitting')
-      snapshot.current = {
-        count: items.reduce((s, i) => s + i.qty, 0),
-        total: money(total(items)),
-        email: value.email,
-      }
-      const ctrl = new AbortController()
-      const timer = setTimeout(() => ctrl.abort(), 15000)
       try {
-        const res = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ access_key: key, ...buildOrderPayload(value, items) }),
-          signal: ctrl.signal,
-        })
-        const data = await res.json().catch(() => ({ success: false }))
-        if (res.ok && data.success) setStatus('success')
-        else setStatus('error')
+        const result = await orderMutation.mutateAsync({ value, accessKey: key })
+        snapshot.current = {
+          count: items.reduce((sum, item) => sum + item.qty, 0),
+          total: money(total(items)),
+          email: value.email,
+          reference: result.reference,
+        }
+        setStatus('success')
       } catch {
         setStatus('error')
-      } finally {
-        clearTimeout(timer)
       }
     },
   })
@@ -91,12 +87,17 @@ export default function CheckoutPage() {
             back at <strong>{snapshot.current?.email}</strong>.
           </p>
           {snapshot.current && (
-            <p className="ngc-confirm__meta">
-              {snapshot.current.count} item(s) · Total {snapshot.current.total}
-            </p>
+            <>
+              <p className="ngc-confirm__meta">
+                {snapshot.current.count} item(s) · Total {snapshot.current.total}
+              </p>
+              <p className="ngc-confirm__reference">
+                Order reference <strong>{snapshot.current.reference}</strong>
+              </p>
+            </>
           )}
           <p className="ngc-confirm__hint">Redirecting you to the shop…</p>
-          <a className="ngc-btn ngc-btn--dark" href="/catalog/">Continue shopping now &rarr;</a>
+          <Link className="ngc-btn ngc-btn--dark" href="/catalog/">Continue shopping now &rarr;</Link>
         </div>
         </div>
       </main>
@@ -127,7 +128,7 @@ export default function CheckoutPage() {
     )
   }
 
-  const submitting = status === 'submitting'
+  const submitting = status === 'submitting' || orderMutation.isPending
 
   const grandTotal = money(total(items))
 
@@ -135,9 +136,9 @@ export default function CheckoutPage() {
     <main className="main cart-main">
       <div className="container">
         <nav className="ngc-crumbs" aria-label="Breadcrumb">
-          <a href="/">Home</a>
+          <Link href="/">Home</Link>
           <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
-          <a href="/cart/">Cart</a>
+          <Link href="/cart/">Cart</Link>
           <span className="ngc-crumbs__sep" aria-hidden="true">›</span>
           <span>CHECKOUT</span>
         </nav>
@@ -156,7 +157,9 @@ export default function CheckoutPage() {
             <OrderSummary items={items} />
             {status === 'error' && (
               <div className="ngc-alert" role="alert">
-                Couldn&apos;t submit your order — please try again.
+                {orderMutation.error instanceof Error
+                  ? orderMutation.error.message
+                  : 'Couldn&apos;t submit your order. Please try again.'}
               </div>
             )}
             <button

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { authClient } from '@/lib/auth-client'
 
 type Mode = 'login' | 'signup' | 'forgot' | 'reset'
@@ -26,11 +27,12 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
     setPending(true)
     try {
+      const accountURL = `${window.location.origin}/account/`
       if (mode === 'login') {
         const result = await authClient.signIn.email({
           email,
           password,
-          callbackURL: '/account/',
+          callbackURL: accountURL,
         })
         if (result.error) throw new Error(result.error.message)
         window.location.assign('/account/')
@@ -39,7 +41,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           name,
           email,
           password,
-          callbackURL: '/account/',
+          callbackURL: accountURL,
         })
         if (result.error) throw new Error(result.error.message)
         window.location.assign('/account/')
@@ -124,18 +126,21 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           <button
             type="button"
             className="ngc-auth-google"
-            onClick={() => authClient.signIn.social({ provider: 'google', callbackURL: '/account/' })}
+            onClick={() => authClient.signIn.social({
+              provider: 'google',
+              callbackURL: `${window.location.origin}/account/`,
+            })}
           >
             Continue with Google
           </button>
           <div className="ngc-auth-links">
-            <a href="/forgot-password/">Forgot password?</a>
-            <a href="/signup/">Create account</a>
+            <Link href="/forgot-password/">Forgot password?</Link>
+            <Link href="/signup/">Create account</Link>
           </div>
         </>
       )}
-      {mode === 'signup' && <p className="ngc-auth-switch">Already registered? <a href="/login/">Sign in</a></p>}
-      {(mode === 'forgot' || mode === 'reset') && <p className="ngc-auth-switch"><a href="/login/">Back to sign in</a></p>}
+      {mode === 'signup' && <p className="ngc-auth-switch">Already registered? <Link href="/login/">Sign in</Link></p>}
+      {(mode === 'forgot' || mode === 'reset') && <p className="ngc-auth-switch"><Link href="/login/">Back to sign in</Link></p>}
     </section>
   )
 }

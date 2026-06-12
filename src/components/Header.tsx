@@ -5,6 +5,16 @@ import HeaderNav from './HeaderNav'
 import MobileMenu from './MobileMenu'
 import CurrencyMenu from './CurrencyMenu'
 import AccountLink from './AccountLink'
+import Link from 'next/link'
+
+const UTILITY_LINKS = [
+  { href: '/', label: 'Home' },
+  { href: '/faq/', label: 'FAQ' },
+  { href: '/shipping-information/', label: 'Shipping' },
+  { href: '/why-naps/', label: 'Why Naps?' },
+  { href: '/contact-us/', label: 'Contact us' },
+  { href: '/ask-an-ifbb-pro/', label: 'Ask an IFBB Pro' },
+]
 
 export default function Header() {
   return (
@@ -12,22 +22,13 @@ export default function Header() {
 
       {/* ── HEADER TOP ── white bar with nav links */}
       <div className="header-top">
-        <div className="container">
-          <div className="header-right header-dropdowns w-sm-100">
-            <div className="header-dropdown dropdown-expanded d-none d-lg-block mr-2">
-              <button type="button" className="ngc-header-links-trigger">Links</button>
-              <div className="header-menu">
-                <ul id="navigationMenu">
-                  <li><a href="/">Home</a></li>
-                  <li><a href="/faq/">Faq</a></li>
-                  <li><a href="/shipping-information/">Shipping</a></li>
-                  <li><a href="/why-naps/">Why Naps ?</a></li>
-                  <li><a href="/contact-us/">Contact us</a></li>
-                  <li><a href="/ask-an-ifbb-pro/">Ask an IFBB Pro</a></li>
-                </ul>
-              </div>
-            </div>
-            <span className="separator"></span>
+        <div className="container ngc-header-top-inner">
+          <nav className="ngc-utility-nav d-none d-lg-flex" aria-label="Support navigation">
+            {UTILITY_LINKS.map(link => (
+              <Link key={link.href} href={link.href}>{link.label}</Link>
+            ))}
+          </nav>
+          <div className="ngc-header-currency">
             <CurrencyMenu />
           </div>
         </div>
@@ -39,14 +40,14 @@ export default function Header() {
 
           <MobileMenu />
 
-          <a href="/" className="logo" aria-label="NapsGear home">
+          <Link href="/" className="logo" aria-label="NapsGear home">
             <NapsGearLogo />
-          </a>
+          </Link>
 
           <div className="header-search header-search-inline header-search-category w-lg-max pl-3 pr-1 mb-0">
-            <a href="/catalog/" className="header-icon search-toggle header-nav-features-search-show-icon me-0" aria-label="Search">
+            <Link href="/catalog/" className="header-icon search-toggle header-nav-features-search-show-icon me-0" aria-label="Search">
               <Search size={20} aria-hidden="true" />
-            </a>
+            </Link>
             <div className="header-search-form">
               <form role="search" action="/catalog/" method="get" className="kwdsearch">
                 <div className="header-search-wrapper">
@@ -67,10 +68,10 @@ export default function Header() {
 
           <div className="header-actions">
             <AccountLink />
-            <a href="/cart/" className="header-icon header-icon-cart dropdown-arrow cart-toggle" aria-label="Cart">
+            <Link href="/cart/" className="header-icon header-icon-cart dropdown-arrow cart-toggle" aria-label="Cart">
               <ShoppingCart size={20} aria-hidden="true" />
               <CartBadge />
-            </a>
+            </Link>
           </div>
 
         </div>

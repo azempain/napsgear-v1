@@ -1,153 +1,114 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
-import { X, ChevronDown } from 'lucide-react'
+
+import { ChevronDown } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
 import { brands, categories } from '@/data'
 import NapsGearLogo from './NapsGearLogo'
+import { SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
 
-type Expanded = 'brands' | 'categories' | null
+type Expanded = 'brands' | 'categories' | 'promotions' | 'information' | null
 
-const INFO_LINKS: { href: string; label: string }[] = [
+const SUPPORT_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/faq/', label: 'FAQ' },
   { href: '/shipping-information/', label: 'Shipping' },
   { href: '/why-naps/', label: 'Why Naps?' },
   { href: '/contact-us/', label: 'Contact us' },
   { href: '/ask-an-ifbb-pro/', label: 'Ask an IFBB Pro' },
-  { href: '/references/', label: 'References' },
-  { href: '/help/', label: 'Help' },
 ]
 
-export default function MobileDrawer({
-  open,
-  onClose,
-}: {
-  open: boolean
-  onClose: () => void
-}) {
+const PROMOTION_LINKS = [
+  { href: '/store-credit/', label: 'Earn Store Credit' },
+  { href: '/aas-diaries/', label: 'AAS Diaries' },
+  { href: '/affiliate-program/', label: 'Affiliate Program' },
+  { href: '/reviews-for-cash/', label: 'Reviews for Cash' },
+  { href: '/promotions/', label: 'All Promotions' },
+]
+
+const INFORMATION_LINKS = [
+  { href: '/laboratory-tests/', label: 'Laboratory Tests' },
+  { href: '/project-get-shredded/', label: 'Project Get Shredded' },
+  { href: '/community-gearpics/', label: 'Community Gear Pics' },
+  { href: '/qa/', label: 'Live Q&A Forums' },
+]
+
+export default function MobileDrawer({ onClose }: { onClose: () => void }) {
   const [expanded, setExpanded] = useState<Expanded>(null)
-  const closeBtn = useRef<HTMLButtonElement>(null)
+  const brandList = brands.filter(brand => brand.slug)
 
-  // Esc to close
-  useEffect(() => {
-    if (!open) return
-    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') onClose() }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  function toggle(section: Exclude<Expanded, null>) {
+    setExpanded(current => current === section ? null : section)
+  }
 
-  // Body scroll lock while open (restores prior value on close)
-  useEffect(() => {
-    if (!open) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = prev }
-  }, [open])
-
-  // Focus the close button when opening; reset the accordion state when closing
-  // so reopening doesn't show a stale expanded section.
-  useEffect(() => {
-    if (open) closeBtn.current?.focus()
-    else setExpanded(null)
-  }, [open])
-
-  const brandList = brands.filter(b => b.slug)
-
-  return (
-    <div
-      className={`mobile-drawer-root${open ? ' open' : ''}`}
-      aria-hidden={!open}
-    >
-      <div className="mobile-drawer-backdrop" onClick={onClose} aria-hidden="true" />
-      <aside
-        id="mobileDrawer"
-        className="mobile-drawer"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Main menu"
-      >
-        <div className="mobile-drawer__header">
-          <a href="/" className="mobile-drawer__brand" aria-label="NapsGear home" onClick={onClose}>
-            <NapsGearLogo />
-          </a>
-          <button
-            ref={closeBtn}
-            type="button"
-            className="mobile-drawer__close"
-            aria-label="Close menu"
-            onClick={onClose}
-          >
-            <X size={20} aria-hidden="true" />
-          </button>
-        </div>
-
-        <nav className="mobile-drawer__nav" aria-label="Mobile primary">
-          <button
-            type="button"
-            className="mobile-drawer__section"
-            aria-expanded={expanded === 'brands' ? 'true' : 'false'}
-            onClick={() => setExpanded(expanded === 'brands' ? null : 'brands')}
-          >
-            <span>Brands</span>
-            <ChevronDown size={16} aria-hidden="true" className="mobile-drawer__chev" />
-          </button>
-          {expanded === 'brands' && (
-            <ul className="mobile-drawer__list">
-              {brandList.map(b => (
-                <li key={b.slug}>
-                  <a
-                    className="mobile-drawer__link"
-                    href={`/brands/${b.slug!}/`}
-                    onClick={onClose}
-                  >
-                    {b.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <button
-            type="button"
-            className="mobile-drawer__section"
-            aria-expanded={expanded === 'categories' ? 'true' : 'false'}
-            onClick={() => setExpanded(expanded === 'categories' ? null : 'categories')}
-          >
-            <span>Categories</span>
-            <ChevronDown size={16} aria-hidden="true" className="mobile-drawer__chev" />
-          </button>
-          {expanded === 'categories' && (
-            <ul className="mobile-drawer__list">
-              {categories.map(c => (
-                <li key={c.slug}>
-                  <a
-                    className="mobile-drawer__link"
-                    href={`/categories/${c.slug}/`}
-                    onClick={onClose}
-                  >
-                    {c.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <div className="mobile-drawer__divider" aria-hidden="true" />
-
-          <ul className="mobile-drawer__list mobile-drawer__list--flat">
-            {INFO_LINKS.map(link => (
+  function section(
+    id: Exclude<Expanded, null>,
+    label: string,
+    links: Array<{ href: string; label: string }>,
+  ) {
+    const open = expanded === id
+    return (
+      <>
+        <button
+          type="button"
+          className="mobile-drawer__section"
+          aria-expanded={open ? 'true' : 'false'}
+          onClick={() => toggle(id)}
+        >
+          <span>{label}</span>
+          <ChevronDown size={16} aria-hidden="true" className="mobile-drawer__chev" />
+        </button>
+        {open && (
+          <ul className="mobile-drawer__list">
+            {links.map(link => (
               <li key={link.href}>
-                <a
-                  className="mobile-drawer__link"
-                  href={link.href}
-                  onClick={onClose}
-                >
+                <Link className="mobile-drawer__link" href={link.href} onClick={onClose}>
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
-        </nav>
-      </aside>
-    </div>
+        )}
+      </>
+    )
+  }
+
+  return (
+    <SheetContent id="mobileDrawer" aria-describedby="mobile-navigation-description">
+      <SheetTitle className="sr-only">Main navigation</SheetTitle>
+      <SheetDescription id="mobile-navigation-description" className="sr-only">
+        Browse products, promotions, support, and account links.
+      </SheetDescription>
+
+      <div className="mobile-drawer__header">
+        <Link href="/" className="mobile-drawer__brand" aria-label="NapsGear home" onClick={onClose}>
+          <NapsGearLogo />
+        </Link>
+      </div>
+
+      <nav className="mobile-drawer__nav" aria-label="Mobile primary">
+        {section('brands', 'Brands', brandList.map(brand => ({
+          href: `/brands/${brand.slug!}/`,
+          label: brand.name,
+        })))}
+        {section('categories', 'Categories', categories.map(category => ({
+          href: `/categories/${category.slug}/`,
+          label: category.name,
+        })))}
+        {section('promotions', 'Promotions', PROMOTION_LINKS)}
+        {section('information', 'Info & Entertainment', INFORMATION_LINKS)}
+
+        <div className="mobile-drawer__divider" aria-hidden="true" />
+        <ul className="mobile-drawer__list mobile-drawer__list--flat">
+          {SUPPORT_LINKS.map(link => (
+            <li key={link.href}>
+              <Link className="mobile-drawer__link" href={link.href} onClick={onClose}>
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </SheetContent>
   )
 }
