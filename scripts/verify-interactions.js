@@ -64,7 +64,7 @@ async function clearNetworkMocks(page) {
 
 const CHECKS = [
   {
-    name: 'Header: utility links are centered with no stray Links label',
+    name: 'Header: utility links begin on the desktop logo line',
     route: '/',
     async assert(page) {
       await page.setViewportSize({ width: 1440, height: 900 })
@@ -72,15 +72,15 @@ const CHECKS = [
       const labels = await nav.$$eval('a', links => links.map(link => link.textContent.trim()))
       if (labels.includes('Links')) throw new Error('stray Links label is still rendered')
 
-      const { navCenter, viewportCenter } = await nav.evaluate(element => {
-        const rect = element.getBoundingClientRect()
-        return {
-          navCenter: rect.left + rect.width / 2,
-          viewportCenter: window.innerWidth / 2,
-        }
-      })
-      if (Math.abs(navCenter - viewportCenter) > 24) {
-        throw new Error(`utility navigation is off-center by ${Math.abs(navCenter - viewportCenter)}px`)
+      const navBox = await page.locator('.ngc-utility-nav').boundingBox()
+      const logoBox = await page.locator('.header-middle .logo').boundingBox()
+      const primaryBox = await page.locator('.main-nav .menu').boundingBox()
+      if (!navBox || !logoBox || !primaryBox) throw new Error('desktop header bounds unavailable')
+      if (Math.abs(navBox.x - logoBox.x) > 2) {
+        throw new Error(`utility links and logo differ by ${Math.abs(navBox.x - logoBox.x)}px`)
+      }
+      if (Math.abs(primaryBox.x - logoBox.x) > 2) {
+        throw new Error(`primary navigation and logo differ by ${Math.abs(primaryBox.x - logoBox.x)}px`)
       }
     },
   },
@@ -152,6 +152,70 @@ const CHECKS = [
       await page.keyboard.press('Escape')
       await page.waitForSelector('#mobileDrawer', { state: 'detached', timeout: 3000 })
       await page.setViewportSize({ width: 1280, height: 800 })
+    },
+  },
+  {
+    name: 'Header: mobile and tablet controls share one vertical line',
+    route: '/',
+    async assert(page) {
+      for (const width of [375, 768, 991]) {
+        await page.setViewportSize({ width, height: 844 })
+        const headerBox = await page.locator('.header-middle').boundingBox()
+        const selectors = [
+          '.mobile-menu-toggle',
+          '.header-middle .logo',
+          '.ngc-mobile-search',
+          '.ngc-account-trigger--mobile',
+          '.header-icon-cart',
+        ]
+        const boxes = []
+        for (const selector of selectors) {
+          const box = await page.locator(selector).boundingBox()
+          if (!box) throw new Error(`${selector} missing at ${width}px`)
+          boxes.push(box)
+        }
+        const centers = boxes.map(box => box.y + box.height / 2)
+        if (Math.max(...centers) - Math.min(...centers) > 3) {
+          throw new Error(`mobile controls are not vertically aligned at ${width}px`)
+        }
+        if (!headerBox || headerBox.height > 60) {
+          throw new Error(`mobile header is ${headerBox?.height}px tall at ${width}px`)
+        }
+        if (!(boxes[0].x < boxes[1].x && boxes[2].x > boxes[1].x + boxes[1].width)) {
+          throw new Error(`mobile header groups are not left/right aligned at ${width}px`)
+        }
+      }
+    },
+  },
+  {
+    name: 'Header: authenticated mobile account opens profile and orders Sheet',
+    route: '/',
+    async assert(page) {
+      await mockSession(page)
+      await page.route('**://*.apirest.*.aws.neon.tech/**', route =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([{
+            id: 'order-1',
+            reference: 'NG-TEST-100',
+            status: 'pending_payment',
+            currency: 'USD',
+            order_total: '95.00',
+            created_at: new Date().toISOString(),
+          }]),
+        }))
+      await page.setViewportSize({ width: 375, height: 844 })
+      await page.reload({ waitUntil: 'load' })
+      const trigger = page.locator('[aria-controls="mobileAccountSheet"]')
+      await trigger.click()
+      await page.waitForSelector('#mobileAccountSheet[data-state="open"]', { timeout: 3000 })
+      const body = await page.textContent('#mobileAccountSheet')
+      if (!body?.includes('Jane Doe') || !body.includes('NG-TEST-100')) {
+        throw new Error('mobile account Sheet is missing session or order data')
+      }
+      await page.keyboard.press('Escape')
+      await clearNetworkMocks(page)
     },
   },
   {
