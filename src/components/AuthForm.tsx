@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react'
 import { authClient } from '@/lib/auth-client'
+import { safeAuthRedirect } from '@/lib/authRedirect'
 
 type Mode = 'login' | 'signup' | 'forgot' | 'reset'
 
@@ -14,6 +16,12 @@ export default function AuthForm({ mode }: { mode: Mode }) {
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [pending, setPending] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [nextQuery, setNextQuery] = useState('')
+
+  useEffect(() => {
+    setNextQuery(window.location.search)
+  }, [])
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -27,7 +35,8 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
     setPending(true)
     try {
-      const accountURL = `${window.location.origin}/account/`
+      const redirectPath = safeAuthRedirect(window.location.search)
+      const accountURL = `${window.location.origin}${redirectPath}`
       if (mode === 'login') {
         const result = await authClient.signIn.email({
           email,
@@ -35,7 +44,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           callbackURL: accountURL,
         })
         if (result.error) throw new Error(result.error.message)
-        window.location.assign('/account/')
+        window.location.assign(redirectPath)
       } else if (mode === 'signup') {
         const result = await authClient.signUp.email({
           name,
@@ -44,7 +53,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           callbackURL: accountURL,
         })
         if (result.error) throw new Error(result.error.message)
-        window.location.assign('/account/')
+        window.location.assign(redirectPath)
       } else if (mode === 'forgot') {
         const result = await authClient.requestPasswordReset({
           email,
@@ -72,10 +81,17 @@ export default function AuthForm({ mode }: { mode: Mode }) {
     forgot: 'Reset Password',
     reset: 'Choose New Password',
   }[mode]
-
+  const description = {
+    login: 'Sign in to continue securely to checkout and manage your orders.',
+    signup: 'Create one account for checkout, order history, and future purchases.',
+    forgot: 'Enter your account email and we will send a secure reset link.',
+    reset: 'Choose a strong new password for your account.',
+  }[mode]
   return (
     <section className="ngc-auth-card" aria-labelledby="auth-title">
+      <div className="ngc-auth-card__icon" aria-hidden="true"><LockKeyhole size={22} /></div>
       <h1 id="auth-title" className="ngc-auth-card__title">{title}</h1>
+      <p className="ngc-auth-card__description">{description}</p>
       <form onSubmit={submit} className="ngc-auth-form">
         {mode === 'signup' && (
           <label className="ngc-field">
@@ -87,22 +103,36 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         {mode !== 'reset' && (
           <label className="ngc-field">
             <span className="ngc-field__label">Email</span>
-            <input className="ngc-input" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" />
+            <span className="ngc-auth-input-wrap">
+              <Mail size={17} aria-hidden="true" />
+              <input className="ngc-input" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" />
+            </span>
           </label>
         )}
 
         {mode !== 'forgot' && (
           <label className="ngc-field">
             <span className="ngc-field__label">Password</span>
-            <input
-              className="ngc-input"
-              type="password"
-              minLength={8}
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-            />
+            <span className="ngc-auth-password-wrap">
+              <input
+                className="ngc-input"
+                type={showPassword ? 'text' : 'password'}
+                minLength={8}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              />
+              <button
+                type="button"
+                className="ngc-auth-password-toggle"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-pressed={showPassword ? 'true' : 'false'}
+                onClick={() => setShowPassword(value => !value)}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </span>
           </label>
         )}
 
@@ -123,23 +153,24 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
       {mode === 'login' && (
         <>
+          <div className="ngc-auth-divider"><span>or</span></div>
           <button
             type="button"
             className="ngc-auth-google"
             onClick={() => authClient.signIn.social({
               provider: 'google',
-              callbackURL: `${window.location.origin}/account/`,
+              callbackURL: `${window.location.origin}${safeAuthRedirect(window.location.search)}`,
             })}
           >
             Continue with Google
           </button>
           <div className="ngc-auth-links">
             <Link href="/forgot-password/">Forgot password?</Link>
-            <Link href="/signup/">Create account</Link>
+            <Link href={`/signup/${nextQuery}`}>Create account</Link>
           </div>
         </>
       )}
-      {mode === 'signup' && <p className="ngc-auth-switch">Already registered? <Link href="/login/">Sign in</Link></p>}
+      {mode === 'signup' && <p className="ngc-auth-switch">Already registered? <Link href={`/login/${nextQuery}`}>Sign in</Link></p>}
       {(mode === 'forgot' || mode === 'reset') && <p className="ngc-auth-switch"><Link href="/login/">Back to sign in</Link></p>}
     </section>
   )
