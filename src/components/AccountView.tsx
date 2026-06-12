@@ -1,17 +1,13 @@
 'use client'
 
-import { authClient } from '@/lib/auth-client'
 import Link from 'next/link'
-import { useQuery } from '@tanstack/react-query'
-import { listMyOrders } from '@/lib/orderPersistence'
+import { useAuthSession, useSignOut } from '@/lib/authSession'
+import { useMyOrders } from '@/lib/ordersQuery'
 
 export default function AccountView() {
-  const { data: session, isPending } = authClient.useSession()
-  const orders = useQuery({
-    queryKey: ['orders', session?.user.id],
-    queryFn: listMyOrders,
-    enabled: Boolean(session),
-  })
+  const { data: session, isPending } = useAuthSession()
+  const signOut = useSignOut()
+  const orders = useMyOrders(session?.user.id)
 
   if (isPending) return <p className="ngc-list__empty">Loading account...</p>
   if (!session) {
@@ -36,12 +32,13 @@ export default function AccountView() {
         <button
           type="button"
           className="ngc-btn ngc-btn--dark"
+          disabled={signOut.isPending}
           onClick={async () => {
-            await authClient.signOut()
+            await signOut.mutateAsync()
             window.location.assign('/')
           }}
         >
-          Sign Out
+          {signOut.isPending ? 'Signing Out...' : 'Sign Out'}
         </button>
       </div>
 
