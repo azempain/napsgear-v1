@@ -4,6 +4,12 @@ const mime = { '.html':'text/html', '.js':'application/javascript', '.css':'text
 http.createServer((req, res) => {
   let url = decodeURIComponent(req.url.split('?')[0])
   let fp = path.join(ROOT, url)
+  // Next 16 requests route-prefetch payloads with a dotted __PAGE__ suffix,
+  // while static export writes the payload inside a matching directory.
+  if (fp.endsWith('.__PAGE__.txt')) {
+    const nestedPayload = fp.replace(/\.__PAGE__\.txt$/, `${path.sep}__PAGE__.txt`)
+    if (fs.existsSync(nestedPayload)) fp = nestedPayload
+  }
   try {
     let st = fs.statSync(fp)
     if (st.isDirectory()) fp = path.join(fp, 'index.html')

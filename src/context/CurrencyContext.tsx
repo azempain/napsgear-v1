@@ -5,7 +5,7 @@ import { mergeRates } from '@/lib/currency'
 import { useCurrencyStore } from '@/store/currencyStore'
 
 const RATE_TTL = 12 * 60 * 60 * 1000
-const RATE_URL = 'https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,CAD,AUD'
+const RATE_URL = 'https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,CAD,AUD'
 
 export default function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const fetchedAt = useCurrencyStore(state => state.fetchedAt)
@@ -18,10 +18,11 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
     fetch(RATE_URL, { signal: controller.signal })
       .then(response => {
         if (!response.ok) throw new Error(`Currency service returned ${response.status}`)
-        return response.json() as Promise<{ rates?: unknown }>
+        return response.json() as Promise<Array<{ quote?: unknown; rate?: unknown }>>
       })
       .then(data => {
-        setRates(mergeRates(data.rates), Date.now())
+        const rates = Object.fromEntries(data.map(entry => [entry.quote, entry.rate]))
+        setRates(mergeRates(rates), Date.now())
       })
       .catch(() => {
         // Cached or bundled fallback rates keep pricing usable when the

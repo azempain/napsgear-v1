@@ -13,18 +13,19 @@ export async function submitOrder({
   items,
   fetchImpl = fetch,
   timeoutMs = 15_000,
+  reference = createOrderReference(),
 }: {
   accessKey: string
   form: CheckoutForm
   items: CartItem[]
   fetchImpl?: typeof fetch
   timeoutMs?: number
+  reference?: string
 }): Promise<OrderSubmission> {
   if (!accessKey.trim()) throw new Error('Checkout is not configured.')
   if (items.length === 0) throw new Error('Your cart is empty.')
 
   const validForm = checkoutSchema.parse(form)
-  const reference = createOrderReference()
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
 
