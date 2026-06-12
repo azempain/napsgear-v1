@@ -188,6 +188,25 @@ const CHECKS = [
     },
   },
   {
+    name: 'Header: mobile search expands inline and submits catalog query',
+    route: '/',
+    async assert(page) {
+      await page.setViewportSize({ width: 375, height: 844 })
+      await page.locator('.ngc-mobile-search').click()
+      const panel = page.locator('#mobileHeaderSearch')
+      await panel.waitFor({ state: 'visible', timeout: 3000 })
+      const input = panel.locator('input[name="q"]')
+      if (!(await input.evaluate(element => element === document.activeElement))) {
+        throw new Error('mobile search input did not receive focus')
+      }
+      await input.fill('dianabol')
+      await Promise.all([
+        page.waitForURL('**/catalog/?q=dianabol'),
+        panel.locator('button[type="submit"]').click(),
+      ])
+    },
+  },
+  {
     name: 'Header: authenticated mobile account opens profile and orders Sheet',
     route: '/',
     async assert(page) {
@@ -801,8 +820,44 @@ const CHECKS = [
         return price && /€/.test(price.textContent || '')
       }, null, { timeout: 3000 })
       await page.reload({ waitUntil: 'load' })
+      await page.waitForFunction(() => {
+        const select = document.querySelector('#dropdownCurrency')
+        return select && select.value === 'EUR'
+      }, null, { timeout: 5000 })
       const selected = await page.inputValue('#dropdownCurrency')
       if (selected !== 'EUR') throw new Error(`currency did not persist: "${selected}"`)
+    },
+  },
+  {
+    name: 'F4: persisted currency hydrates without server/client mismatch',
+    route: '/catalog/',
+    async assert(page) {
+      const hydrationErrors = []
+      const onConsole = message => {
+        if (/hydration failed|hydration mismatch/i.test(message.text())) {
+          hydrationErrors.push(message.text())
+        }
+      }
+      page.on('console', onConsole)
+      await page.evaluate(() => {
+        localStorage.setItem('napsgear_currency', JSON.stringify({
+          state: {
+            currency: 'GBP',
+            rates: { USD: 1, EUR: 0.92, GBP: 0.78, CAD: 1.37, AUD: 1.52 },
+            fetchedAt: Date.now(),
+          },
+          version: 0,
+        }))
+      })
+      await page.reload({ waitUntil: 'load' })
+      await page.waitForFunction(() => {
+        const price = document.querySelector('.product-price')
+        return price && /£/.test(price.textContent || '')
+      }, null, { timeout: 5000 })
+      page.off('console', onConsole)
+      if (hydrationErrors.length) {
+        throw new Error(hydrationErrors.join(' | '))
+      }
     },
   },
   {

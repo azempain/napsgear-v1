@@ -31,6 +31,7 @@ export const useCurrencyStore = create<CurrencyState>()(
     }),
     {
       name: 'napsgear_currency',
+      skipHydration: true,
       partialize: state => ({
         currency: state.currency,
         rates: state.rates,
