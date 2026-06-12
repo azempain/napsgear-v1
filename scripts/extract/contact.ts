@@ -34,6 +34,16 @@ export function extractContact(html: string): ContactInfo {
   if (email) out.email = email
   if (formAction) out.formAction = formAction
   if (portalUrl) out.portalUrl = portalUrl
+  const actions = $('.dialog-block').map((_, block) => {
+    const $block = $(block)
+    const $link = $block.find('.dialog-block-title a[href]').first()
+    const label = $link.text().replace(/\s+/g, ' ').trim()
+    const sourceHref = $link.attr('href')?.trim()
+    const href = sourceHref?.includes('napsgear.org/qa.php') ? '/qa/' : sourceHref
+    const description = $block.find('.dialog-block-body').first().text().replace(/\s+/g, ' ').trim()
+    return label && href && description ? { label, href, description } : null
+  }).get().filter((action): action is NonNullable<typeof action> => action !== null)
+  if (actions.length > 0) out.actions = actions
   return out
 }
 

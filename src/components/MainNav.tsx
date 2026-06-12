@@ -56,12 +56,12 @@ export default function MainNav() {
             <div className="dropdown-menu" id="promotionsMenu" data-bs-parent="#mainMenuNav">
               <ul>
                 <li><h5 className="menu-item__title nolink">Earn Store Credit</h5></li>
-                <li><a className="menu-item__link" href="#">NapsGear AAS Diaries</a></li>
-                <li><a className="menu-item__link" href="#">Affiliate Partner Program</a></li>
-                <li><a className="menu-item__link" href="#">Share Your Gear Pics</a></li>
+                <li><a className="menu-item__link" href="/aas-diaries/">NapsGear AAS Diaries</a></li>
+                <li><a className="menu-item__link" href="/affiliate-program/">Affiliate Partner Program</a></li>
+                <li><a className="menu-item__link" href="/share-your-gear-pics/">Share Your Gear Pics</a></li>
                 <li><h5 className="menu-item__title nolink">Products on Sale</h5></li>
-                <li><a className="menu-item__link" href="#">Supplier Super Deals</a></li>
-                <li><a className="menu-item__link" href="#">Product of the Week</a></li>
+                <li><a className="menu-item__link" href="/supplier-super-deals/">Supplier Super Deals</a></li>
+                <li><a className="menu-item__link" href="/product-of-the-week/">Product of the Week</a></li>
                 <li><a className="menu-item__link" href="/promotions/">All Recent Promotions</a></li>
               </ul>
             </div>
@@ -74,10 +74,10 @@ export default function MainNav() {
             <div className="dropdown-menu" id="infoMenu" data-bs-parent="#mainMenuNav">
               <ul>
                 <li><a className="menu-item__link" href="/ask-an-ifbb-pro/">Ask an IFBB Pro Anything</a></li>
-                <li><a className="menu-item__link" href="#">NapsGear AAS Diaries</a></li>
+                <li><a className="menu-item__link" href="/aas-diaries/">NapsGear AAS Diaries</a></li>
                 <li><a className="menu-item__link" href="/why-naps/">Why Buy from NapsGear</a></li>
                 <li><a className="menu-item__link" href="/references/">Laboratory Tests</a></li>
-                <li><a className="menu-item__link" href="#">Community Gear Pics</a></li>
+                <li><a className="menu-item__link" href="/community-gearpics/">Community Gear Pics</a></li>
                 <li><a className="menu-item__link" href="/qa/">LIVE Q&amp;A Forums</a></li>
               </ul>
             </div>

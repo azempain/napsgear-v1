@@ -4,9 +4,7 @@ import { useCart } from '@/context/CartContext'
 import { subtotal, shippingFee, loyaltyCredit, total } from '@/lib/cart'
 import EmptyCart from './EmptyCart'
 import CartSkeleton from './CartSkeleton'
-
-const money = (n: number) =>
-  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
+import { useCurrency } from '@/context/CurrencyContext'
 
 const TrashIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105.7 122.88" aria-hidden="true">
@@ -29,6 +27,7 @@ function MobileCartActions({ totalLabel }: { totalLabel: string }) {
 
 export default function CartView() {
   const { items, hydrated, updateQty, removeItem, clearCart } = useCart()
+  const { money } = useCurrency()
   const [toast, setToast] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 

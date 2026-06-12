@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react'
 import type { Product } from '@/data/types'
 import { useCart } from '@/context/CartContext'
 import { parsePrice, packTiers } from '@/lib/pricing'
+import { useCurrency } from '@/context/CurrencyContext'
 
 const FREE_PACK_BANNERS = [
   { free: '1 pack', text: 'For every 5 packs purchased, you get 1 pack FREE' },
@@ -13,6 +14,7 @@ const FREE_PACK_BANNERS = [
 
 export default function ProductDetail({ product }: { product: Product }) {
   const { addItem } = useCart()
+  const { money } = useCurrency()
   const tiers = packTiers(parsePrice(product.price), product.packs)
   const [selected, setSelected] = useState(0)
   const [tab, setTab] = useState<'description' | 'reviews' | 'qa'>('description')
@@ -109,9 +111,9 @@ export default function ProductDetail({ product }: { product: Product }) {
                         {t.packs} pack{t.packs > 1 ? 's' : ''}{t.label ? `  (${t.label})` : ''}
                       </div>
                       <div className="price-per-item" data-label="Price per item">
-                        ${t.perItem.toFixed(2)}
+                        {money(t.perItem)}
                       </div>
-                      <div className="price-total" data-label="Total">${t.total.toFixed(2)}</div>
+                      <div className="price-total" data-label="Total">{money(t.total)}</div>
                     </label>
                   </div>
                 ))}

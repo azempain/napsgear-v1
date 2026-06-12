@@ -7,7 +7,7 @@
 // which owns pagination state. This gives us the Table abstraction's lifecycle
 // (page index, page size, row model) without fighting it for filter semantics.
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   useReactTable,
   getCoreRowModel,
@@ -51,6 +51,11 @@ export default function ProductTable({
   const [labels, setLabels] = useState<LabelFilters>(EMPTY_LABEL_FILTERS)
   const [ingSet, setIngSet] = useState<Set<string>>(new Set())
   const [sortKey, setSortKey] = useState<SortKey>('name-asc')
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search).get('q')
+    if (query) setSearch(query)
+  }, [])
 
   const filtered = useMemo(() => {
     return products

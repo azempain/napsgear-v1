@@ -5,57 +5,50 @@ import type { ShippingDoc } from '@/data/types'
 const SAVED_FILE = 'saved pages/NapsGear - shipping.php'
 const DATA_FILE  = 'src/data/shipping.json'
 
-// Shipping page is rendered as a flat sequence of <h4> headings each followed
-// by one or more <p> paragraphs (and occasional <ul>). Walk the body and
-// group siblings under whichever h4 most recently appeared. Stop traversal
-// when we hit a known footer container so navigation/widget markup doesn't
-// leak in.
-const STOP_AT = new Set([
-  'footer', 'aside', 'nav', 'script', 'style',
-])
-
 export function extractShipping(html: string): ShippingDoc {
   const $ = loadHtml(html)
+  const $policy = $('main table td.main').first()
+  if ($policy.length === 0) return { sections: [] }
 
-  type Section = ShippingDoc['sections'][number]
-  const sections: Section[] = []
-  let current: Section | null = null
+  const policyHtml = $policy.html() ?? ''
+  const lines = loadHtml(`<div>${policyHtml.replace(/<br\s*\/?>/gi, '\n')}</div>`)
+    .root()
+    .text()
+    .split('\n')
+    .map(line => line.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
 
-  // Walk all descendants of <body> in document order. We rely on cheerio's
-  // descendant iteration following the source order.
-  $('body').find('h4, p, ul').each((_, el) => {
-    const tag = ('tagName' in el && el.tagName) ? el.tagName.toLowerCase() : ''
-    if (!tag) return
+  const headingIndexes = new Map<string, string>([
+    ['First Class Shipping fees cover', 'First Class Shipping'],
+    ['Domestic Orders', 'Domestic Orders'],
+    ['International Orders', 'International Orders'],
+    ['Customs Clearance:', 'Customs Clearance'],
+  ])
 
-    // Skip anything inside a stop container (footer/aside/nav/etc.)
-    const $el = $(el)
-    if ($el.parents(Array.from(STOP_AT).join(',')).length > 0) return
+  const sections: ShippingDoc['sections'] = []
+  let current = { heading: 'Shipping overview', paras: [] as string[] }
+  sections.push(current)
 
-    if (tag === 'h4') {
-      const heading = $el.text().trim()
-      if (!heading) return
-      current = { heading }
+  for (const line of lines) {
+    const headingMatch = [...headingIndexes.entries()].find(([prefix]) => line.startsWith(prefix))
+    if (headingMatch) {
+      const [prefix, heading] = headingMatch
+      current = { heading, paras: [] }
       sections.push(current)
-      return
+      const remainder = line.slice(prefix.length).trim()
+      if (remainder) current.paras.push(
+        heading === 'First Class Shipping' ? `First Class Shipping fees cover ${remainder}` : remainder,
+      )
+      continue
     }
-    if (!current) return // ignore content before the first heading
+    current.paras.push(line)
+  }
 
-    if (tag === 'p') {
-      const text = $el.text().replace(/\s+/g, ' ').trim()
-      if (!text) return
-      current.paras = current.paras ?? []
-      current.paras.push(text)
-      return
-    }
-    if (tag === 'ul') {
-      const items = $el.find('> li').map((_, li) => $(li).text().replace(/\s+/g, ' ').trim()).get().filter(Boolean)
-      if (items.length === 0) return
-      current.list = current.list ?? []
-      current.list.push(...items)
-    }
-  })
-
-  return { sections }
+  return {
+    sections: sections
+      .map(section => ({ ...section, paras: section.paras.filter(Boolean) }))
+      .filter(section => section.paras.length > 0),
+  }
 }
 
 export interface ShippingSummary { sections: number; items: number }

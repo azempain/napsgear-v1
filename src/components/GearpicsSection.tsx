@@ -36,7 +36,7 @@ export default function GearpicsSection() {
   return (
     <div className="gearpics-section firstpage-section widget-gearpics mb-4">
       <h2 className="section-title ls-n-10 m-b-4">
-        <a href="#">Customers images</a>
+        <a href="/community-gearpics/">Customers images</a>
       </h2>
       <div className="carousel-wrapper">
         <div ref={ref} className="swiper" id="gearpicsCarousel">
