@@ -23,30 +23,36 @@ export default function FAQPage() {
   return (
     <main className="main">
       <div className="container py-5">
-        <h1 className="mb-4">Frequently Asked Questions</h1>
-        {faq.length === 0 ? (
-          <p className="text-muted">No FAQ entries available.</p>
-        ) : (
-          [...groups.entries()].map(([cat, entries]) => (
-            <section key={cat} className="mb-4">
-              <h2 className="h5 mt-4">{cat}</h2>
-              <ul className="list-unstyled">
-                {entries.map(e => (
-                  <li key={e.id} className="mb-2" data-faq-q={e.id}>
-                    {e.sourceUrl ? (
-                      <a href={e.sourceUrl} rel="noreferrer">{e.question}</a>
-                    ) : (
-                      <strong>{e.question}</strong>
-                    )}
-                    {e.answer && (
-                      <div className="text-muted mt-1" data-faq-a={e.id}>{e.answer}</div>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))
-        )}
+        <article className="ngc-info-page">
+          <header className="ngc-info-page__header">
+            <h1>Frequently Asked Questions</h1>
+            <p>Browse the original support topics by category. Each question opens its full NapsHelp knowledgebase article.</p>
+          </header>
+          {faq.length === 0 ? (
+            <p className="text-muted">No FAQ entries available.</p>
+          ) : (
+            [...groups.entries()].map(([cat, entries]) => (
+              <section key={cat} className="ngc-info-page__section">
+                <h2>{cat}</h2>
+                <ul className="list-unstyled">
+                  {entries.map(e => (
+                    <li key={e.id} className="mb-2" data-faq-q={e.id}>
+                      {e.sourceUrl ? (
+                        <a href={e.sourceUrl} rel="noreferrer">{e.question}</a>
+                      ) : (
+                        <strong>{e.question}</strong>
+                      )}
+                      {e.answer && (
+                        <div className="text-muted mt-1" data-faq-a={e.id}>{e.answer}</div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))
+          )}
+          <a className="ngc-btn ngc-btn--dark" href="/contact-us/">Contact Support</a>
+        </article>
       </div>
     </main>
   )

@@ -5,6 +5,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import 'swiper/css/grid'
 import CartProvider from '@/context/CartContext'
+import CurrencyProvider from '@/context/CurrencyContext'
 import Header from '@/components/Header'
 import CartDrawer from '@/components/CartDrawer'
 import Footer from '@/components/Footer'
@@ -82,15 +83,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             BreadcrumbList) ship from their own page files. */}
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
 
-        <CartProvider>
-          <ScrollToTop />
-          <Header />
-          <CartDrawer />
-          <div className='min-h-screen'>
-            {children}
-          </div>
-          <Footer />
-        </CartProvider>
+        <CurrencyProvider>
+          <CartProvider>
+            <ScrollToTop />
+            <Header />
+            <CartDrawer />
+            <div className='min-h-screen'>
+              {children}
+            </div>
+            <Footer />
+          </CartProvider>
+        </CurrencyProvider>
         <NavInteractions />
       </body>
     </html>

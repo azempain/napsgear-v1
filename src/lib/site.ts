@@ -34,7 +34,25 @@ export const STATIC_ROUTES: { path: string; priority: number; changeFreq: 'weekl
   { path: '/references/',            priority: 0.4, changeFreq: 'yearly' },
   { path: '/ask-an-ifbb-pro/',       priority: 0.5, changeFreq: 'monthly' },
   { path: '/qa/',                    priority: 0.5, changeFreq: 'weekly' },
+  { path: '/store-credit/',          priority: 0.4, changeFreq: 'monthly' },
+  { path: '/reviews-for-cash/',      priority: 0.4, changeFreq: 'monthly' },
+  { path: '/share-your-gear-pics/',  priority: 0.4, changeFreq: 'monthly' },
+  { path: '/refer-a-friend/',        priority: 0.4, changeFreq: 'monthly' },
+  { path: '/cashback/',              priority: 0.4, changeFreq: 'monthly' },
+  { path: '/supplier-super-deals/',  priority: 0.5, changeFreq: 'weekly' },
+  { path: '/product-of-the-week/',   priority: 0.6, changeFreq: 'weekly' },
+  { path: '/laboratory-tests/',      priority: 0.5, changeFreq: 'monthly' },
+  { path: '/project-get-shredded/',  priority: 0.4, changeFreq: 'monthly' },
+  { path: '/community-gearpics/',    priority: 0.5, changeFreq: 'weekly' },
 ]
 
 /** Routes that must NEVER be indexed (cart state, in-flight checkout). */
-export const PRIVATE_ROUTES = ['/cart/', '/checkout/']
+export const PRIVATE_ROUTES = [
+  '/cart/',
+  '/checkout/',
+  '/account/',
+  '/login/',
+  '/signup/',
+  '/forgot-password/',
+  '/reset-password/',
+]

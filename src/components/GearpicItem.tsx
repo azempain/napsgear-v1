@@ -1,7 +1,7 @@
 import type { Gearpic } from '@/data/types'
 
 export default function GearpicItem({ item }: { item: Gearpic }) {
-  const href = '#'
+  const href = `/community-gearpics/#gear-${item.id}`
   return (
     <div className="widget-gearpics__item" data-id={item.id}>
       <figure>

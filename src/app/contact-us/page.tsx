@@ -14,27 +14,27 @@ export default function ContactPage() {
   return (
     <main className="main">
       <div className="container py-5">
-        <h1 className="mb-4">{c.heading ?? 'Contact Us'}</h1>
+        <article className="ngc-info-page">
+          <header className="ngc-info-page__header">
+            <h1>{c.heading ?? 'Contact Us'}</h1>
+            <p>Use the support portal for account, order, payment, shipping, or product questions.</p>
+          </header>
 
-        {c.email || c.phone || c.hours || c.address ? (
-          <ul className="list-unstyled mb-4">
-            {c.email && (
-              <li className="mb-2">
-                <strong>Email:</strong> <a href={`mailto:${c.email}`}>{c.email}</a>
-              </li>
-            )}
-            {c.phone && <li className="mb-2"><strong>Phone:</strong> {c.phone}</li>}
-            {c.hours && <li className="mb-2"><strong>Hours:</strong> {c.hours}</li>}
-            {c.address && <li className="mb-2"><strong>Address:</strong> {c.address}</li>}
-          </ul>
-        ) : null}
+          {c.actions?.map(action => (
+            <section key={action.label} className="ngc-info-page__section">
+              <h2>{action.label}</h2>
+              <p>{action.description}</p>
+              <a href={action.href} rel="noreferrer">Open {action.label}</a>
+            </section>
+          ))}
 
-        {c.portalUrl && (
-          <p>
-            For account-specific questions, file a ticket at the{' '}
-            <a href={c.portalUrl} rel="noreferrer">NapsHelp support portal</a>.
-          </p>
-        )}
+          <section className="ngc-info-page__section">
+            <h2>Managing support tickets</h2>
+            <p>Register or sign in before submitting a ticket. After signing in, use the ticket list to review open and resolved requests.</p>
+          </section>
+
+          {c.portalUrl && <a className="ngc-btn ngc-btn--dark" href={c.portalUrl} rel="noreferrer">Visit NapsHelp</a>}
+        </article>
       </div>
     </main>
   )

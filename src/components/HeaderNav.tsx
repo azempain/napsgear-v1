@@ -82,17 +82,17 @@ export default function HeaderNav() {
         <li className="menu-item menu-item-dropdown dropdown">
           <button type="button" className="dropdown-button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">Promotions <Chevron /></button>
           <div className="dropdown-menu">
-            <a className="menu-item__link" href="#">Earn Store Credit</a>
-            <a className="menu-item__link" href="#">NapsGear AAS Diaries <span className="badge-new">NEW</span></a>
-            <a className="menu-item__link" href="#">Affiliate Partner Program</a>
-            <a className="menu-item__link" href="#">Reviews for Cash</a>
-            <a className="menu-item__link" href="#">Share Your Gear Pics</a>
-            <a className="menu-item__link" href="#">Refer NapsGear for Cash</a>
-            <a className="menu-item__link" href="#">Flat 20% Cashback</a>
+            <a className="menu-item__link" href="/store-credit/">Earn Store Credit</a>
+            <a className="menu-item__link" href="/aas-diaries/">NapsGear AAS Diaries <span className="badge-new">NEW</span></a>
+            <a className="menu-item__link" href="/affiliate-program/">Affiliate Partner Program</a>
+            <a className="menu-item__link" href="/reviews-for-cash/">Reviews for Cash</a>
+            <a className="menu-item__link" href="/share-your-gear-pics/">Share Your Gear Pics</a>
+            <a className="menu-item__link" href="/refer-a-friend/">Refer NapsGear for Cash</a>
+            <a className="menu-item__link" href="/cashback/">Flat 20% Cashback</a>
             <div className="menu-item__title">Products on Sale</div>
-            <a className="menu-item__link" href="#">Supplier Super Deals <span className="badge-new">NEW</span></a>
-            <a className="menu-item__link" href="#">Product of the Week</a>
-            <a className="menu-item__link" href="#">All Recent Promotions</a>
+            <a className="menu-item__link" href="/supplier-super-deals/">Supplier Super Deals <span className="badge-new">NEW</span></a>
+            <a className="menu-item__link" href="/product-of-the-week/">Product of the Week</a>
+            <a className="menu-item__link" href="/promotions/">All Recent Promotions</a>
           </div>
         </li>
 
@@ -101,12 +101,12 @@ export default function HeaderNav() {
           <button type="button" className="dropdown-button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">Info &amp; Entertainment <Chevron /></button>
           <div className="dropdown-menu">
             <a className="menu-item__link" href="/ask-an-ifbb-pro/">Ask an IFBB Pro Anything</a>
-            <a className="menu-item__link" href="#">NapsGear AAS Diaries</a>
-            <a className="menu-item__link" href="#">Why Buy from NapsGear</a>
-            <a className="menu-item__link" href="#">Laboratory Tests</a>
-            <a className="menu-item__link" href="#">Project Get Shredded</a>
-            <a className="menu-item__link" href="#">Community Gear Pics</a>
-            <a className="menu-item__link" href="#">LIVE Q&amp;A Forums</a>
+            <a className="menu-item__link" href="/aas-diaries/">NapsGear AAS Diaries</a>
+            <a className="menu-item__link" href="/why-naps/">Why Buy from NapsGear</a>
+            <a className="menu-item__link" href="/laboratory-tests/">Laboratory Tests</a>
+            <a className="menu-item__link" href="/project-get-shredded/">Project Get Shredded</a>
+            <a className="menu-item__link" href="/community-gearpics/">Community Gear Pics</a>
+            <a className="menu-item__link" href="/qa/">LIVE Q&amp;A Forums</a>
           </div>
         </li>
 

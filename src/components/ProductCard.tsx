@@ -1,8 +1,13 @@
+'use client'
+
 import { memo } from 'react'
 import type { Product } from '@/data/types'
 import ProductImage from './ProductImage'
+import { parsePrice } from '@/lib/pricing'
+import { useCurrency } from '@/context/CurrencyContext'
 
 export default memo(function ProductCard({ product }: { product: Product }) {
+  const { money } = useCurrency()
   const thumb = product.images[0] ?? ''
   const href = `/${product.slug}/`
   return (
@@ -45,7 +50,7 @@ export default memo(function ProductCard({ product }: { product: Product }) {
         </h3>
         <div className="product-item__status">
           {product.price && (
-            <div className="price-box"><span className="product-price">{product.price}</span></div>
+            <div className="price-box"><span className="product-price">{money(parsePrice(product.price))}</span></div>
           )}
           <div className="d-flex align-items-center" />
         </div>
