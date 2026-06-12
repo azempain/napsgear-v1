@@ -74,9 +74,9 @@ export default function MobileDrawer({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <SheetContent id="mobileDrawer" aria-describedby="mobile-navigation-description">
+    <SheetContent id="mobileDrawer">
       <SheetTitle className="sr-only">Main navigation</SheetTitle>
-      <SheetDescription id="mobile-navigation-description" className="sr-only">
+      <SheetDescription className="sr-only">
         Browse products, promotions, support, and account links.
       </SheetDescription>
 

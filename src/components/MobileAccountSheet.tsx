@@ -34,10 +34,9 @@ export default function MobileAccountSheet() {
       <SheetContent
         id="mobileAccountSheet"
         className="ngc-account-sheet"
-        aria-describedby="mobile-account-description"
       >
         <SheetTitle className="sr-only">Account</SheetTitle>
-        <SheetDescription id="mobile-account-description" className="sr-only">
+        <SheetDescription className="sr-only">
           View your account, recent orders, cart, and sign out.
         </SheetDescription>
 

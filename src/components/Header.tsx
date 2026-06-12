@@ -5,6 +5,7 @@ import HeaderNav from './HeaderNav'
 import MobileMenu from './MobileMenu'
 import CurrencyMenu from './CurrencyMenu'
 import AccountLink from './AccountLink'
+import MobileHeaderSearch from './MobileHeaderSearch'
 import Link from 'next/link'
 
 const UTILITY_LINKS = [
@@ -67,13 +68,7 @@ export default function Header() {
           </div>
 
           <div className="header-actions">
-            <Link
-              href="/catalog/"
-              className="header-icon ngc-mobile-search"
-              aria-label="Search products"
-            >
-              <Search size={21} aria-hidden="true" />
-            </Link>
+            <MobileHeaderSearch />
             <AccountLink />
             <Link href="/cart/" className="header-icon header-icon-cart dropdown-arrow cart-toggle" aria-label="Cart">
               <ShoppingCart size={20} aria-hidden="true" />
