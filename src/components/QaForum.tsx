@@ -43,7 +43,7 @@ export default function QaForum({ posts }: { posts: QaPost[] }) {
       ) : (
         <div className="row row-cols-1 row-cols-md-2 g-3">
           {visible.map(p => (
-            <div key={p.id} className="col">
+            <div key={p.id} id={`post-${p.id}`} className="col">
               <QaPostCard post={p} />
             </div>
           ))}

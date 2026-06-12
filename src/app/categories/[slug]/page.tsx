@@ -41,16 +41,12 @@ export default async function CategoryPage({
   const category = categories.find((c) => c.slug === slug)
   if (!category) notFound()
 
-  // When the category has a productSlugs allowlist (populated by the saved-
-  // pages extractor for categories with a captured product grid), filter to
-  // those SKUs. Otherwise fall back to showing the full catalog so the route
-  // isn't empty in dev.
   let list: typeof products
   if (category.productSlugs && category.productSlugs.length > 0) {
     const slugSet = new Set(category.productSlugs)
     list = products.filter(p => slugSet.has(p.slug))
   } else {
-    list = products
+    list = []
   }
 
   const crumbs = breadcrumbJsonLd([

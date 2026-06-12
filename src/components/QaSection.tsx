@@ -36,7 +36,7 @@ export default function QaSection() {
   return (
     <section className="qa-firstpage-section firstpage-section mb-4">
       <h2 className="section-title ls-n-10 m-b-4">
-        <a href="#">
+        <a href="/qa/">
           <span className="text-danger">Live</span> Q&amp;A Forums with NapsGear Customers
         </a>
       </h2>

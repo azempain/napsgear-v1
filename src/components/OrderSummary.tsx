@@ -1,10 +1,10 @@
 'use client'
 import type { CartItem } from '@/context/CartContext'
 import { subtotal, shippingFee, loyaltyCredit, total } from '@/lib/cart'
-
-const fmt = (n: number) => `$${n.toFixed(2)}`
+import { useCurrency } from '@/context/CurrencyContext'
 
 export default function OrderSummary({ items }: { items: CartItem[] }) {
+  const { money } = useCurrency()
   return (
     <aside className="ngc-totals" aria-label="Order summary">
       <div className="ngc-totals__card">
@@ -20,26 +20,26 @@ export default function OrderSummary({ items }: { items: CartItem[] }) {
                   {i.packLabel ? ` · ${i.packLabel}` : ''}
                 </span>
               </div>
-              <span className="ngc-summary__price">{fmt(i.price * i.qty)}</span>
+              <span className="ngc-summary__price">{money(i.price * i.qty)}</span>
             </li>
           ))}
         </ul>
 
         <div className="ngc-loyalty">
-          You will earn <strong>{fmt(loyaltyCredit(items))}</strong> of Loyalty Credit!
+          You will earn <strong>{money(loyaltyCredit(items))}</strong> of Loyalty Credit!
         </div>
 
         <div className="ngc-totals__row">
           <h6>Order Subtotal:</h6>
-          <div>{fmt(subtotal(items))}</div>
+          <div>{money(subtotal(items))}</div>
         </div>
         <div className="ngc-totals__row">
           <h6>Shipping &amp; Handling:</h6>
-          <div>{fmt(shippingFee(items))}</div>
+          <div>{money(shippingFee(items))}</div>
         </div>
         <div className="ngc-totals__row ngc-totals__row--grand">
           <h6>Total:</h6>
-          <div data-order-total>{fmt(total(items))}</div>
+          <div data-order-total>{money(total(items))}</div>
         </div>
       </div>
     </aside>

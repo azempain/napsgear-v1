@@ -22,4 +22,14 @@ describe('new route modules import cleanly', () => {
   it('brands/[slug]', async () => {
     expect((await import('./brands/[slug]/page')).default).toBeTypeOf('function')
   })
+  it('account routes', async () => {
+    expect((await import('./login/page')).default).toBeTypeOf('function')
+    expect((await import('./signup/page')).default).toBeTypeOf('function')
+    expect((await import('./account/page')).default).toBeTypeOf('function')
+  })
+  it('promotion and community routes', async () => {
+    expect((await import('./store-credit/page')).default).toBeTypeOf('function')
+    expect((await import('./product-of-the-week/page')).default).toBeTypeOf('function')
+    expect((await import('./community-gearpics/page')).default).toBeTypeOf('function')
+  })
 })

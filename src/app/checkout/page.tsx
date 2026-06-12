@@ -11,6 +11,7 @@ import OrderSummary from '@/components/OrderSummary'
 import EmptyCart from '@/components/EmptyCart'
 import CartSkeleton from '@/components/CartSkeleton'
 import { total } from '@/lib/cart'
+import { useCurrency } from '@/context/CurrencyContext'
 
 const EMPTY: CheckoutForm = {
   fullName: '', email: '', phone: '', address1: '', address2: '',
@@ -21,6 +22,7 @@ type Status = 'form' | 'submitting' | 'success' | 'error'
 
 export default function CheckoutPage() {
   const { items, hydrated, clearCart } = useCart()
+  const { money } = useCurrency()
   const router = useRouter()
   const [status, setStatus] = useState<Status>('form')
   // Captured at submit time so the confirmation screen survives clearCart.
@@ -40,7 +42,7 @@ export default function CheckoutPage() {
       setStatus('submitting')
       snapshot.current = {
         count: items.reduce((s, i) => s + i.qty, 0),
-        total: `$${total(items).toFixed(2)}`,
+        total: money(total(items)),
         email: value.email,
       }
       const ctrl = new AbortController()
@@ -127,7 +129,7 @@ export default function CheckoutPage() {
 
   const submitting = status === 'submitting'
 
-  const grandTotal = `$${total(items).toFixed(2)}`
+  const grandTotal = money(total(items))
 
   return (
     <main className="main cart-main">

@@ -1,15 +1,17 @@
 'use client'
 import { useCart } from '@/context/CartContext'
+import { useCurrency } from '@/context/CurrencyContext'
 
 export default function CartDrawer() {
   const { items, count, removeItem, updateQty } = useCart()
+  const { money } = useCurrency()
 
   return (
     <div id="shoppingCartBox" className="dropdown dropdown-cart">
       <div className="cart-overlay" data-cart-close="" />
       <div className="dropdown-menu mobile-cart">
         <div className="cart-close-overlay">
-          <a href="#" title="Close (Esc)" className="btn-close cart-close" data-cart-close="" />
+          <button type="button" title="Close (Esc)" aria-label="Close cart" className="btn-close cart-close" data-cart-close="" />
         </div>
         <div className="dropdownmenu-wrapper custom-scrollbar">
           <div className="dropdown-cart-header">Shopping Cart</div>
@@ -47,7 +49,7 @@ export default function CartDrawer() {
                           >&#43;</button>
                         </div>
                         <div className="product-price">
-                          ${(item.price * item.qty).toFixed(2)}
+                          {money(item.price * item.qty)}
                         </div>
                         <button
                           className="btn-remove"
@@ -62,7 +64,7 @@ export default function CartDrawer() {
               <div className="dropdown-cart-total">
                 <span>Total:</span>
                 <span className="cart-total-price">
-                  ${items.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2)}
+                  {money(items.reduce((s, i) => s + i.price * i.qty, 0))}
                 </span>
               </div>
               <div className="dropdown-cart-action">

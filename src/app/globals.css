@@ -1785,3 +1785,169 @@ body.has-sticky-header {
   .ngc-product-img { transition: none; }
 }
 
+/* Production functionality: account, currency, and information pages. */
+.ngc-currency-trigger,
+.ngc-header-links-trigger {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+.header-currency .dropdown-item {
+  width: 100%;
+  border: 0;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+.header-currency .dropdown-item.active {
+  color: #0089cb;
+  font-weight: 700;
+}
+
+.ngc-auth-page {
+  min-height: 62vh;
+  display: grid;
+  place-items: center;
+  padding-top: 48px !important;
+  padding-bottom: 48px !important;
+}
+.ngc-auth-card {
+  width: min(100%, 440px);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+  padding: 28px;
+}
+.ngc-auth-card__title {
+  margin: 0 0 22px;
+  font-size: 26px;
+  color: #1a1f29;
+}
+.ngc-auth-form {
+  display: grid;
+  gap: 14px;
+}
+.ngc-auth-form .ngc-input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+.ngc-auth-success {
+  padding: 10px 14px;
+  border: 1px solid #b7dfc4;
+  border-radius: 4px;
+  background: #edf9f1;
+  color: #176b35;
+}
+.ngc-auth-google {
+  width: 100%;
+  margin-top: 12px;
+  min-height: 42px;
+  border: 1px solid #cfd4da;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+.ngc-auth-links {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  font-size: 13px;
+}
+.ngc-auth-switch {
+  margin: 16px 0 0;
+  text-align: center;
+}
+.ngc-account {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.ngc-account__card {
+  display: grid;
+  gap: 1px;
+  border: 1px solid #e5e7eb;
+  background: #e5e7eb;
+}
+.ngc-account__card > div {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  padding: 14px 16px;
+  background: #fff;
+}
+.ngc-account__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.ngc-info-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.ngc-info-page__header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e7e7e7;
+}
+.ngc-info-page__header h1 {
+  margin: 0 0 10px;
+}
+.ngc-info-page__header p {
+  margin: 0;
+  color: #5f6670;
+  font-size: 17px;
+  line-height: 1.6;
+}
+.ngc-info-page__section {
+  padding: 22px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+.ngc-info-page__section h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+.ngc-info-page__section p,
+.ngc-info-page__section li {
+  line-height: 1.7;
+}
+.ngc-info-page > .ngc-btn {
+  display: inline-block;
+  margin-top: 24px;
+}
+.ngc-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+.ngc-gallery__item {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+}
+.ngc-gallery__item img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.ngc-gallery__item div {
+  padding: 12px 14px;
+}
+.ngc-gallery__item time {
+  color: #777;
+  font-size: 12px;
+}
+.ngc-gallery__item h2 {
+  margin: 4px 0 0;
+  font-size: 16px;
+}
+

@@ -1,8 +1,10 @@
-import { Search, User, ShoppingCart } from 'lucide-react'
+import { Search, ShoppingCart } from 'lucide-react'
 import CartBadge from './CartBadge'
 import NapsGearLogo from './NapsGearLogo'
 import HeaderNav from './HeaderNav'
 import MobileMenu from './MobileMenu'
+import CurrencyMenu from './CurrencyMenu'
+import AccountLink from './AccountLink'
 
 export default function Header() {
   return (
@@ -13,7 +15,7 @@ export default function Header() {
         <div className="container">
           <div className="header-right header-dropdowns w-sm-100">
             <div className="header-dropdown dropdown-expanded d-none d-lg-block mr-2">
-              <a href="#">Links</a>
+              <button type="button" className="ngc-header-links-trigger">Links</button>
               <div className="header-menu">
                 <ul id="navigationMenu">
                   <li><a href="/">Home</a></li>
@@ -26,13 +28,7 @@ export default function Header() {
               </div>
             </div>
             <span className="separator"></span>
-            <div className="header-dropdown header-currency">
-              <a href="#" role="button" id="dropdownCurrency" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">USD</a>
-              <div className="dropdown-menu dropdown-menu-arrow-centered min-width-0" aria-labelledby="dropdownCurrency">
-                <a className="dropdown-item" href="/">US Dollar</a>
-                <a className="dropdown-item" href="/">Euro</a>
-              </div>
-            </div>
+            <CurrencyMenu />
           </div>
         </div>
       </div>
@@ -48,15 +44,15 @@ export default function Header() {
           </a>
 
           <div className="header-search header-search-inline header-search-category w-lg-max pl-3 pr-1 mb-0">
-            <a href="#" className="header-icon search-toggle header-nav-features-search-show-icon me-0" role="button" aria-label="Search">
+            <a href="/catalog/" className="header-icon search-toggle header-nav-features-search-show-icon me-0" aria-label="Search">
               <Search size={20} aria-hidden="true" />
             </a>
             <div className="header-search-form">
-              <form role="search" action="#" method="get" className="kwdsearch">
+              <form role="search" action="/catalog/" method="get" className="kwdsearch">
                 <div className="header-search-wrapper">
                   <input
                     className="form-control text-1 bg-white header-search-input"
-                    name="keywords"
+                    name="q"
                     type="search"
                     minLength={2}
                     placeholder="Search..."
@@ -70,9 +66,7 @@ export default function Header() {
           </div>
 
           <div className="header-actions">
-            <a className="header-icon header-icon-user" href="#loginModal" data-bs-toggle="modal" role="button" aria-label="Sign in">
-              <User size={20} aria-hidden="true" />
-            </a>
+            <AccountLink />
             <a href="/cart/" className="header-icon header-icon-cart dropdown-arrow cart-toggle" aria-label="Cart">
               <ShoppingCart size={20} aria-hidden="true" />
               <CartBadge />

@@ -1,55 +1,43 @@
 import { describe, it, expect } from 'vitest'
 import { extractShipping } from './shipping'
 
-// Fixture mirrors the actual shipping page: a series of <h4> headings each
-// followed by one or more <p> paragraphs (no <ul> lists in this corpus).
+// Fixture mirrors the actual page: legal terms appear first, while the real
+// shipping copy lives in the main table after the accordion.
 const HTML = `
 <html><body>
-  <h1>Shipping &amp; Returns</h1>
-
-  <h4>DISCLAIMER OF WARRANTY:</h4>
-  <p>napsgear.org expressly disclaims warranties of any kind.</p>
-  <p>Second paragraph here.</p>
-
-  <h4>LIMITATION OF LIABILITY:</h4>
-  <p>In no event will we be liable for any damages.</p>
-
-  <h3 class="alignTextCenter">Purchasing and Ordering Disclaimer</h3>
-
-  <h4>MAKE YOUR OWN DECISIONS:</h4>
-  <p>If you are making important purchasing or planning decisions ...</p>
-  <ul><li>Item one</li><li>Item two</li></ul>
+  <main>
+    <div class="accordion"><h4>DISCLAIMER OF WARRANTY:</h4><p>Not shipping copy.</p></div>
+    <table><tr><td class="main">
+      Shipping overview copy.
+      <br><br><b>First Class Shipping</b> fees cover handling and courier service.
+      <br><br><b>Domestic Orders</b><br><br>Domestic delivery guidance.
+      <br><br><b>International Orders</b><br><br>International delivery guidance.
+      <br><br><i>Customs Clearance: Higher-risk destinations have different policies.</i>
+    </td></tr></table>
+  </main>
 </body></html>
 `
 
 describe('extractShipping', () => {
   const doc = extractShipping(HTML)
 
-  it('one section per <h4> heading', () => {
+  it('extracts the shipping policy rather than the legal accordion', () => {
     expect(doc.sections.map(s => s.heading)).toEqual([
-      'DISCLAIMER OF WARRANTY:',
-      'LIMITATION OF LIABILITY:',
-      'MAKE YOUR OWN DECISIONS:',
+      'Shipping overview',
+      'First Class Shipping',
+      'Domestic Orders',
+      'International Orders',
+      'Customs Clearance',
     ])
   })
 
-  it('captures all paras under a section until the next heading', () => {
-    expect(doc.sections[0].paras).toEqual([
-      'napsgear.org expressly disclaims warranties of any kind.',
-      'Second paragraph here.',
-    ])
-    expect(doc.sections[1].paras).toEqual([
-      'In no event will we be liable for any damages.',
-    ])
+  it('captures the text under each shipping heading', () => {
+    expect(doc.sections[0].paras).toEqual(['Shipping overview copy.'])
+    expect(doc.sections[2].paras).toEqual(['Domestic delivery guidance.'])
+    expect(doc.sections[4].paras).toEqual(['Higher-risk destinations have different policies.'])
   })
 
-  it('captures <ul><li> as the list field when present', () => {
-    expect(doc.sections[2].list).toEqual(['Item one', 'Item two'])
-  })
-
-  it('omits paras/list fields when empty', () => {
-    const empty = extractShipping('<html><body><h4>Empty</h4></body></html>')
-    expect(empty.sections[0].paras).toBeUndefined()
-    expect(empty.sections[0].list).toBeUndefined()
+  it('returns no sections when the policy table is absent', () => {
+    expect(extractShipping('<html><body><h4>Terms</h4></body></html>')).toEqual({ sections: [] })
   })
 })
