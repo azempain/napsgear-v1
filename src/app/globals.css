@@ -96,19 +96,19 @@ body {
 }
 body.has-sticky-header { padding-top: var(--header-h) !important; }
 
-/* Header alignment: one centered utility row, one balanced brand/search row,
+/* Header alignment: one logo-aligned utility row, one balanced brand/search row,
    and one centered primary navigation row. */
 .header-top > .ngc-header-top-inner {
   position: relative;
   min-height: 44px;
   display: flex !important;
   align-items: center;
-  justify-content: center !important;
+  justify-content: flex-start !important;
 }
 .ngc-utility-nav {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: clamp(20px, 3vw, 42px);
   white-space: nowrap;
 }
@@ -163,6 +163,24 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
 .header-middle .header-actions {
   margin: 0 !important;
 }
+.ngc-mobile-search,
+.ngc-account-trigger--mobile {
+  display: none !important;
+}
+.ngc-account-link--desktop,
+.ngc-account-trigger--mobile {
+  position: relative;
+}
+.ngc-account-presence {
+  position: absolute;
+  right: 1px;
+  bottom: 2px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid #008fca;
+  border-radius: 50%;
+  background: #35c66b;
+}
 .header-middle .header-search {
   width: 100% !important;
   max-width: none !important;
@@ -176,12 +194,12 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
 }
 .header-bottom > .container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .main-nav .menu {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   gap: clamp(30px, 5vw, 76px);
 }
@@ -230,6 +248,142 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
 }
 @keyframes ngcSheetFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ngcSheetSlide { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes ngcSheetSlideRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+.ngc-account-sheet {
+  inset: 0 0 0 auto;
+  padding: 74px 22px 24px;
+  border-right: 0;
+  border-left: 1px solid #e5e7eb;
+  box-shadow: -18px 0 50px rgba(0, 0, 0, .2);
+  animation-name: ngcSheetSlideRight;
+}
+.ngc-account-sheet__loading {
+  color: #637080;
+}
+.ngc-account-sheet__profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #e8edf1;
+}
+.ngc-account-sheet__avatar {
+  display: grid;
+  flex: 0 0 48px;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #008fca;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+}
+.ngc-account-sheet__profile > div {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.ngc-account-sheet__profile p,
+.ngc-account-sheet__profile span {
+  margin: 0;
+  overflow: hidden;
+  color: #687583;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ngc-account-sheet__profile strong {
+  overflow: hidden;
+  color: #17212b;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ngc-account-sheet__links {
+  display: grid;
+  gap: 8px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e8edf1;
+}
+.ngc-account-sheet__links a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 7px;
+  color: #17212b;
+  font-weight: 700;
+  text-decoration: none;
+}
+.ngc-account-sheet__links a:hover {
+  background: #eef8fc;
+  color: #007fac;
+}
+.ngc-account-sheet__orders {
+  padding: 20px 0;
+}
+.ngc-account-sheet__section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.ngc-account-sheet__section-title h2 {
+  margin: 0;
+  font-size: 17px;
+}
+.ngc-account-sheet__order {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid #edf0f2;
+  color: #17212b;
+  text-decoration: none;
+}
+.ngc-account-sheet__order > span {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.ngc-account-sheet__order time,
+.ngc-account-sheet__muted {
+  color: #687583;
+  font-size: 12px;
+}
+.ngc-account-sheet__signout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  border: 1px solid #d7dee4;
+  border-radius: 7px;
+  background: #fff;
+  color: #17212b;
+  font-weight: 700;
+}
+.ngc-account-sheet__guest {
+  display: grid;
+  gap: 12px;
+  text-align: center;
+}
+.ngc-account-sheet__guest .ngc-account-sheet__avatar {
+  margin: 0 auto 4px;
+}
+.ngc-account-sheet__guest h2,
+.ngc-account-sheet__guest p {
+  margin: 0;
+}
+.ngc-account-sheet__guest p {
+  margin-bottom: 8px;
+  color: #687583;
+  line-height: 1.55;
+}
 
 .mobile-drawer__brand {
   display: inline-flex;
@@ -1921,31 +2075,75 @@ body.has-sticky-header {
 }
 
 @media (max-width: 991.98px) {
-  :root { --header-h: 110px; }
+  :root { --header-h: 56px; }
   .header-top { display: none !important; }
   .header-bottom { display: none !important; }
+  .header-middle {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
   .header-middle > .container {
-    min-height: 88px;
-    grid-template-columns: 44px minmax(120px, 1fr) auto;
-    gap: 12px;
+    min-height: 56px;
+    grid-template-columns: 34px auto minmax(12px, 1fr) auto;
+    gap: 14px;
   }
   .header-middle .logo {
-    justify-self: center;
-    max-width: 170px;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: start;
+    width: auto;
+    max-width: none;
+  }
+  .header-middle .logo svg {
+    width: auto !important;
+    height: 29px;
+    max-width: 98px;
   }
   .header-middle .header-search {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    padding-bottom: 12px !important;
+    display: none !important;
   }
   .header-middle .header-actions {
-    grid-column: 3;
+    grid-column: 4;
     grid-row: 1;
+    gap: 12px;
   }
   .mobile-menu-toggle {
     grid-column: 1;
     grid-row: 1;
     margin: 0 !important;
+  }
+  .ngc-mobile-search,
+  .ngc-account-trigger--mobile {
+    display: inline-flex !important;
+  }
+  .ngc-account-trigger--mobile,
+  .mobile-menu-toggle {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    cursor: pointer;
+  }
+  .ngc-account-link--desktop {
+    display: none !important;
+  }
+  .header-middle .header-icon,
+  .mobile-menu-toggle {
+    width: 30px !important;
+    height: 38px !important;
+    min-width: 30px;
+    align-items: center;
+    justify-content: center;
+  }
+  .header-middle .header-icon svg,
+  .mobile-menu-toggle svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  .ngc-account-presence {
+    right: 0;
+    bottom: 7px;
   }
 }
 
@@ -2079,6 +2277,11 @@ body.has-sticky-header {
   max-width: 720px;
   margin: 0 auto;
 }
+.ngc-account > h1 {
+  margin: 0 0 22px;
+  color: #1a1f29;
+  font-size: clamp(28px, 5vw, 38px);
+}
 .ngc-account__card {
   display: grid;
   gap: 1px;
@@ -2179,6 +2382,71 @@ body.has-sticky-header {
   margin-top: 26px;
 }
 @media (max-width: 575.98px) {
+  .header-middle > .container {
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+    gap: 10px;
+  }
+  .header-middle .logo {
+    max-width: none;
+  }
+  .header-middle .logo svg {
+    height: 27px;
+    max-width: 92px;
+  }
+  .header-middle .header-actions {
+    gap: 8px;
+  }
+  .header-middle .header-icon,
+  .mobile-menu-toggle {
+    width: 28px !important;
+    min-width: 28px;
+  }
+  .ngc-sheet-content {
+    width: min(92vw, 390px);
+  }
+  .ngc-account-sheet {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+  .ngc-account {
+    padding-bottom: 34px;
+  }
+  .ngc-account__card {
+    border-radius: 9px;
+    overflow: hidden;
+  }
+  .ngc-account__card > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 14px;
+  }
+  .ngc-account__card > div span {
+    overflow-wrap: anywhere;
+    color: #596675;
+  }
+  .ngc-account__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .ngc-account__actions .ngc-btn {
+    width: 100%;
+  }
+  .ngc-account-orders {
+    margin-top: 34px;
+  }
+  .ngc-confirm {
+    margin: 28px auto;
+    padding: 28px 20px 24px;
+  }
+  .ngc-confirm__title {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+  .ngc-confirm .ngc-btn {
+    width: 100%;
+    white-space: normal;
+  }
   .ngc-auth-links,
   .ngc-checkout-auth__actions {
     flex-direction: column;
