@@ -9,7 +9,6 @@
 
 import { useState } from 'react'
 import Skeleton from './Skeleton'
-import { toWebpSource } from '@/lib/imagePath'
 
 export default function ProductImage({
   src,
@@ -19,12 +18,10 @@ export default function ProductImage({
   alt: string
 }) {
   const [loaded, setLoaded] = useState(false)
-  const webpSrc = toWebpSource(src)
   return (
     <>
       {!loaded && <Skeleton fill aria-label={`Loading ${alt}`} />}
       <picture>
-        {webpSrc && <source srcSet={webpSrc} type="image/webp" />}
         <img
           src={src}
           alt={alt}

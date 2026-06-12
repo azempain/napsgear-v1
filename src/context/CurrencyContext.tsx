@@ -12,6 +12,10 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
   const setRates = useCurrencyStore(state => state.setRates)
 
   useEffect(() => {
+    void useCurrencyStore.persist.rehydrate()
+  }, [])
+
+  useEffect(() => {
     if (fetchedAt && Date.now() - fetchedAt < RATE_TTL) return
 
     const controller = new AbortController()
