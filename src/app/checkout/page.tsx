@@ -14,8 +14,8 @@ import { useCurrency } from '@/context/CurrencyContext'
 import { useMutation } from '@tanstack/react-query'
 import { completeCheckout } from '@/lib/checkoutOrder'
 import { createOrderReference } from '@/lib/orderSubmission'
-import { authClient } from '@/lib/auth-client'
 import { authHref } from '@/lib/authRedirect'
+import { useAuthSession } from '@/lib/authSession'
 
 const EMPTY: CheckoutForm = {
   fullName: '', email: '', phone: '', address1: '', address2: '',
@@ -27,7 +27,7 @@ type Status = 'form' | 'submitting' | 'success' | 'error'
 export default function CheckoutPage() {
   const { items, hydrated, clearCart } = useCart()
   const { currency, money } = useCurrency()
-  const { data: session, isPending: sessionPending } = authClient.useSession()
+  const { data: session, isPending: sessionPending } = useAuthSession()
   const router = useRouter()
   const [status, setStatus] = useState<Status>('form')
   // Captured at submit time so the confirmation screen survives clearCart.

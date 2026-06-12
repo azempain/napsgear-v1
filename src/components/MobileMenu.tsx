@@ -1,11 +1,12 @@
 'use client'
-import { useState } from 'react'
 import { Menu } from 'lucide-react'
 import MobileDrawer from './MobileDrawer'
 import { Sheet, SheetTrigger } from '@/components/ui/sheet'
+import { useAppUiStore } from '@/store/appUiStore'
 
 export default function MobileMenu() {
-  const [open, setOpen] = useState(false)
+  const open = useAppUiStore(state => state.mobileNavOpen)
+  const setOpen = useAppUiStore(state => state.setMobileNavOpen)
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
