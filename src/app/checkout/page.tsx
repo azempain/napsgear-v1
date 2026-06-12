@@ -12,7 +12,10 @@ import CartSkeleton from '@/components/CartSkeleton'
 import { total } from '@/lib/cart'
 import { useCurrency } from '@/context/CurrencyContext'
 import { useMutation } from '@tanstack/react-query'
-import { submitOrder } from '@/lib/orderSubmission'
+import { completeCheckout } from '@/lib/checkoutOrder'
+import { createOrderReference } from '@/lib/orderSubmission'
+import { authClient } from '@/lib/auth-client'
+import { authHref } from '@/lib/authRedirect'
 
 const EMPTY: CheckoutForm = {
   fullName: '', email: '', phone: '', address1: '', address2: '',
@@ -23,15 +26,23 @@ type Status = 'form' | 'submitting' | 'success' | 'error'
 
 export default function CheckoutPage() {
   const { items, hydrated, clearCart } = useCart()
-  const { money } = useCurrency()
+  const { currency, money } = useCurrency()
+  const { data: session, isPending: sessionPending } = authClient.useSession()
   const router = useRouter()
   const [status, setStatus] = useState<Status>('form')
   // Captured at submit time so the confirmation screen survives clearCart.
   const snapshot = useRef<{ count: number; total: string; email: string; reference: string } | null>(null)
+  const reference = useRef<string | null>(null)
 
   const orderMutation = useMutation({
     mutationFn: ({ value, accessKey }: { value: CheckoutForm; accessKey: string }) =>
-      submitOrder({ accessKey, form: value, items }),
+      completeCheckout({
+        accessKey,
+        currency,
+        form: value,
+        items,
+        reference: reference.current ?? (reference.current = createOrderReference()),
+      }),
   })
 
   const form = useForm({
@@ -39,6 +50,10 @@ export default function CheckoutPage() {
     onSubmit: async ({ value }) => {
       // CheckoutForm already wired per-field onBlur+onSubmit validators using
       // checkoutFieldValidators, so by the time we land here the form is valid.
+      if (!session) {
+        router.push(authHref('/login/'))
+        return
+      }
       const key = process.env.NEXT_PUBLIC_WEB3FORMS_KEY
       if (!key) {
         console.warn('[checkout] NEXT_PUBLIC_WEB3FORMS_KEY is not set — see .env.local.example')
@@ -54,6 +69,7 @@ export default function CheckoutPage() {
           email: value.email,
           reference: result.reference,
         }
+        reference.current = null
         setStatus('success')
       } catch {
         setStatus('error')
@@ -73,6 +89,16 @@ export default function CheckoutPage() {
     const t = setTimeout(() => router.push('/catalog/'), 5000)
     return () => clearTimeout(t)
   }, [status, clearCart, router])
+
+  useEffect(() => {
+    if (!session) return
+    if (!form.getFieldValue('fullName') && session.user.name) {
+      form.setFieldValue('fullName', session.user.name)
+    }
+    if (!form.getFieldValue('email') && session.user.email) {
+      form.setFieldValue('email', session.user.email)
+    }
+  }, [form, session])
 
   // success takes precedence over the empty-cart guard (cart is now empty by design)
   if (status === 'success') {
@@ -106,7 +132,7 @@ export default function CheckoutPage() {
 
   // Pre-hydration: render skeleton tree so the empty-state CTA doesn't flash
   // before localStorage is read.
-  if (!hydrated) {
+  if (!hydrated || sessionPending) {
     return (
       <main className="main cart-main">
         <CartSkeleton />
@@ -123,6 +149,28 @@ export default function CheckoutPage() {
             sub="Your cart is empty — add a product before placing an order."
             ctaLabel="Browse Catalog"
           />
+        </div>
+      </main>
+    )
+  }
+
+  if (!session) {
+    return (
+      <main className="main cart-main">
+        <div className="container">
+          <section className="ngc-checkout-auth" aria-labelledby="checkout-auth-title">
+            <div className="ngc-checkout-auth__icon" aria-hidden="true">✓</div>
+            <p className="ngc-checkout-auth__eyebrow">Secure checkout</p>
+            <h1 id="checkout-auth-title">Sign in before continuing</h1>
+            <p>
+              Your cart is ready. Sign in or create an account so the order,
+              payment status, and delivery details are protected and available later.
+            </p>
+            <div className="ngc-checkout-auth__actions">
+              <Link className="ngc-btn ngc-btn--dark" href={authHref('/login/')}>Sign In</Link>
+              <Link className="ngc-btn ngc-btn--outline" href={authHref('/signup/')}>Create Account</Link>
+            </div>
+          </section>
         </div>
       </main>
     )

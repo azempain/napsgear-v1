@@ -8,6 +8,60 @@ const { chromium } = require('playwright')
 
 const BASE = process.env.VERIFY_BASE || 'http://localhost:3000'
 
+function fakeJwt(userId) {
+  const encode = value => Buffer.from(JSON.stringify(value)).toString('base64url')
+  const now = Math.floor(Date.now() / 1000)
+  return `${encode({ alg: 'none', typ: 'JWT' })}.${encode({
+    sub: userId,
+    iat: now,
+    exp: now + 3600,
+  })}.signature`
+}
+
+async function mockSession(page, authenticated = true) {
+  await page.route('**/auth/get-session', async route => {
+    if (!authenticated) {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: 'null',
+      })
+      return
+    }
+
+    const userId = '10000000-0000-4000-8000-000000000001'
+    const now = new Date().toISOString()
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        session: {
+          id: 'test-session',
+          userId,
+          token: fakeJwt(userId),
+          expiresAt: new Date(Date.now() + 3600_000).toISOString(),
+          createdAt: now,
+          updatedAt: now,
+        },
+        user: {
+          id: userId,
+          name: 'Jane Doe',
+          email: 'jane@example.com',
+          emailVerified: true,
+          createdAt: now,
+          updatedAt: now,
+        },
+      }),
+    })
+  })
+}
+
+async function clearNetworkMocks(page) {
+  await page.unroute('**/auth/get-session')
+  await page.unroute('**://*.apirest.*.aws.neon.tech/**')
+  await page.unroute('**://api.web3forms.com/**')
+}
+
 const CHECKS = [
   {
     name: 'Header: utility links are centered with no stray Links label',
@@ -31,15 +85,54 @@ const CHECKS = [
     },
   },
   {
-    name: 'Header: currency selector stays contained in the utility row',
+    name: 'Header: currency selector stays at the far edge across desktop widths',
     route: '/',
     async assert(page) {
-      await page.setViewportSize({ width: 1440, height: 900 })
-      const selectBox = await page.locator('#dropdownCurrency').boundingBox()
-      const topBox = await page.locator('.header-top').boundingBox()
-      if (!selectBox || !topBox) throw new Error('currency or utility-row bounds unavailable')
-      if (selectBox.y < topBox.y || selectBox.y + selectBox.height > topBox.y + topBox.height) {
-        throw new Error('currency selector escapes the utility row')
+      for (const width of [992, 1024, 1280, 1440]) {
+        await page.setViewportSize({ width, height: 900 })
+        const selectBox = await page.locator('#dropdownCurrency').boundingBox()
+        const topBox = await page.locator('.ngc-header-top-inner').boundingBox()
+        if (!selectBox || !topBox) throw new Error('currency or utility-row bounds unavailable')
+        if (selectBox.y < topBox.y || selectBox.y + selectBox.height > topBox.y + topBox.height) {
+          throw new Error(`currency selector escapes the utility row at ${width}px`)
+        }
+        const rightGap = topBox.x + topBox.width - (selectBox.x + selectBox.width)
+        if (rightGap > 24) {
+          throw new Error(`currency selector is ${rightGap}px from the far edge at ${width}px`)
+        }
+        if (selectBox.width > 72) {
+          throw new Error(`currency selector expanded to ${selectBox.width}px at ${width}px`)
+        }
+        const value = await page.inputValue('#dropdownCurrency')
+        if (!/^[A-Z]{3}$/.test(value)) {
+          throw new Error(`currency selector renders a non-code value: "${value}"`)
+        }
+      }
+    },
+  },
+  {
+    name: 'AMA page has no malformed local thumbnail requests',
+    route: '/ask-an-ifbb-pro/',
+    async assert(page) {
+      const failures = []
+      const badResponses = []
+      const onFailure = request => failures.push(request.url())
+      const onResponse = response => {
+        if (response.status() === 404) badResponses.push(response.url())
+      }
+      page.on('requestfailed', onFailure)
+      page.on('response', onResponse)
+
+      await page.reload({ waitUntil: 'domcontentloaded' })
+      await page.waitForTimeout(1500)
+
+      page.off('requestfailed', onFailure)
+      page.off('response', onResponse)
+      const malformed = [...failures, ...badResponses].filter(url =>
+        /NapsGear(?:%20| )-%20ama_files|NapsGear - ama_files/.test(url),
+      )
+      if (malformed.length) {
+        throw new Error(`malformed AMA thumbnails requested: ${malformed.join(', ')}`)
       }
     },
   },
@@ -208,7 +301,7 @@ const CHECKS = [
     },
   },
   {
-    name: 'Checkout: summary totals, validation, mocked submit -> confirm + cart cleared',
+    name: 'Checkout: authenticated order persists before email and clears cart',
     route: '/',
     async assert(page) {
       // Seed a cart in localStorage, then load /checkout/.
@@ -217,10 +310,34 @@ const CHECKS = [
           { id: 'x__1', productName: 'Test Product', packCount: 1, slug: 'x', price: 30, qty: 2 },
         ]))
       })
-      // Mock the Web3Forms endpoint so no real key/network is needed.
-      await page.route('**://api.web3forms.com/**', route =>
-        route.fulfill({ status: 200, contentType: 'application/json',
-          body: JSON.stringify({ success: true }) }))
+      const requestOrder = []
+      await mockSession(page)
+      await page.route('**://*.apirest.*.aws.neon.tech/**', async route => {
+        const url = route.request().url()
+        if (url.includes('/rpc/create_checkout_order')) {
+          requestOrder.push('database')
+          await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify('10000000-0000-4000-8000-000000000002'),
+          })
+          return
+        }
+        requestOrder.push('email-status')
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: 'null',
+        })
+      })
+      await page.route('**://api.web3forms.com/**', async route => {
+        requestOrder.push('email')
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ success: true }),
+        })
+      })
 
       await page.goto(BASE + '/checkout/', { waitUntil: 'load' })
       await page.waitForSelector('#placeOrderBtn', { timeout: 8000 })
@@ -253,6 +370,32 @@ const CHECKS = [
       if (Array.isArray(parsed) && parsed.length !== 0) {
         throw new Error('cart not cleared after order')
       }
+      if (requestOrder[0] !== 'database' || requestOrder[1] !== 'email') {
+        throw new Error(`order sequence was ${requestOrder.join(' -> ')}`)
+      }
+      await clearNetworkMocks(page)
+    },
+  },
+  {
+    name: 'Checkout: anonymous customers must sign in before payment',
+    route: '/',
+    async assert(page) {
+      await page.addInitScript(() => {
+        localStorage.setItem('napsgear_cart', JSON.stringify([
+          { id: 'x__1', productName: 'Test Product', packCount: 1, slug: 'x', price: 30, qty: 1 },
+        ]))
+      })
+      await mockSession(page, false)
+      await page.goto(BASE + '/checkout/', { waitUntil: 'load' })
+      await page.waitForSelector('.ngc-checkout-auth', { timeout: 8000 })
+      const loginHref = await page.getAttribute('.ngc-checkout-auth a[href^="/login/"]', 'href')
+      if (!loginHref || !loginHref.includes('next=%2Fcheckout%2F')) {
+        throw new Error(`checkout login redirect is unsafe or missing: "${loginHref}"`)
+      }
+      if (await page.$('#placeOrderBtn')) {
+        throw new Error('anonymous customer can still access the place-order button')
+      }
+      await clearNetworkMocks(page)
     },
   },
   // ─── F1 checks ─────────────────────────────────────────────────────────
@@ -426,22 +569,25 @@ const CHECKS = [
           { id: 'x__1', productName: 'Test Product', packCount: 1, slug: 'x', price: 30, qty: 1 },
         ]))
       })
+      await mockSession(page)
       await page.goto(BASE + '/checkout/', { waitUntil: 'load' })
       await page.waitForSelector('#fullName', { timeout: 8000 })
-      // Focus fullName, do not type, blur by pressing Tab.
-      await page.focus('#fullName')
+      // Name and email are prefilled from the authenticated session. Use an
+      // untouched required field to verify field-level blur validation.
+      await page.focus('#phone')
       await page.keyboard.press('Tab')
-      await page.waitForSelector('#fullName-err', { timeout: 3000 })
-      const msg = (await page.textContent('#fullName-err'))?.trim()
+      await page.waitForSelector('#phone-err', { timeout: 3000 })
+      const msg = (await page.textContent('#phone-err'))?.trim()
       if (!msg || !/required/i.test(msg)) {
         throw new Error(`expected required-message on blur, got: "${msg}"`)
       }
       // No submit happened, so other fields should NOT have errors yet.
       const otherErrs = await page.$$eval('.ngc-field__err', els =>
-        els.map(e => e.id).filter(id => id && id !== 'fullName-err'))
+        els.map(e => e.id).filter(id => id && id !== 'phone-err'))
       if (otherErrs.length > 0) {
         throw new Error(`other fields errored prematurely: ${otherErrs.join(',')}`)
       }
+      await clearNetworkMocks(page)
     },
   },
   // ─── F2a checks ─────────────────────────────────────────────────────────
@@ -596,11 +742,16 @@ const CHECKS = [
     },
   },
   {
-    name: 'F4: hosted-auth account routes render in the static export',
+    name: 'F4: hosted-auth pages render polished account recovery UI',
     route: '/login/',
     async assert(page) {
       await page.waitForSelector('.ngc-auth-card', { timeout: 8000 })
       if (!(await page.$('input[type="email"]'))) throw new Error('login email field missing')
+      if (!(await page.$('.ngc-auth-password-toggle'))) {
+        throw new Error('login password visibility control missing')
+      }
+      const forgotHref = await page.getAttribute('a[href^="/forgot-password/"]', 'href')
+      if (!forgotHref) throw new Error('forgot-password link missing')
       for (const path of ['/signup/', '/forgot-password/', '/reset-password/', '/account/']) {
         const response = await page.request.get(BASE + path)
         if (!response.ok()) throw new Error(`${path} returned ${response.status()}`)

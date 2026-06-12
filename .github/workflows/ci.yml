@@ -22,8 +22,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -42,6 +40,8 @@ jobs:
 
       - name: Static export build
         run: pnpm build
+        env:
+          NEXT_PUBLIC_WEB3FORMS_KEY: ci-test-key
 
       - name: Bundle-size budget
         run: pnpm bundle-budget
