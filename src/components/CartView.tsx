@@ -5,6 +5,8 @@ import { subtotal, shippingFee, loyaltyCredit, total } from '@/lib/cart'
 import EmptyCart from './EmptyCart'
 import CartSkeleton from './CartSkeleton'
 import { useCurrency } from '@/context/CurrencyContext'
+import Image from 'next/image'
+import Link from 'next/link'
 
 const TrashIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105.7 122.88" aria-hidden="true">
@@ -19,8 +21,8 @@ function MobileCartActions({ totalLabel }: { totalLabel: string }) {
         <span>Total</span>
         <strong>{totalLabel}</strong>
       </div>
-      <a className="ngc-btn ngc-btn--dark" href="/checkout/">Checkout</a>
-      <a className="ngc-cart-mobile-actions__continue" href="/catalog/">Continue Shopping</a>
+      <Link className="ngc-btn ngc-btn--dark" href="/checkout/">Checkout</Link>
+      <Link className="ngc-cart-mobile-actions__continue" href="/catalog/">Continue Shopping</Link>
     </div>
   )
 }
@@ -113,7 +115,14 @@ export default function CartView() {
                   <div className="ngc-item__product">
                     <figure className="ngc-item__image">
                       {item.image ? (
-                        <img src={item.image} alt={item.productName} referrerPolicy="no-referrer" />
+                        <Image
+                          src={item.image}
+                          alt={item.productName}
+                          width={96}
+                          height={96}
+                          referrerPolicy="no-referrer"
+                          unoptimized
+                        />
                       ) : (
                         <div className="ngc-item__placeholder" aria-hidden="true" />
                       )}
@@ -121,7 +130,7 @@ export default function CartView() {
 
                     <div className="ngc-item__details">
                       <h3 className="ngc-item__name">
-                        <a href={`/${item.slug}/`}>{item.productName}</a>
+                        <Link href={`/${item.slug}/`}>{item.productName}</Link>
                       </h3>
                       <div className="ngc-item__variant">
                         {item.packCount} pack{item.packCount === 1 ? '' : 's'}
@@ -201,10 +210,10 @@ export default function CartView() {
             </div>
 
             <div className="ngc-actions">
-              <a className="ngc-btn ngc-btn--outline" href="/catalog/">Continue Shopping</a>
-              <a className="ngc-btn ngc-btn--dark" href="/checkout/">
+              <Link className="ngc-btn ngc-btn--outline" href="/catalog/">Continue Shopping</Link>
+              <Link className="ngc-btn ngc-btn--dark" href="/checkout/">
                 Proceed to Checkout
-              </a>
+              </Link>
             </div>
           </div>
         </aside>

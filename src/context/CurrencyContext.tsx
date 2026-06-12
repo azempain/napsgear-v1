@@ -1,47 +1,18 @@
 'use client'
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import {
-  FALLBACK_RATES,
-  formatMoney,
-  isCurrencyCode,
-  mergeRates,
-  type CurrencyCode,
-  type CurrencyRates,
-} from '@/lib/currency'
+import { useEffect } from 'react'
+import { mergeRates } from '@/lib/currency'
+import { useCurrencyStore } from '@/store/currencyStore'
 
-const CURRENCY_KEY = 'napsgear_currency'
-const RATES_KEY = 'napsgear_currency_rates'
 const RATE_TTL = 12 * 60 * 60 * 1000
 const RATE_URL = 'https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,CAD,AUD'
 
-type CurrencyContextValue = {
-  currency: CurrencyCode
-  rates: CurrencyRates
-  setCurrency: (currency: CurrencyCode) => void
-  money: (usdAmount: number) => string
-}
-
-const CurrencyContext = createContext<CurrencyContextValue | null>(null)
-
 export default function CurrencyProvider({ children }: { children: React.ReactNode }) {
-  const [currency, setCurrencyState] = useState<CurrencyCode>('USD')
-  const [rates, setRates] = useState<CurrencyRates>(FALLBACK_RATES)
+  const fetchedAt = useCurrencyStore(state => state.fetchedAt)
+  const setRates = useCurrencyStore(state => state.setRates)
 
   useEffect(() => {
-    const savedCurrency = localStorage.getItem(CURRENCY_KEY)
-    if (isCurrencyCode(savedCurrency)) setCurrencyState(savedCurrency)
-
-    const savedRates = localStorage.getItem(RATES_KEY)
-    if (savedRates) {
-      try {
-        const parsed = JSON.parse(savedRates) as { fetchedAt?: number; rates?: unknown }
-        if (parsed.rates) setRates(mergeRates(parsed.rates))
-        if (parsed.fetchedAt && Date.now() - parsed.fetchedAt < RATE_TTL) return
-      } catch {
-        localStorage.removeItem(RATES_KEY)
-      }
-    }
+    if (fetchedAt && Date.now() - fetchedAt < RATE_TTL) return
 
     const controller = new AbortController()
     fetch(RATE_URL, { signal: controller.signal })
@@ -50,9 +21,7 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
         return response.json() as Promise<{ rates?: unknown }>
       })
       .then(data => {
-        const next = mergeRates(data.rates)
-        setRates(next)
-        localStorage.setItem(RATES_KEY, JSON.stringify({ fetchedAt: Date.now(), rates: next }))
+        setRates(mergeRates(data.rates), Date.now())
       })
       .catch(() => {
         // Cached or bundled fallback rates keep pricing usable when the
@@ -60,25 +29,11 @@ export default function CurrencyProvider({ children }: { children: React.ReactNo
       })
 
     return () => controller.abort()
-  }, [])
+  }, [fetchedAt, setRates])
 
-  const setCurrency = useCallback((next: CurrencyCode) => {
-    setCurrencyState(next)
-    localStorage.setItem(CURRENCY_KEY, next)
-  }, [])
-
-  const value = useMemo<CurrencyContextValue>(() => ({
-    currency,
-    rates,
-    setCurrency,
-    money: (amount) => formatMoney(amount, currency, rates),
-  }), [currency, rates, setCurrency])
-
-  return <CurrencyContext.Provider value={value}>{children}</CurrencyContext.Provider>
+  return children
 }
 
 export function useCurrency() {
-  const context = useContext(CurrencyContext)
-  if (!context) throw new Error('useCurrency must be used inside CurrencyProvider')
-  return context
+  return useCurrencyStore()
 }

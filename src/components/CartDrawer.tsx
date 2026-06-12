@@ -1,6 +1,8 @@
 'use client'
 import { useCart } from '@/context/CartContext'
 import { useCurrency } from '@/context/CurrencyContext'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function CartDrawer() {
   const { items, count, removeItem, updateQty } = useCart()
@@ -25,7 +27,7 @@ export default function CartDrawer() {
                   <li key={item.id} className="cart-product">
                     {item.image && (
                       <figure className="product-image-container">
-                        <img src={item.image} alt={item.productName} width={80} height={80} />
+                        <Image src={item.image} alt={item.productName} width={80} height={80} unoptimized />
                       </figure>
                     )}
                     <div className="product-details">
@@ -68,7 +70,7 @@ export default function CartDrawer() {
                 </span>
               </div>
               <div className="dropdown-cart-action">
-                <a href="/checkout/" className="btn btn-primary btn-block">Checkout</a>
+                <Link href="/checkout/" className="btn btn-primary btn-block">Checkout</Link>
               </div>
             </>
           )}

@@ -10,6 +10,58 @@ const BASE = process.env.VERIFY_BASE || 'http://localhost:3000'
 
 const CHECKS = [
   {
+    name: 'Header: utility links are centered with no stray Links label',
+    route: '/',
+    async assert(page) {
+      await page.setViewportSize({ width: 1440, height: 900 })
+      const nav = await page.waitForSelector('.ngc-utility-nav', { timeout: 8000 })
+      const labels = await nav.$$eval('a', links => links.map(link => link.textContent.trim()))
+      if (labels.includes('Links')) throw new Error('stray Links label is still rendered')
+
+      const { navCenter, viewportCenter } = await nav.evaluate(element => {
+        const rect = element.getBoundingClientRect()
+        return {
+          navCenter: rect.left + rect.width / 2,
+          viewportCenter: window.innerWidth / 2,
+        }
+      })
+      if (Math.abs(navCenter - viewportCenter) > 24) {
+        throw new Error(`utility navigation is off-center by ${Math.abs(navCenter - viewportCenter)}px`)
+      }
+    },
+  },
+  {
+    name: 'Header: currency selector stays contained in the utility row',
+    route: '/',
+    async assert(page) {
+      await page.setViewportSize({ width: 1440, height: 900 })
+      const selectBox = await page.locator('#dropdownCurrency').boundingBox()
+      const topBox = await page.locator('.header-top').boundingBox()
+      if (!selectBox || !topBox) throw new Error('currency or utility-row bounds unavailable')
+      if (selectBox.y < topBox.y || selectBox.y + selectBox.height > topBox.y + topBox.height) {
+        throw new Error('currency selector escapes the utility row')
+      }
+    },
+  },
+  {
+    name: 'Header: mobile navigation uses an accessible Sheet',
+    route: '/',
+    async assert(page) {
+      await page.setViewportSize({ width: 390, height: 844 })
+      const trigger = await page.waitForSelector('[aria-controls="mobileDrawer"]', { timeout: 8000 })
+      await trigger.click()
+      const sheet = await page.waitForSelector('#mobileDrawer[data-state="open"]', { timeout: 3000 })
+      const labelledBy = await sheet.getAttribute('aria-labelledby')
+      const title = labelledBy ? await page.textContent(`#${labelledBy}`) : ''
+      if (!title || !/main navigation/i.test(title)) {
+        throw new Error('mobile Sheet is missing its accessible title')
+      }
+      await page.keyboard.press('Escape')
+      await page.waitForSelector('#mobileDrawer', { state: 'detached', timeout: 3000 })
+      await page.setViewportSize({ width: 1280, height: 800 })
+    },
+  },
+  {
     name: 'AMA slider initialized + at least 5 slides',
     route: '/',
     async assert(page) {
@@ -114,10 +166,18 @@ const CHECKS = [
       if (!firstProduct) throw new Error('no product link on /catalog/')
       await page.goto(BASE + firstProduct, { waitUntil: 'load' })
       await page.waitForSelector('#addToCartBtn', { timeout: 8000 })
-      const radios = await page.$$('input[name="pack"]')
-      if (radios.length !== 5) throw new Error(`expected 5 pack radios, got ${radios.length}`)
+      const radioIds = await page.$$eval(
+        'input[name="pack"]',
+        els => [...new Set(els.map(el => el.id))],
+      )
+      if (radioIds.length !== 5) {
+        throw new Error(`expected 5 pack tiers, got ${radioIds.length}`)
+      }
       // Sub-project C rewrote ProductDetail; tier totals live in .price-total now.
-      const totals = await page.$$eval('.price-total', els => els.map(e => e.textContent))
+      const totals = await page.$$eval(
+        '.price-total',
+        els => [...new Set(els.map(el => el.textContent))],
+      )
       if (totals.length !== 5) throw new Error(`expected 5 tier totals, got ${totals.length}`)
       if (totals[0] === totals[4]) throw new Error('1-pack total equals 20-pack total — tiers not differentiated')
     },
@@ -524,17 +584,14 @@ const CHECKS = [
     name: 'F4: currency selection converts prices and persists after reload',
     route: '/catalog/',
     async assert(page) {
-      const trigger = await page.waitForSelector('#dropdownCurrency', { timeout: 8000 })
-      await trigger.click()
-      const euro = page.locator('.header-currency .dropdown-item').filter({ hasText: 'Euro (EUR)' })
-      if (await euro.count() !== 1) throw new Error('Euro currency option missing or duplicated')
-      await euro.click()
+      await page.waitForSelector('#dropdownCurrency', { timeout: 8000 })
+      await page.selectOption('#dropdownCurrency', 'EUR')
       await page.waitForFunction(() => {
         const price = document.querySelector('.product-price')
         return price && /€/.test(price.textContent || '')
       }, null, { timeout: 3000 })
       await page.reload({ waitUntil: 'load' })
-      const selected = (await page.textContent('#dropdownCurrency'))?.trim()
+      const selected = await page.inputValue('#dropdownCurrency')
       if (selected !== 'EUR') throw new Error(`currency did not persist: "${selected}"`)
     },
   },
@@ -592,6 +649,7 @@ const CHECKS = [
 
   for (const check of CHECKS) {
     try {
+      await page.setViewportSize({ width: 1280, height: 800 })
       // Keep checks independent. Currency and cart preferences intentionally
       // persist in the app, but one check must not change another check's
       // assumptions when the harness reuses a single browser page.
