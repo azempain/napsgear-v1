@@ -766,31 +766,31 @@ const CHECKS = [
     },
   },
   {
-    name: 'P4: /categories/oral-steroids-c23/ filter engages (1 page vs many on /catalog/)',
+    name: 'P4: /categories/anavar/ filter engages (fewer pages than full /catalog/)',
     route: '/catalog/',
     async assert(page) {
       // Both pages SSR at 24 items (one ProductTable page). Distinguish by
-      // pagination button count: catalog has ~32 pages over 761 products;
-      // oral-steroids has 24 productSlugs → fits in 1 page → 0 buttons.
+      // pagination button count: catalog spans many pages over ~691 products;
+      // anavar has 32 productSlugs → 2 pages → fewer buttons.
       const catalogPages = await page.$$eval(
         '.ngc-pagination__num, nav.toolbox-pagination .page-link',
         els => els.length,
       )
       if (catalogPages < 5) {
-        throw new Error(`/catalog/ pagination too small (${catalogPages}) — expected many pages over 700+ products`)
+        throw new Error(`/catalog/ pagination too small (${catalogPages}) — expected many pages over 600+ products`)
       }
       await page.goto(
-        (process.env.VERIFY_BASE || 'http://localhost:3000') + '/categories/oral-steroids-c23/',
+        (process.env.VERIFY_BASE || 'http://localhost:3000') + '/categories/anavar/',
         { waitUntil: 'load' },
       )
       await page.waitForSelector('[data-testid="product-grid"]', { timeout: 8000 })
-      const oralPages = await page.$$eval(
+      const anavarPages = await page.$$eval(
         '.ngc-pagination__num, nav.toolbox-pagination .page-link',
         els => els.length,
       )
-      if (oralPages >= catalogPages) {
+      if (anavarPages >= catalogPages) {
         throw new Error(
-          `expected oral-steroids pagination (${oralPages}) < catalog pagination (${catalogPages}) — productSlugs filter did not engage`,
+          `expected anavar pagination (${anavarPages}) < catalog pagination (${catalogPages}) — productSlugs filter did not engage`,
         )
       }
     },
@@ -902,12 +902,21 @@ const CHECKS = [
     },
   },
   {
-    name: 'F4: uncaptured category does not show the full unrelated catalog',
-    route: '/categories/accordo-rx-c144205/',
+    name: 'F4: unknown category slug 404s (dynamicParams=false) — no full-catalog fallback',
+    route: '/',
     async assert(page) {
-      await page.waitForSelector('.ngc-list__empty', { timeout: 8000 })
+      // Every category is now derived from products, so all have productSlugs.
+      // An unmatched slug must 404 (dynamicParams=false), never fall back to
+      // rendering the entire unrelated catalog.
+      const resp = await page.goto(
+        (process.env.VERIFY_BASE || 'http://localhost:3000') + '/categories/does-not-exist-xyz/',
+        { waitUntil: 'domcontentloaded' },
+      )
+      if (!resp || resp.status() !== 404) {
+        throw new Error(`expected 404 for unknown category, got ${resp ? resp.status() : 'no response'}`)
+      }
       const productCount = await page.$$eval('[data-testid="product-grid"] .product-item', els => els.length)
-      if (productCount !== 0) throw new Error(`expected empty uncaptured category, got ${productCount} products`)
+      if (productCount !== 0) throw new Error(`unknown category rendered ${productCount} products — should be none`)
     },
   },
 ]

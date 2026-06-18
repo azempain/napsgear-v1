@@ -59,6 +59,29 @@ describe('mapProduct', () => {
     ])
   })
 
+  it('filters out theme junk images (flags, default placeholders, icons)', () => {
+    const np: NinegearProduct = {
+      id: 7,
+      name: 'HCGrow',
+      slug: 'hcgrow-2',
+      prices: { price: '60' },
+      on_sale: false,
+      short_description: '',
+      images: [
+        { src: 'https://ninegear.us/wp-content/uploads/2025/10/hcgrow-crowx-labs.jpg' },
+        { src: 'https://ninegear.us/wp-content/uploads/2025/10/en-default-medium_default.webp' },
+        { src: 'https://ninegear.us/wp-content/uploads/2025/10/us-flag.png' },
+        { src: 'https://ninegear.us/wp-content/uploads/2025/10/int-flag.png' },
+        { src: 'https://ninegear.us/wp-content/uploads/2025/10/uk-flag1.png' },
+        { src: 'https://ninegear.us/wp-content/uploads/2025/10/test-icon-min2.png' },
+      ],
+      categories: [{ id: 156, name: 'Peptides', slug: 'peptides' }],
+    }
+    const { product, images } = mapProduct(np)
+    expect(product.images).toEqual(['/images/products/hcgrow-2-1.jpg'])
+    expect(images).toHaveLength(1)
+  })
+
   it('uses a templated description and Sale label when bare + on_sale', () => {
     const { product } = mapProduct(BARE)
     expect(product.brand).toBeUndefined()

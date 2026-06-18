@@ -17,6 +17,18 @@ export interface MappedProduct {
 // Spec-table fields that aren't useful prose in the description body.
 const SKIP_FIELDS = new Set<string>()
 
+// The Store API's `images[]` mixes the real product photo (always first) with
+// Woodmart theme assets: shipping-flag icons (us-flag.png, int-flag.png,
+// eu-flag.png, uk-flag1.png), the "default" placeholder
+// (en-default-medium_default.webp), and small UI icons (test-icon-min2.png).
+// None are product imagery — drop them.
+const JUNK_IMAGE = /(?:[a-z]{2,3}-flag\d*\.(?:png|jpe?g|webp)|default|-icon)/i
+
+function isJunkImage(url: string): boolean {
+  const basename = url.split('/').pop() ?? url
+  return JUNK_IMAGE.test(basename)
+}
+
 function extFromUrl(url: string): string {
   try {
     const ext = new URL(url).pathname.match(/\.([a-z0-9]+)$/i)?.[1]
@@ -47,7 +59,7 @@ export function mapProduct(np: NinegearProduct): MappedProduct {
   const seen = new Set<string>()
   const images: ImageRef[] = []
   for (const img of np.images) {
-    if (!img?.src || seen.has(img.src)) continue
+    if (!img?.src || seen.has(img.src) || isJunkImage(img.src)) continue
     seen.add(img.src)
     const local = `/images/products/${np.slug}-${images.length + 1}${extFromUrl(img.src)}`
     images.push({ remote: img.src, local })
