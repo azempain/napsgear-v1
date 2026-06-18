@@ -1,653 +1,908 @@
 [
   {
-    "slug": "accordo-rx-c144205",
-    "name": "Accordo Rx",
-    "url": "/categories/accordo-rx-c144205"
-  },
-  {
-    "slug": "alpha-pharma-healthcare-c141952",
-    "name": "Alpha-Pharma Healthcare",
-    "url": "/categories/alpha-pharma-healthcare-c141952"
-  },
-  {
-    "slug": "alp-laboratories-c146773",
-    "name": "ALP Laboratories",
-    "url": "/categories/alp-laboratories-c146773"
-  },
-  {
-    "slug": "aurum-pharmaceuticals-c142339",
-    "name": "Aurum Pharmaceuticals",
-    "url": "/categories/aurum-pharmaceuticals-c142339"
-  },
-  {
-    "slug": "avogen-lab-c135271",
-    "name": "AVoGen Lab",
-    "url": "/categories/avogen-lab-c135271"
-  },
-  {
-    "slug": "beligas-c142048",
-    "name": "Beligas",
-    "url": "/categories/beligas-c142048"
-  },
-  {
-    "slug": "biomex-labs-c142714",
-    "name": "Biomex Labs",
-    "url": "/categories/biomex-labs-c142714"
-  },
-  {
-    "slug": "biotech-labs-c147750",
-    "name": "Biotech Labs",
-    "url": "/categories/biotech-labs-c147750"
-  },
-  {
-    "slug": "bull-pharma-c146770",
-    "name": "Bull Pharma",
-    "url": "/categories/bull-pharma-c146770"
-  },
-  {
-    "slug": "crowx-labs-c146386",
-    "name": "Crowx Labs",
-    "url": "/categories/crowx-labs-c146386"
-  },
-  {
-    "slug": "euro-pharmacies-c142195",
-    "name": "Euro-Pharmacies",
-    "url": "/categories/euro-pharmacies-c142195"
-  },
-  {
-    "slug": "geneza-pharmaceuticals-c142291",
-    "name": "Geneza Pharmaceuticals",
-    "url": "/categories/geneza-pharmaceuticals-c142291"
-  },
-  {
-    "slug": "genshi-labs-c145954",
-    "name": "Genshi Labs",
-    "url": "/categories/genshi-labs-c145954"
-  },
-  {
-    "slug": "nakon-medical-c145333",
-    "name": "Nakon Medical",
-    "url": "/categories/nakon-medical-c145333"
-  },
-  {
-    "slug": "omega-lab-c147558",
-    "name": "Omega Lab",
-    "url": "/categories/omega-lab-c147558"
-  },
-  {
-    "slug": "pharmaqo-labs-c142576",
-    "name": "Pharmaqo Labs",
-    "url": "/categories/pharmaqo-labs-c142576"
-  },
-  {
-    "slug": "ryzen-pharmaceuticals-c146674",
-    "name": "Ryzen Pharmaceuticals",
-    "url": "/categories/ryzen-pharmaceuticals-c146674"
-  },
-  {
-    "slug": "sixpex-c145330",
-    "name": "SixPex",
-    "url": "/categories/sixpex-c145330"
-  },
-  {
-    "slug": "tsg-compound-pharmacy-c142099",
-    "name": "TSG Compound Pharmacy",
-    "url": "/categories/tsg-compound-pharmacy-c142099"
-  },
-  {
-    "slug": "ultima-pharmaceuticals-c144304",
-    "name": "Ultima Pharmaceuticals",
-    "url": "/categories/ultima-pharmaceuticals-c144304"
-  },
-  {
-    "slug": "xeno-labs-c142528",
-    "name": "Xeno Labs",
-    "url": "/categories/xeno-labs-c142528"
-  },
-  {
-    "slug": "xt-labs-c141388",
-    "name": "XT Labs",
-    "url": "/categories/xt-labs-c141388"
-  },
-  {
-    "slug": "ed-pills-c141856",
-    "name": "ED Pills",
-    "url": "/categories/ed-pills-c141856"
-  },
-  {
-    "slug": "hcg-miscellaneous-c141239",
-    "name": "HCG & Miscellaneous",
-    "url": "/categories/hcg-miscellaneous-c141239"
-  },
-  {
-    "slug": "human-growth-hormone-c138076",
-    "name": "Human Growth Hormone",
-    "url": "/categories/human-growth-hormone-c138076"
-  },
-  {
-    "slug": "turkish-pharma-c147846",
-    "name": "Turkish Pharma",
-    "url": "/categories/turkish-pharma-c147846"
-  },
-  {
-    "slug": "crowx-labs-c146915",
-    "name": "Crowx Labs",
-    "url": "/categories/crowx-labs-c146915"
-  },
-  {
-    "slug": "euro-pharmacies-c145429",
-    "name": "Euro-Pharmacies",
-    "url": "/categories/euro-pharmacies-c145429"
-  },
-  {
-    "slug": "nano-peptides-c147606",
-    "name": "Nano Peptides",
-    "url": "/categories/nano-peptides-c147606"
-  },
-  {
-    "slug": "odin-pharma-c147702",
-    "name": "Odin Pharma",
-    "url": "/categories/odin-pharma-c147702"
-  },
-  {
-    "slug": "pharmaqo-labs-c145435",
-    "name": "Pharmaqo Labs",
-    "url": "/categories/pharmaqo-labs-c145435"
-  },
-  {
-    "slug": "sixpex-c147218",
-    "name": "SixPex",
-    "url": "/categories/sixpex-c147218"
-  },
-  {
-    "slug": "tsg-compound-pharmacy-c147507",
-    "name": "TSG Compound Pharmacy",
-    "url": "/categories/tsg-compound-pharmacy-c147507"
-  },
-  {
-    "slug": "u-s-made-peptides-c141194",
-    "name": "U.S. Made Peptides",
-    "url": "/categories/u-s-made-peptides-c141194"
-  },
-  {
-    "slug": "ultima-pharmaceuticals-c145432",
-    "name": "Ultima Pharmaceuticals",
-    "url": "/categories/ultima-pharmaceuticals-c145432"
-  },
-  {
-    "slug": "xeno-labs-c147029",
-    "name": "Xeno Labs",
-    "url": "/categories/xeno-labs-c147029"
-  },
-  {
-    "slug": "xt-labs-c146146",
-    "name": "XT Labs",
-    "url": "/categories/xt-labs-c146146"
-  },
-  {
-    "slug": "euro-pharmacies-europe-c146578",
-    "name": "Euro-Pharmacies, Europe",
-    "url": "/categories/euro-pharmacies-europe-c146578"
-  },
-  {
-    "slug": "pharmaqo-labs-c145624",
-    "name": "Pharmaqo Labs",
-    "url": "/categories/pharmaqo-labs-c145624"
-  },
-  {
-    "slug": "xt-labs-c146149",
-    "name": "XT Labs",
-    "url": "/categories/xt-labs-c146149"
-  },
-  {
-    "slug": "oral-steroids-c23",
-    "name": "Oral Steroids",
-    "url": "/categories/oral-steroids-c23",
+    "slug": "anadrol",
+    "name": "Anadrol",
+    "url": "/categories/anadrol",
     "productSlugs": [
-      "methandionex-10-p24817",
-      "oxandrolex-10-p24829",
-      "oxymetholex-50-p24826",
-      "stanozolex-10-p24823",
-      "summer-cutting-cycle-p26098",
-      "turaxel-10-p24832",
-      "anadromed-50-p23782",
-      "anavamed-10-p23785",
-      "dianamed-10-p23788",
-      "primomed-25-p23890",
-      "supermed-10-p23857",
-      "turimed-10-p23791",
-      "winimed-10-p23797",
-      "d-bol-10-p12750",
-      "oxandro-10-p12759",
-      "turinabol-10-p12765",
-      "max-one-methandienone-p8530",
-      "stan-max-stanozolol-p8524",
-      "gp-m1t-p452",
-      "gp-methan-10-dianabol-p55",
-      "gp-methan-50-dianabol-p56",
-      "gp-oral-tren-methyltrienolone-p328",
-      "gp-oxy-anadrol-anapolon-p61",
-      "gp-stan-10-winstrol-tabs-p57"
+      "anadrol-3",
+      "anadrol-2",
+      "xxx-tabs-2",
+      "oxymetholone-2",
+      "oxymetholex-anadrol-50mg-tab-50-tab-bag",
+      "oxymetholone",
+      "anadromed-50",
+      "pro-anadrol-int",
+      "anadrol",
+      "oxiplex",
+      "anadrolus",
+      "oxymetholone-50",
+      "anadrol-50",
+      "pro-anadrol",
+      "anapolon",
+      "oxypex-50",
+      "ultima-oxy",
+      "oxyrow"
     ]
   },
   {
-    "slug": "injectable-steroids-c21",
-    "name": "Injectable Steroids",
-    "url": "/categories/injectable-steroids-c21"
-  },
-  {
-    "slug": "cycle-support-c867",
-    "name": "Cycle Support",
-    "url": "/categories/cycle-support-c867"
-  },
-  {
-    "slug": "human-growth-hormone-c45",
-    "name": "Human Growth Hormone",
-    "url": "/categories/human-growth-hormone-c45"
-  },
-  {
-    "slug": "deus-medical-europe-c146933",
-    "name": "Deus Medical, Europe",
-    "url": "/categories/deus-medical-europe-c146933"
-  },
-  {
-    "slug": "dragon-pharma-c146050",
-    "name": "Dragon Pharma",
-    "url": "/categories/dragon-pharma-c146050"
-  },
-  {
-    "slug": "euro-pharmacies-europe-c146242",
-    "name": "Euro-Pharmacies, Europe",
-    "url": "/categories/euro-pharmacies-europe-c146242"
-  },
-  {
-    "slug": "india-pharmacy-peptides-c147897",
-    "name": "India Pharmacy Peptides",
-    "url": "/categories/india-pharmacy-peptides-c147897"
-  },
-  {
-    "slug": "pharmaqo-labs-c144607",
-    "name": "Pharmaqo Labs",
-    "url": "/categories/pharmaqo-labs-c144607"
-  },
-  {
-    "slug": "sinoway-c144598",
-    "name": "Sinoway",
-    "url": "/categories/sinoway-c144598"
-  },
-  {
-    "slug": "ultima-pharmaceuticals-c144604",
-    "name": "Ultima Pharmaceuticals",
-    "url": "/categories/ultima-pharmaceuticals-c144604"
-  },
-  {
-    "slug": "deus-medical-europe-c146936",
-    "name": "Deus Medical, Europe",
-    "url": "/categories/deus-medical-europe-c146936"
-  },
-  {
-    "slug": "dragon-pharma-c146389",
-    "name": "Dragon Pharma",
-    "url": "/categories/dragon-pharma-c146389"
-  },
-  {
-    "slug": "euro-pharmacies-europe-c146248",
-    "name": "Euro-Pharmacies, Europe",
-    "url": "/categories/euro-pharmacies-europe-c146248"
-  },
-  {
-    "slug": "pharmaqo-labs-c146392",
-    "name": "Pharmaqo Labs",
-    "url": "/categories/pharmaqo-labs-c146392"
-  },
-  {
-    "slug": "insulins-amp-biguanides-c43",
-    "name": "Insulins & Biguanides",
-    "url": "/categories/insulins-amp-biguanides-c43"
-  },
-  {
-    "slug": "pre-designed-stacks-c42",
-    "name": "Pre-designed Stacks",
-    "url": "/categories/pre-designed-stacks-c42"
-  },
-  {
-    "slug": "pct---post-cycle-therapy-c518",
-    "name": "PCT - Post Cycle Therapy",
-    "url": "/categories/pct---post-cycle-therapy-c518"
-  },
-  {
-    "slug": "men-s-health-c446",
-    "name": "Men`s Health",
-    "url": "/categories/men-s-health-c446"
-  },
-  {
-    "slug": "erectile-dysfunction-c438",
-    "name": "Erectile Dysfunction",
-    "url": "/categories/erectile-dysfunction-c438"
-  },
-  {
-    "slug": "ed-trial-packs-c134557",
-    "name": "ED Trial Packs",
-    "url": "/categories/ed-trial-packs-c134557"
-  },
-  {
-    "slug": "anti-fungal-c141013",
-    "name": "Anti Fungal",
-    "url": "/categories/anti-fungal-c141013"
-  },
-  {
-    "slug": "anti-viral-c418",
-    "name": "Anti Viral",
-    "url": "/categories/anti-viral-c418"
-  },
-  {
-    "slug": "anti-acidity-c420",
-    "name": "Anti-Acidity",
-    "url": "/categories/anti-acidity-c420"
-  },
-  {
-    "slug": "anti-allergic-asthma-c422",
-    "name": "Anti-Allergic/Asthma",
-    "url": "/categories/anti-allergic-asthma-c422"
-  },
-  {
-    "slug": "anti-depressant-c424",
-    "name": "Anti-Depressant",
-    "url": "/categories/anti-depressant-c424"
-  },
-  {
-    "slug": "anti-diabetic-c426",
-    "name": "Anti-Diabetic",
-    "url": "/categories/anti-diabetic-c426"
-  },
-  {
-    "slug": "anti-herpes-c430",
-    "name": "Anti-Herpes",
-    "url": "/categories/anti-herpes-c430"
-  },
-  {
-    "slug": "antibiotics-c432",
-    "name": "Antibiotics",
-    "url": "/categories/antibiotics-c432"
-  },
-  {
-    "slug": "blood-pressure-c434",
-    "name": "Blood Pressure",
-    "url": "/categories/blood-pressure-c434"
-  },
-  {
-    "slug": "diuretics-c520",
-    "name": "Diuretics",
-    "url": "/categories/diuretics-c520"
-  },
-  {
-    "slug": "eye-care-c140782",
-    "name": "Eye Care",
-    "url": "/categories/eye-care-c140782"
-  },
-  {
-    "slug": "gastrointestinal-c440",
-    "name": "Gastrointestinal",
-    "url": "/categories/gastrointestinal-c440"
-  },
-  {
-    "slug": "general-health-c442",
-    "name": "General Health",
-    "url": "/categories/general-health-c442"
-  },
-  {
-    "slug": "hair-loss-c135403",
-    "name": "Hair Loss",
-    "url": "/categories/hair-loss-c135403"
-  },
-  {
-    "slug": "healthy-bones-c444",
-    "name": "Healthy Bones",
-    "url": "/categories/healthy-bones-c444"
-  },
-  {
-    "slug": "heart-and-cholesterol-c436",
-    "name": "Heart and Cholesterol",
-    "url": "/categories/heart-and-cholesterol-c436"
-  },
-  {
-    "slug": "liver-protection-c134731",
-    "name": "Liver Protection",
-    "url": "/categories/liver-protection-c134731"
-  },
-  {
-    "slug": "pain-relief-c448",
-    "name": "Pain Relief",
-    "url": "/categories/pain-relief-c448"
-  },
-  {
-    "slug": "pets-c450",
-    "name": "Pets",
-    "url": "/categories/pets-c450"
-  },
-  {
-    "slug": "skin-care-c452",
-    "name": "Skin Care",
-    "url": "/categories/skin-care-c452"
-  },
-  {
-    "slug": "stay-awake-stimulant-c521",
-    "name": "Stay-Awake Stimulant",
-    "url": "/categories/stay-awake-stimulant-c521"
-  },
-  {
-    "slug": "stop-smoking-c456",
-    "name": "Stop Smoking",
-    "url": "/categories/stop-smoking-c456"
-  },
-  {
-    "slug": "vitamin-shots-c135406",
-    "name": "Vitamin Shots",
-    "url": "/categories/vitamin-shots-c135406"
-  },
-  {
-    "slug": "weight-loss-c460",
-    "name": "Weight Loss",
-    "url": "/categories/weight-loss-c460"
-  },
-  {
-    "slug": "women-s-health-c462",
-    "name": "Women`s Health",
-    "url": "/categories/women-s-health-c462"
-  },
-  {
-    "slug": "anabolic-steroids-c137965",
-    "name": "Anabolic Steroids",
-    "url": "/categories/anabolic-steroids-c137965"
-  },
-  {
-    "slug": "human-growth-hormone-c141808",
-    "name": "Human Growth Hormone",
-    "url": "/categories/human-growth-hormone-c141808"
-  },
-  {
-    "slug": "antiestrogens-c135505",
-    "name": "Antiestrogens",
-    "url": "/categories/antiestrogens-c135505"
-  },
-  {
-    "slug": "post-cycle-therapy-c135508",
-    "name": "Post Cycle Therapy",
-    "url": "/categories/post-cycle-therapy-c135508"
-  },
-  {
-    "slug": "asthma-c135397",
-    "name": "Asthma",
-    "url": "/categories/asthma-c135397"
-  },
-  {
-    "slug": "thyroid-c135502",
-    "name": "Thyroid",
-    "url": "/categories/thyroid-c135502"
-  },
-  {
-    "slug": "erectile-dysfunction-c135334",
-    "name": "Erectile Dysfunction",
-    "url": "/categories/erectile-dysfunction-c135334"
-  },
-  {
-    "slug": "antibiotics-c135484",
-    "name": "Antibiotics",
-    "url": "/categories/antibiotics-c135484"
-  },
-  {
-    "slug": "anxiety-c135490",
-    "name": "Anxiety",
-    "url": "/categories/anxiety-c135490"
-  },
-  {
-    "slug": "blood-pressure-c135487",
-    "name": "Blood Pressure",
-    "url": "/categories/blood-pressure-c135487"
-  },
-  {
-    "slug": "cholesterol-c135496",
-    "name": "Cholesterol",
-    "url": "/categories/cholesterol-c135496"
-  },
-  {
-    "slug": "diabetes-c135325",
-    "name": "Diabetes",
-    "url": "/categories/diabetes-c135325"
-  },
-  {
-    "slug": "diuretics-c135400",
-    "name": "Diuretics",
-    "url": "/categories/diuretics-c135400"
-  },
-  {
-    "slug": "general-health-c135394",
-    "name": "General Health",
-    "url": "/categories/general-health-c135394"
-  },
-  {
-    "slug": "hair-care-c135511",
-    "name": "Hair Care",
-    "url": "/categories/hair-care-c135511"
-  },
-  {
-    "slug": "muscle-relaxant-c135493",
-    "name": "Muscle Relaxant",
-    "url": "/categories/muscle-relaxant-c135493"
-  },
-  {
-    "slug": "skin-care-c135331",
-    "name": "Skin Care",
-    "url": "/categories/skin-care-c135331"
-  },
-  {
-    "slug": "stay-awake-c135499",
-    "name": "Stay-awake",
-    "url": "/categories/stay-awake-c135499"
-  },
-  {
-    "slug": "vitamin-shots-c135328",
-    "name": "Vitamin Shots",
-    "url": "/categories/vitamin-shots-c135328"
-  },
-  {
-    "slug": "weight-loss-c135478",
-    "name": "Weight Loss",
-    "url": "/categories/weight-loss-c135478"
-  },
-  {
-    "slug": "anti-depressant-c485",
-    "name": "Anti-Depressant",
-    "url": "/categories/anti-depressant-c485"
-  },
-  {
-    "slug": "erectile-dysfunction-c486",
-    "name": "Erectile Dysfunction",
-    "url": "/categories/erectile-dysfunction-c486"
-  },
-  {
-    "slug": "gastrointestinal-c140053",
-    "name": "Gastrointestinal",
-    "url": "/categories/gastrointestinal-c140053"
-  },
-  {
-    "slug": "hair-care-c140050",
-    "name": "Hair Care",
-    "url": "/categories/hair-care-c140050"
-  },
-  {
-    "slug": "himalaya-c488",
-    "name": "Himalaya",
-    "url": "/categories/himalaya-c488"
-  },
-  {
-    "slug": "joint-amp-bones-health-c140059",
-    "name": "Joint & Bones Health",
-    "url": "/categories/joint-amp-bones-health-c140059"
-  },
-  {
-    "slug": "liver-protection-c140056",
-    "name": "Liver Protection",
-    "url": "/categories/liver-protection-c140056"
-  },
-  {
-    "slug": "men-s-health-c489",
-    "name": "Men`s Health",
-    "url": "/categories/men-s-health-c489"
-  },
-  {
-    "slug": "pain-relief-c490",
-    "name": "Pain Relief",
-    "url": "/categories/pain-relief-c490"
-  },
-  {
-    "slug": "skin-care-c491",
-    "name": "Skin Care",
-    "url": "/categories/skin-care-c491"
-  },
-  {
-    "slug": "sleeping-aid-c492",
-    "name": "Sleeping Aid",
-    "url": "/categories/sleeping-aid-c492"
-  },
-  {
-    "slug": "weight-loss-c494",
-    "name": "Weight Loss",
-    "url": "/categories/weight-loss-c494"
-  },
-  {
-    "slug": "women-s-health-c495",
-    "name": "Women`s Health",
-    "url": "/categories/women-s-health-c495"
-  },
-  {
-    "slug": "syringes-needles-c879",
-    "name": "Syringes & Needles",
-    "url": "/categories/syringes-needles-c879"
-  },
-  {
-    "slug": "us-domestic-c147753",
-    "name": "U.S. Domestic",
-    "url": "/categories/us-domestic-c147753"
-  },
-  {
-    "slug": "peptides-c147555",
+    "slug": "anavar",
+    "name": "Anavar",
+    "url": "/categories/anavar",
+    "productSlugs": [
+      "anavar-10-3",
+      "oxa-20",
+      "anavar-lite",
+      "pro-anavar",
+      "ultima-oxa-10",
+      "super-lean-2",
+      "anavar-50-3",
+      "anavar-2",
+      "fermavar-2-5-mg",
+      "oxydrol-50",
+      "oxandrolone-10",
+      "oxandrolone-50",
+      "oxarow-50",
+      "summer-cutting-cycle-50mg-tab-50-tab-bag",
+      "oxandrolex-10-anavar-10mg-tab-100-tab-bag",
+      "oxandrolone",
+      "anavamed-10",
+      "pro-anavar-int",
+      "anavar-lite-int",
+      "anavar",
+      "ultima-oxa-50",
+      "oxandroplex",
+      "anavaros",
+      "anavar-10-2",
+      "anavar-50-2",
+      "anavar-50",
+      "anavar-10",
+      "oxandrolon",
+      "oxapex-25",
+      "oxapex-10",
+      "oxarow-10",
+      "superdrol-2"
+    ]
+  },
+  {
+    "slug": "anti-estrogens-pct",
+    "name": "Anti Estrogens (PCT)",
+    "url": "/categories/anti-estrogens-pct",
+    "productSlugs": [
+      "caberpex-1",
+      "arimidex-1mg-2",
+      "aromasin-25",
+      "clom-50",
+      "provi-20",
+      "nolvadex-3",
+      "proviron-20",
+      "trt-formula-3",
+      "pct-tabs",
+      "tamoxifen",
+      "arimidex-1mg",
+      "proviron-2",
+      "fermaprov-5mg",
+      "clomid-4",
+      "exarow",
+      "post-cycle-therapy",
+      "letrozolexin-letrozole-2-5-mg-tab-50-tab-bag",
+      "exemestanex-aromasin-20mg-tab-50-tab-bag",
+      "anastrozolex-arimidex-1mg-tab-50-tab-bag",
+      "clomixin-clomid-50mg-tab-50-tab-bag",
+      "anastrozol-1",
+      "clomed",
+      "tamoximed-20",
+      "clomid-3",
+      "arimidex-3",
+      "provirow",
+      "tamotex-tamoxifen-20mg-tab-50-tab-bag",
+      "provixin-proviron-25mg-tab-50-tab-bag",
+      "cabergoline",
+      "exemestane-aromasin",
+      "letrozole-2",
+      "nolvadex-2",
+      "mesterolone",
+      "clomiphene-citrate",
+      "provimed-25",
+      "nolvamed-20",
+      "femamed-2-5",
+      "clomimed-50",
+      "aromamed-25",
+      "arimimed-1",
+      "human-chorionic-gonadotropin-int",
+      "nolvadex-hp-int",
+      "arimidex-int",
+      "clomid-int",
+      "creto-proviron-int",
+      "mono-femara-int",
+      "supo-aromasin-int",
+      "proviron",
+      "nolvadex",
+      "letrozole",
+      "clomid-2",
+      "arimidex-2",
+      "ultima-proviron",
+      "ultima-clomid",
+      "ultima-aromasin",
+      "ultima-arimidex",
+      "arimidext",
+      "provironus",
+      "nolvados",
+      "finastelad",
+      "femaralyn",
+      "clomilad",
+      "aromalyn",
+      "proviron-25-2",
+      "nolvadex-20-2",
+      "femara-2-5",
+      "clomid-50-2",
+      "arimidex-1",
+      "proviron-25",
+      "nolvadex-20",
+      "clomid-50",
+      "aromasin-20",
+      "human-chorionic-gonadotropin",
+      "arimidex",
+      "clomid",
+      "finasterida",
+      "exedrol",
+      "provimed",
+      "letrozol",
+      "tamoximed-10",
+      "letro-2-5",
+      "anastrozole",
+      "arimipex-1",
+      "nolvarow",
+      "clomirow",
+      "arimirow-2",
+      "nolvadex-hp",
+      "nolvapex-20",
+      "letropex-2-5",
+      "aromapex-25",
+      "creto-proviron",
+      "supo-aromasin",
+      "provipex-25",
+      "ultima-nolva",
+      "clomipex-50",
+      "mono-femara",
+      "finasteride",
+      "letrorow",
+      "arimirow",
+      "tamox-20",
+      "hcgrow-2"
+    ]
+  },
+  {
+    "slug": "boldenone",
+    "name": "Boldenone",
+    "url": "/categories/boldenone",
+    "productSlugs": [
+      "boldenone-injection",
+      "boldenone-undecylenate-2",
+      "e-t-t-500-4",
+      "eq-tren-400-2",
+      "eq-test-500-2",
+      "boldenone-undecylenate-300mg",
+      "boldenone-undecylenate-250mg-ml-10ml-vial",
+      "boldepex-200",
+      "boldenone-undecylenate",
+      "equimed-250",
+      "dhb-med-100",
+      "test-tren-bold-blend-400mg-int-2",
+      "hp-quant-equipoise-2",
+      "quant-equipoise-int",
+      "hp-quant-equipoise",
+      "ultima-test-200-eq-200-mix-400mg-3",
+      "ultima-eq-500",
+      "ultima-bold",
+      "ultima-anomass-400-mix-3",
+      "boldeplex-200",
+      "boldelad",
+      "eq-500",
+      "eq-300",
+      "boldenone-300",
+      "quant-equipoise",
+      "test-tren-bold-blend-400mg-2",
+      "bold-300",
+      "bolderow-2"
+    ]
+  },
+  {
+    "slug": "clenbuterol",
+    "name": "Clenbuterol",
+    "url": "/categories/clenbuterol",
+    "productSlugs": [
+      "clenpex-40",
+      "clenbuterol-3",
+      "clenbuterox-clenbuterol-40mcg-tab-100-tab-bag",
+      "clenbuterol",
+      "clenomed-40",
+      "pro-clenbuterol-int",
+      "clenbutos",
+      "clen-40",
+      "helios-2",
+      "pro-clenbuterol",
+      "clenbuterol-40",
+      "clenrow"
+    ]
+  },
+  {
+    "slug": "dianabol",
+    "name": "Dianabol",
+    "url": "/categories/dianabol",
+    "productSlugs": [
+      "methapex-20",
+      "methapex-50",
+      "dianabol-3",
+      "dianabol-2",
+      "dianabolan-50mg",
+      "metharow-10",
+      "xxx-tabs",
+      "metandienone",
+      "methandionex-10-dianabol-10mg-tab-100-tab-bag",
+      "metharow-50",
+      "danabol-10",
+      "dianamed-10",
+      "methandienone",
+      "dianamed-100",
+      "pro-dynabol-int",
+      "dianabol",
+      "ultima-dbol-10",
+      "dianaplex",
+      "dinabolyn",
+      "dianabol-20",
+      "dianabol-10",
+      "pro-dynabol",
+      "danabol-50",
+      "ultima-dbol-50",
+      "ultima-dbol-25",
+      "dbol-20"
+    ]
+  },
+  {
+    "slug": "fat-burners",
+    "name": "Fat Burners",
+    "url": "/categories/fat-burners",
+    "productSlugs": [
+      "clenpex-40",
+      "t3",
+      "clenbuterol-3",
+      "clenbuterox-clenbuterol-40mcg-tab-100-tab-bag",
+      "t4-50mcg-tab-50-tab-bag",
+      "t3-50mcg-tab-50-tab-bag",
+      "clenbuterol-2",
+      "clenbuterol",
+      "t4-levothyroxine-sodium",
+      "t3-cytomel-2",
+      "thyromed-50",
+      "cytomed-25",
+      "clenomed-40",
+      "helio-clen-yohimbine-int",
+      "pro-clenbuterol-int",
+      "t3-cytomel",
+      "helio-clen-yohimbine",
+      "ultima-clen",
+      "tyroid-mixos",
+      "liothymed",
+      "clenbutos",
+      "t3-tromel",
+      "cy3",
+      "clen-40",
+      "helios-2",
+      "pro-clenbuterol",
+      "citomed",
+      "ultima-t3",
+      "clenbuterol-40",
+      "clenrow"
+    ]
+  },
+  {
+    "slug": "halotestin",
+    "name": "Halotestin",
+    "url": "/categories/halotestin",
+    "productSlugs": [
+      "halopex-10",
+      "halotestin-2",
+      "halotestin",
+      "halomed-5",
+      "halos",
+      "halotestin-10",
+      "halotest"
+    ]
+  },
+  {
+    "slug": "masteron",
+    "name": "Masteron",
+    "url": "/categories/masteron",
+    "productSlugs": [
+      "tren-test-mast-short-blend-150mg-3",
+      "mass-mix-4",
+      "masterow-2",
+      "test-mast-tren-formula-2",
+      "test-mast-primo-formula-2",
+      "fastrip-150-3",
+      "masteron-propionate-100mg-ml",
+      "mast-e-200-2",
+      "mast-p-100-2",
+      "masteron-enanthate-200mg-ml-10ml-vial",
+      "drostanolone-e-200",
+      "drostanolone-p-100",
+      "drostanolone-injection",
+      "drostanolone-propionate-2",
+      "drostanolone-enanthate",
+      "mastermed-p-100",
+      "mastermed-e-200",
+      "tren-test-mast-short-blend-150mg-int-3",
+      "propha-masterone-int",
+      "etho-masterone-int",
+      "mastepex-e200",
+      "ultima-drostan-p-100",
+      "ultima-drostan-e-200",
+      "masterow",
+      "drostanolone-propionate",
+      "drostanolone-enananthate",
+      "titan-400-3",
+      "mastaplex",
+      "masteron-200",
+      "masteron-100",
+      "cut-mix-150",
+      "mast-p-100",
+      "mast-e-200",
+      "propha-masterone",
+      "etho-masterone",
+      "mastepex-p100"
+    ]
+  },
+  {
+    "slug": "methyl-drostanolone",
+    "name": "Methyl Drostanolone",
+    "url": "/categories/methyl-drostanolone",
+    "productSlugs": [
+      "superdrolex-methyldrostanolone-10mg-tab-100-tab-bag",
+      "superdrol",
+      "methandroplex",
+      "superdrolyn",
+      "superdrol-10",
+      "ultima-superdrol"
+    ]
+  },
+  {
+    "slug": "methyl-1-testosterone",
+    "name": "Methyl-1 Testosterone",
+    "url": "/categories/methyl-1-testosterone",
+    "productSlugs": [
+      "supermed-10",
+      "turinaplex",
+      "methyl-1-test-10"
+    ]
+  },
+  {
+    "slug": "nandrolone",
+    "name": "Nandrolone",
+    "url": "/categories/nandrolone",
+    "productSlugs": [
+      "decapex-200",
+      "nandrolone-phenylpropionate-3",
+      "mass-mix-2",
+      "nandrolone-phenylpropionate-2",
+      "nandrolone-d-300",
+      "nandrolone-p-100",
+      "nandrolone-decanoate-250mg-ml",
+      "nandrolone-phenylpropionate-100mg-ml-10ml-vial",
+      "durapex-100",
+      "fenandrol",
+      "decandrol",
+      "decarow",
+      "ultima-nandro-mix",
+      "nandrolone-phenylpropionate",
+      "nandrolone-deconate",
+      "decamed-pp-100",
+      "decamed-250",
+      "hp-deca-durabolin-int",
+      "pheno-npp-int",
+      "hp-deca-durabolin",
+      "ultima-npp-150",
+      "ultima-mass-stack-500-mix-2",
+      "ultima-deca-500",
+      "ultima-deca-250",
+      "decaplex-300",
+      "nanphenylos",
+      "npp-150",
+      "deca-500",
+      "deca-300",
+      "deca-durabolin-300",
+      "deca-durabolin",
+      "pheno-npp",
+      "npp-100",
+      "deca-250",
+      "npprow"
+    ]
+  },
+  {
+    "slug": "peptides",
     "name": "Peptides",
-    "url": "/categories/peptides-c147555"
+    "url": "/categories/peptides",
+    "productSlugs": [
+      "bpc-157-2",
+      "hcg-5000",
+      "semag-5mg",
+      "tb-500-3",
+      "frag-hgh-1761",
+      "bpc-157",
+      "tb-500-2",
+      "oxytocin-2mg",
+      "cjc-1295-ipamorelin-5mg",
+      "drag-hgh-1761",
+      "cjc-1295-ghrp-2-5mg",
+      "melanotan-ii-10mg",
+      "mgf-2mg",
+      "ipamorelin-2mg",
+      "cjc-1295-ipamoralin",
+      "cjc-1295",
+      "selank-5mg-2",
+      "ghrp-6-5mg-2",
+      "cjc-1295-ghrp-6-2mg",
+      "epitalon-10mg",
+      "dsip-2-mg",
+      "hcg-5000-iu",
+      "glutathione-1500mg",
+      "tirzerow",
+      "semaglutide-5mg",
+      "bacteriostatic-water",
+      "tb-500",
+      "peg-mgf",
+      "melanotan-2",
+      "cjc-1295-with-dac",
+      "hgh-frag-176-191",
+      "ghrp-6",
+      "ghrp2",
+      "selank-5mg",
+      "ghrp-6-5mg",
+      "cjc-1295-dac-2mg",
+      "bpc-157-5mg",
+      "semagrow"
+    ]
   },
   {
-    "slug": "sarms-c148012",
-    "name": "SARMs",
-    "url": "/categories/sarms-c148012"
+    "slug": "primobolan",
+    "name": "Primobolan",
+    "url": "/categories/primobolan",
+    "productSlugs": [
+      "primopex-100",
+      "pro-primobolan",
+      "etho-primobolan-100mg",
+      "test-mast-tren-formula-4",
+      "primobolan-depot-175",
+      "primobolan-depot-100",
+      "test-mast-primo-formula-4",
+      "primorow",
+      "primobol-amp",
+      "primobolan-depot-100mg-ml",
+      "methenolone-enanthate",
+      "primomed-100",
+      "pro-primobolan-int",
+      "etho-primobolan-100mg-int",
+      "ultima-primo-200",
+      "ultima-primo-100",
+      "primoplex",
+      "primobolan-200",
+      "primobolan-100"
+    ]
   },
   {
-    "slug": "singapore-pharmacies-c147841",
-    "name": "Singapore Pharmacies",
-    "url": "/categories/singapore-pharmacies-c147841"
+    "slug": "sexual-health",
+    "name": "Sexual Health",
+    "url": "/categories/sexual-health",
+    "productSlugs": [
+      "viagra-3",
+      "cialis-3",
+      "qoagra",
+      "tadalafil-2",
+      "tadalafil",
+      "sildenafil",
+      "viagrax-sildenafil-100mg-tab-50-tab-bag",
+      "cialix-20mg-tab",
+      "apollo-100",
+      "esculap",
+      "apollo-50",
+      "cialis-tadafil",
+      "viagron",
+      "viamed-20",
+      "ciamed-5",
+      "retho-cialis-int",
+      "viagra-50mg-int",
+      "viagra-2",
+      "cialis-2",
+      "ultima-cialis",
+      "viagra-50",
+      "viagra",
+      "cialis",
+      "cialipex-20",
+      "retho-cialis",
+      "ultima-viagra",
+      "viagra-50mg",
+      "ciarow",
+      "viarow"
+    ]
   },
   {
-    "slug": "herbals-c147844",
-    "name": "Herbals",
-    "url": "/categories/herbals-c147844"
+    "slug": "stanozolol",
+    "name": "Stanozolol",
+    "url": "/categories/stanozolol",
+    "productSlugs": [
+      "stanopex-50",
+      "winstrol-2",
+      "super-lean-3",
+      "xxx-tabs-3",
+      "winstrol",
+      "winstrol-50mg",
+      "fermawin-2-5-mg",
+      "stanozolol-50",
+      "stanozolol-10",
+      "winsrow-50",
+      "stanozolex-10-winstrol-10mg-tab-100-tab-bag",
+      "summer-cutting-cycle-50mg-tab-50-tab-bag-2",
+      "stanozolol-2",
+      "stanozolol-winstrol",
+      "winimed-10",
+      "hp-pro-winstrol-int",
+      "pro-winstrol-int",
+      "stanozolol",
+      "stanoplex-100",
+      "stanoplex",
+      "stanos",
+      "winstrol-10-2",
+      "winstrol-50-3",
+      "winstrol-10",
+      "strombafort-10",
+      "strombafort-50",
+      "winstrol-50-2",
+      "ultima-stan-50",
+      "ultima-stan-25",
+      "ultima-stan-10",
+      "winsrow-10",
+      "stanozolol-20-50-tabs",
+      "pro-winstrol",
+      "stanopex-10",
+      "hp-pro-winstrol"
+    ]
+  },
+  {
+    "slug": "steroid-mix",
+    "name": "Steroid Mix",
+    "url": "/categories/steroid-mix",
+    "productSlugs": [
+      "testopex-b500",
+      "multi-ester-tren-200-2",
+      "ultima-tritren-150-2",
+      "trenbolone-mix-200-2",
+      "trt-formula-2",
+      "test-mast-tren-formula-3",
+      "super-lean",
+      "methyltrienolone-1",
+      "test-mast-primo-formula-3",
+      "fastrip-150-4",
+      "e-t-t-500-3",
+      "multi-ester-test-400-3",
+      "sustarow-3",
+      "megarow",
+      "trenbolone-mix-2",
+      "cut-stack",
+      "ultima-cut-mix-150",
+      "ultima-cut-long-300",
+      "cutrow",
+      "sustaplex-4",
+      "tremilad-2",
+      "stakos",
+      "tritren-150-2",
+      "helios",
+      "cut-mix-150-3",
+      "cut-long-300-2",
+      "tri-tren-150-2",
+      "rip-blend-300",
+      "megatest-500"
+    ]
+  },
+  {
+    "slug": "sustanon-testosterone-mix",
+    "name": "Sustanon - Testosterone Mix",
+    "url": "/categories/sustanon-testosterone-mix",
+    "productSlugs": [
+      "testopex-b300",
+      "sustanon-250-2",
+      "testosterone-mix-400-4",
+      "sustanone-250",
+      "sustanon-250",
+      "tri-ester-test-400-3",
+      "sustanon-250-250mg-ml",
+      "multi-ester-test-400",
+      "sustarow",
+      "sustandrol",
+      "sustanon",
+      "sustamed-250",
+      "tri-testosterone-pro-400mg-int-4",
+      "hp-supra-testosterone-500mg-int",
+      "suste-testosterone-250mg-int",
+      "supra-testosterone-400mg-int",
+      "tri-testosterone-pro-400mg-4",
+      "ultima-test-200-eq-200-mix-400mg-2",
+      "ultima-sus-500",
+      "ultima-supertest-450",
+      "sustaplex-3",
+      "sustalad",
+      "sustanon-270",
+      "suspension-100",
+      "testosterone-mix-400-3",
+      "sustanon-300",
+      "suste-testosterone-250mg",
+      "supra-testosterone-400mg",
+      "hp-supra-testosterone-500mg",
+      "ultima-mix",
+      "susta-375"
+    ]
+  },
+  {
+    "slug": "t4-t3-cytomel",
+    "name": "T4 / T3 Cytomel",
+    "url": "/categories/t4-t3-cytomel",
+    "productSlugs": [
+      "t3",
+      "t4-50mcg-tab-50-tab-bag",
+      "t3-50mcg-tab-50-tab-bag",
+      "t4-levothyroxine-sodium",
+      "t3-cytomel-2",
+      "thyromed-50",
+      "cytomed-25",
+      "helio-clen-yohimbine-int",
+      "t3-cytomel",
+      "helio-clen-yohimbine",
+      "ultima-clen",
+      "tyroid-mixos",
+      "liothymed",
+      "t3-tromel",
+      "cy3",
+      "citomed",
+      "ultima-t3"
+    ]
+  },
+  {
+    "slug": "testosterone-base",
+    "name": "Testosterone Base",
+    "url": "/categories/testosterone-base",
+    "productSlugs": [
+      "susrow",
+      "testomed-100",
+      "testoplex-base",
+      "sustaplex",
+      "aquatest"
+    ]
+  },
+  {
+    "slug": "testosterone-cypionate",
+    "name": "Testosterone Cypionate",
+    "url": "/categories/testosterone-cypionate",
+    "productSlugs": [
+      "testopex-c200",
+      "test-c-200",
+      "testosterone-cypionate-250",
+      "testosterone-mix-400",
+      "testosterone-cypionate-2",
+      "testcrow",
+      "testomed-c-250",
+      "testosterone-cypionate",
+      "tri-testosterone-pro-400mg-int",
+      "hp-cypo-testosterone-250-int",
+      "cypo-testosterone-200mg-int",
+      "hp-cypo-testosterone-250",
+      "ultima-tritest-350-blend",
+      "ultima-cyp",
+      "ultima-1-test-cyp",
+      "testoplex-c",
+      "cypilos",
+      "test-c-300",
+      "cypionat-250",
+      "cypo-testosterone-200mg",
+      "tri-testosterone-pro-400mg",
+      "testosterone-c-200",
+      "tri-ester-test-400",
+      "1-testosterone-cypionate",
+      "cipandrol",
+      "testosterone-cypionate-200mg-ml",
+      "1-testosterone-cypionate-dhb-100mg-ml-10ml"
+    ]
+  },
+  {
+    "slug": "testosterone-enanthate",
+    "name": "Testosterone Enanthate",
+    "url": "/categories/testosterone-enanthate",
+    "productSlugs": [
+      "testopex-p100",
+      "super-testosterone-enanthate",
+      "testosterone-enanthate-250",
+      "testosterone-enanthate-2",
+      "testosterone-mix-400-2",
+      "test-mast-tren-formula",
+      "mass-mix",
+      "test-mast-primo-formula",
+      "testerow",
+      "enandrol",
+      "testosterone-enanthate",
+      "tri-testosterone-pro-400mg-int-3",
+      "testomed-e-250",
+      "hp-etho-testosterone-450mg-int",
+      "etho-testosterone-300mg-int",
+      "hp-etho-testosterone-450mg",
+      "ultima-tritest-350-blend-2",
+      "trenbolone-enanthate",
+      "ultima-test-200-eq-200-mix-400mg",
+      "ultima-mass-stack-500-mix",
+      "ultima-enan-400",
+      "ultima-enan-250",
+      "ultima-anomass-400-mix",
+      "titan-400",
+      "testoplex-e",
+      "testos",
+      "enanthate-250",
+      "enanthate-400",
+      "cut-long-300",
+      "test-e-300",
+      "etho-testosterone-300mg",
+      "tren-e-200",
+      "test-e-250",
+      "testosterone-enanthate-200mg-ml",
+      "eq-test-500",
+      "e-t-t-500",
+      "tri-ester-test-400-2",
+      "testosterone-e-300",
+      "tri-testosterone-pro-400mg-3"
+    ]
+  },
+  {
+    "slug": "testosterone-propionate",
+    "name": "Testosterone Propionate",
+    "url": "/categories/testosterone-propionate",
+    "productSlugs": [
+      "tren-test-mast-short-blend-150mg-2",
+      "test-p-100-4",
+      "testosterone-propionate-100-2",
+      "tri-trenbolone-blend-150-2",
+      "hp-rip-mix-2",
+      "testosterone-propionate-4",
+      "megarow-2",
+      "testosterone-propionate-3",
+      "testomed-p-100-2",
+      "tren-test-mast-short-blend-150mg-int-2",
+      "tri-trenbolone-blend-150-int-2",
+      "testosterone-trenbolone-short-blend-150-int-2",
+      "propha-testosterone-int-2",
+      "ultima-tritest-350-blend-4",
+      "ultima-prop-2",
+      "sustaplex-2",
+      "propionat-100-2",
+      "cut-mix-150-2",
+      "test-p-100-3",
+      "propha-testosterone-2",
+      "testprow-2",
+      "fastrip-150-2",
+      "testosterone-p-100-2",
+      "sustarow-2",
+      "propandrol-2",
+      "testosterone-propionate-100mg-ml-2",
+      "testosterone-trenbolone-short-blend-150-2",
+      "multi-ester-test-400-2"
+    ]
+  },
+  {
+    "slug": "testosterone-undecanoat",
+    "name": "Testosterone Undecanoat",
+    "url": "/categories/testosterone-undecanoat",
+    "productSlugs": [
+      "testosterone-undecanoate",
+      "testomed-u-250",
+      "tri-testosterone-pro-400mg-int-2",
+      "undecanoate",
+      "tri-testosterone-pro-400mg-2",
+      "ultima-undeca"
+    ]
+  },
+  {
+    "slug": "trenbolone",
+    "name": "Trenbolone",
+    "url": "/categories/trenbolone",
+    "productSlugs": [
+      "trenbolone-acetate-3",
+      "trenbolone-enanthate-3",
+      "trenbolone-enanthate-200mg-ml",
+      "trenbolone-acetate-100mg-ml",
+      "tri-trenrow",
+      "tren-test-mast-short-blend-150mg",
+      "trenbopex-e200",
+      "trenbopex-a100",
+      "multi-ester-tren-200",
+      "trenerow",
+      "ultima-tren-e-200",
+      "tri-trenbolone-blend-150",
+      "ultima-tren-a-100",
+      "etho-trenbolone",
+      "ultima-tritren-150",
+      "trenbolone-acetate-2",
+      "mass-mix-3",
+      "trenbolone-mix-200",
+      "trenbolone-enanthate-2",
+      "hp-rip-mix",
+      "trenarow",
+      "trenbolone-e-200",
+      "trenbolone-a-100",
+      "fastrip-150",
+      "e-t-t-500-2",
+      "eq-tren-400",
+      "trenbolone-aq-50",
+      "trenbolone-hexy-100",
+      "parabolan-2",
+      "tren-a-100-2",
+      "trenbolone-mix",
+      "trenbolone-acetate",
+      "parabolan",
+      "trenbomed-e-200",
+      "trenbomed-a-100",
+      "paramed-76-5",
+      "3-trenbomed-150",
+      "tren-test-mast-short-blend-150mg-int",
+      "test-tren-bold-blend-400mg-int",
+      "tri-trenbolone-blend-150-int",
+      "testosterone-trenbolone-short-blend-150-int",
+      "ultima-anomass-400-mix-2",
+      "triple",
+      "trenboplex-e",
+      "trenboplex-a",
+      "titan-400-2",
+      "trenacetos",
+      "tremilad",
+      "hexos",
+      "tritren-150",
+      "trenbolone-enanthate-200",
+      "trenbolone-suspension",
+      "trenbolon-acetate-100",
+      "parabolan-100",
+      "tri-tren-150",
+      "tren-e-200-2",
+      "tren-a-100",
+      "acro-trenbolone",
+      "test-tren-bold-blend-400mg",
+      "testosterone-trenbolone-short-blend-150"
+    ]
+  },
+  {
+    "slug": "turinabol",
+    "name": "Turinabol",
+    "url": "/categories/turinabol",
+    "productSlugs": [
+      "turipex-10",
+      "super-lean-4",
+      "turinabol-3",
+      "turaxel-10-turanabol-10mg-tab-100-tab-bag",
+      "tbolrow",
+      "turinabol-2",
+      "turimed-10",
+      "apto-turinabol-int",
+      "turinabol",
+      "turinadyn",
+      "turanabol-20",
+      "apto-turinabol",
+      "turanabol",
+      "ultima-turinabol-20",
+      "turinabol-10"
+    ]
+  },
+  {
+    "slug": "winstrol",
+    "name": "Winstrol",
+    "url": "/categories/winstrol",
+    "productSlugs": [
+      "stanrow",
+      "stanozolol-aq-100",
+      "strombaject",
+      "winimed-50",
+      "winstrol-50"
+    ]
   }
 ]

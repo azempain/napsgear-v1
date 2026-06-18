@@ -1,464 +1,80 @@
 [
   {
-    "slug": "alpha-pharma-healthcare-c141952",
-    "name": "Alpha-Pharma Healthcare",
-    "id": 141952,
-    "url": "/brands/alpha-pharma-healthcare-c141952"
+    "slug": "axiom-peptides",
+    "name": "Axiom Peptides",
+    "id": null,
+    "url": "/brands/axiom-peptides"
   },
   {
-    "slug": "accordo-rx-c144205",
-    "name": "Accordo Rx",
-    "id": 144205,
-    "url": "/brands/accordo-rx-c144205"
+    "slug": "beligas-pharmacies",
+    "name": "Beligas Pharmacies",
+    "id": null,
+    "url": "/brands/beligas-pharmacies"
   },
   {
-    "slug": "alp-laboratories-c146773",
-    "name": "ALP Laboratories",
-    "id": 146773,
-    "url": "/brands/alp-laboratories-c146773"
+    "slug": "crowx-labs",
+    "name": "CROWX LABS",
+    "id": null,
+    "url": "/brands/crowx-labs"
   },
   {
-    "slug": "aurum-pharmaceuticals-c142339",
-    "name": "Aurum Pharmaceuticals",
-    "id": 142339,
-    "url": "/brands/aurum-pharmaceuticals-c142339"
+    "slug": "deus-medical",
+    "name": "Deus Medical",
+    "id": null,
+    "url": "/brands/deus-medical"
   },
   {
-    "slug": "avogen-lab-c135271",
-    "name": "AVoGen Lab",
-    "id": 135271,
-    "url": "/brands/avogen-lab-c135271"
+    "slug": "driada-medical",
+    "name": "DRIADA MEDICAL",
+    "id": null,
+    "url": "/brands/driada-medical"
   },
   {
-    "slug": "beligas-c142048",
-    "name": "Beligas",
-    "id": 142048,
-    "url": "/brands/beligas-c142048"
+    "slug": "euro-pharmacies",
+    "name": "Euro – Pharmacies",
+    "id": null,
+    "url": "/brands/euro-pharmacies"
   },
   {
-    "slug": "biomex-labs-c142714",
-    "name": "Biomex Labs",
-    "id": 142714,
-    "url": "/brands/biomex-labs-c142714"
+    "slug": "hemi-pharma",
+    "name": "HEMI PHARMA",
+    "id": null,
+    "url": "/brands/hemi-pharma"
   },
   {
-    "slug": "biotech-labs-c147750",
-    "name": "Biotech Labs",
-    "id": 147750,
-    "url": "/brands/biotech-labs-c147750"
+    "slug": "hilma-biocare",
+    "name": "Hilma Biocare",
+    "id": null,
+    "url": "/brands/hilma-biocare"
   },
   {
-    "slug": "bull-pharma-c146770",
-    "name": "Bull Pharma",
-    "id": 146770,
-    "url": "/brands/bull-pharma-c146770"
+    "slug": "hutech-labs",
+    "name": "HUTECH LABS",
+    "id": null,
+    "url": "/brands/hutech-labs"
   },
   {
-    "slug": "crowx-labs-c146386",
-    "name": "Crowx Labs",
-    "id": 146386,
-    "url": "/brands/crowx-labs-c146386"
-  },
-  {
-    "slug": "euro-pharmacies-c142195",
-    "name": "Euro-Pharmacies",
-    "id": 142195,
-    "url": "/brands/euro-pharmacies-c142195"
-  },
-  {
-    "slug": "geneza-pharmaceuticals-c142291",
-    "name": "Geneza Pharmaceuticals",
-    "id": 142291,
-    "url": "/brands/geneza-pharmaceuticals-c142291"
-  },
-  {
-    "slug": "genshi-labs-c145954",
-    "name": "Genshi Labs",
-    "id": 145954,
-    "url": "/brands/genshi-labs-c145954"
-  },
-  {
-    "slug": "nakon-medical-c145333",
-    "name": "Nakon Medical",
-    "id": 145333,
-    "url": "/brands/nakon-medical-c145333"
-  },
-  {
-    "slug": "omega-lab-c147558",
-    "name": "Omega Lab",
-    "id": 147558,
-    "url": "/brands/omega-lab-c147558"
-  },
-  {
-    "slug": "pharmaqo-labs-c142576",
+    "slug": "pharmaqo-labs",
     "name": "Pharmaqo Labs",
-    "id": 142576,
-    "url": "/brands/pharmaqo-labs-c142576"
+    "id": null,
+    "url": "/brands/pharmaqo-labs"
   },
   {
-    "slug": "ryzen-pharmaceuticals-c146674",
+    "slug": "ryzen-pharmaceuticals",
     "name": "Ryzen Pharmaceuticals",
-    "id": 146674,
-    "url": "/brands/ryzen-pharmaceuticals-c146674"
-  },
-  {
-    "slug": "sixpex-c145330",
-    "name": "SixPex",
-    "id": 145330,
-    "url": "/brands/sixpex-c145330"
-  },
-  {
-    "slug": "tsg-compound-pharmacy-c142099",
-    "name": "TSG Compound Pharmacy",
-    "id": 142099,
-    "url": "/brands/tsg-compound-pharmacy-c142099"
-  },
-  {
-    "slug": "ultima-pharmaceuticals-c144304",
-    "name": "Ultima Pharmaceuticals",
-    "id": 144304,
-    "url": "/brands/ultima-pharmaceuticals-c144304"
-  },
-  {
-    "slug": "xeno-labs-c142528",
-    "name": "Xeno Labs",
-    "id": 142528,
-    "url": "/brands/xeno-labs-c142528"
-  },
-  {
-    "slug": "xt-labs-c141388",
-    "name": "XT Labs",
-    "id": 141388,
-    "url": "/brands/xt-labs-c141388"
-  },
-  {
-    "slug": "ed-pills-c141856",
-    "name": "ED Pills",
-    "id": 141856,
-    "url": "/brands/ed-pills-c141856"
-  },
-  {
-    "slug": "hcg-miscellaneous-c141239",
-    "name": "HCG & Miscellaneous",
-    "id": 141239,
-    "url": "/brands/hcg-miscellaneous-c141239"
-  },
-  {
-    "slug": "human-growth-hormone-c138076",
-    "name": "Human Growth Hormone",
-    "id": 138076,
-    "url": "/brands/human-growth-hormone-c138076"
-  },
-  {
-    "slug": "turkish-pharma-c147846",
-    "name": "Turkish Pharma",
-    "id": 147846,
-    "url": "/brands/turkish-pharma-c147846"
-  },
-  {
-    "slug": "crowx-labs-c146915",
-    "name": "Crowx Labs",
     "id": null,
-    "url": "/brands/crowx-labs-c146915"
+    "url": "/brands/ryzen-pharmaceuticals"
   },
   {
-    "slug": "euro-pharmacies-c145429",
-    "name": "Euro-Pharmacies",
+    "slug": "sixpex",
+    "name": "SIXPEX",
     "id": null,
-    "url": "/brands/euro-pharmacies-c145429"
+    "url": "/brands/sixpex"
   },
   {
-    "slug": "sixpex-c147218",
-    "name": "SixPex",
+    "slug": "ultima-pharmacies",
+    "name": "Ultima Pharmacies",
     "id": null,
-    "url": "/brands/sixpex-c147218"
-  },
-  {
-    "slug": "odin-pharma-c147702",
-    "name": "Odin Pharma",
-    "id": null,
-    "url": "/brands/odin-pharma-c147702"
-  },
-  {
-    "slug": "nano-peptides-c147606",
-    "name": "Nano Peptides",
-    "id": null,
-    "url": "/brands/nano-peptides-c147606"
-  },
-  {
-    "slug": "pharmaqo-labs-c145435",
-    "name": "Pharmaqo Labs",
-    "id": null,
-    "url": "/brands/pharmaqo-labs-c145435"
-  },
-  {
-    "slug": "u-s-made-peptides-c141194",
-    "name": "U.S. Made Peptides",
-    "id": null,
-    "url": "/brands/u-s-made-peptides-c141194"
-  },
-  {
-    "slug": "tsg-compound-pharmacy-c147507",
-    "name": "TSG Compound Pharmacy",
-    "id": null,
-    "url": "/brands/tsg-compound-pharmacy-c147507"
-  },
-  {
-    "slug": "ultima-pharmaceuticals-c145432",
-    "name": "Ultima Pharmaceuticals",
-    "id": null,
-    "url": "/brands/ultima-pharmaceuticals-c145432"
-  },
-  {
-    "slug": "xeno-labs-c147029",
-    "name": "Xeno Labs",
-    "id": null,
-    "url": "/brands/xeno-labs-c147029"
-  },
-  {
-    "slug": "xt-labs-c146146",
-    "name": "XT Labs",
-    "id": null,
-    "url": "/brands/xt-labs-c146146"
-  },
-  {
-    "slug": "euro-pharmacies-europe-c146578",
-    "name": "Euro-Pharmacies, Europe",
-    "id": null,
-    "url": "/brands/euro-pharmacies-europe-c146578"
-  },
-  {
-    "slug": "pharmaqo-labs-c145624",
-    "name": "Pharmaqo Labs",
-    "id": null,
-    "url": "/brands/pharmaqo-labs-c145624"
-  },
-  {
-    "slug": "xt-labs-c146149",
-    "name": "XT Labs",
-    "id": null,
-    "url": "/brands/xt-labs-c146149"
-  },
-  {
-    "slug": "brands.php?brands_id=71269",
-    "name": "Alpha-Pharma Healthcare",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=71269"
-  },
-  {
-    "slug": "brands.php?brands_id=71524",
-    "name": "Maxtreme Pharma",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=71524"
-  },
-  {
-    "slug": "brands.php?brands_id=74467",
-    "name": "Deus Medical, Europe",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=74467"
-  },
-  {
-    "slug": "brands.php?brands_id=74617",
-    "name": "Euro-Pharmacies, Europe",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=74617"
-  },
-  {
-    "slug": "brands.php?brands_id=74566",
-    "name": "Bioteq Labs, Europe (UK)",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=74566"
-  },
-  {
-    "slug": "brands.php?brands_id=73958",
-    "name": "Ultima Pharmaceuticals",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=73958"
-  },
-  {
-    "slug": "brands.php?brands_id=75757",
-    "name": "Genshi Labs",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=75757"
-  },
-  {
-    "slug": "brands.php?brands_id=75541",
-    "name": "Nakon Medical",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=75541"
-  },
-  {
-    "slug": "brands.php?brands_id=74515",
-    "name": "Beligas",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=74515"
-  },
-  {
-    "slug": "brands.php?brands_id=74054",
-    "name": "Pharmaqo Labs",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=74054"
-  },
-  {
-    "slug": "brands.php?brands_id=71212",
-    "name": "Dragon Pharma",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=71212"
-  },
-  {
-    "slug": "brands.php?brands_id=13",
-    "name": "Geneza Pharmaceuticals",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=13"
-  },
-  {
-    "slug": "brands.php?brands_id=76096",
-    "name": "Generic Asia",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=76096"
-  },
-  {
-    "slug": "brands.php?brands_id=72893",
-    "name": "BM Pharmaceuticals",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=72893"
-  },
-  {
-    "slug": "brands.php?brands_id=73245",
-    "name": "Magnum Pharma",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=73245"
-  },
-  {
-    "slug": "brands.php?brands_id=92",
-    "name": "Other Pharmacy Steroid Brands",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=92"
-  },
-  {
-    "slug": "brands.php?brands_id=71467",
-    "name": "India Pharmacy Steroids",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=71467"
-  },
-  {
-    "slug": "brands.php?brands_id=26",
-    "name": "Insulins & Biguanides",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=26"
-  },
-  {
-    "slug": "brands.php?brands_id=27",
-    "name": "Human Growth Hormone",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=27"
-  },
-  {
-    "slug": "brands.php?brands_id=135",
-    "name": "Syringes & Needles",
-    "id": null,
-    "url": "/brands/brands.php?brands_id=135"
-  },
-  {
-    "slug": "us-domestic-c147753",
-    "name": "U.S. Domestic",
-    "id": 147753,
-    "url": "/brands/us-domestic-c147753"
-  },
-  {
-    "slug": "maxtreme-pharma-c145523",
-    "name": "Maxtreme Pharma",
-    "id": 145523,
-    "url": "/brands/maxtreme-pharma-c145523"
-  },
-  {
-    "slug": "deus-medical-europe-c146933",
-    "name": "Deus Medical, Europe",
-    "id": 146933,
-    "url": "/brands/deus-medical-europe-c146933"
-  },
-  {
-    "slug": "bioteq-labs-europe-c147902",
-    "name": "Bioteq Labs, Europe (UK)",
-    "id": 147902,
-    "url": "/brands/bioteq-labs-europe-c147902"
-  },
-  {
-    "slug": "dragon-pharma-c146050",
-    "name": "Dragon Pharma",
-    "id": 146050,
-    "url": "/brands/dragon-pharma-c146050"
-  },
-  {
-    "slug": "generic-asia-c147840",
-    "name": "Generic Asia",
-    "id": 147840,
-    "url": "/brands/generic-asia-c147840"
-  },
-  {
-    "slug": "bm-pharmaceuticals-c147848",
-    "name": "BM Pharmaceuticals",
-    "id": 147848,
-    "url": "/brands/bm-pharmaceuticals-c147848"
-  },
-  {
-    "slug": "magnum-pharma-c147850",
-    "name": "Magnum Pharma",
-    "id": 147850,
-    "url": "/brands/magnum-pharma-c147850"
-  },
-  {
-    "slug": "other-pharmacy-steroid-brands-c147845",
-    "name": "Other Pharmacy Steroid Brands",
-    "id": 147845,
-    "url": "/brands/other-pharmacy-steroid-brands-c147845"
-  },
-  {
-    "slug": "india-pharmacy-steroids-c147843",
-    "name": "India Pharmacy Steroids",
-    "id": 147843,
-    "url": "/brands/india-pharmacy-steroids-c147843"
-  },
-  {
-    "slug": "insulins-amp-biguanides-c43",
-    "name": "Insulins & Biguanides",
-    "id": 43,
-    "url": "/brands/insulins-amp-biguanides-c43"
-  },
-  {
-    "slug": "human-growth-hormone-c45",
-    "name": "Human Growth Hormone",
-    "id": 45,
-    "url": "/brands/human-growth-hormone-c45"
-  },
-  {
-    "slug": "syringes-needles-c879",
-    "name": "Syringes & Needles",
-    "id": 879,
-    "url": "/brands/syringes-needles-c879"
-  },
-  {
-    "slug": "peptides-c147555",
-    "name": "Peptides",
-    "id": 147555,
-    "url": "/brands/peptides-c147555"
-  },
-  {
-    "slug": "sarms-c148012",
-    "name": "SARMs",
-    "id": 148012,
-    "url": "/brands/sarms-c148012"
-  },
-  {
-    "slug": "singapore-pharmacies-c147841",
-    "name": "Singapore Pharmacies",
-    "id": 147841,
-    "url": "/brands/singapore-pharmacies-c147841"
-  },
-  {
-    "slug": "herbals-c147844",
-    "name": "Herbals",
-    "id": 147844,
-    "url": "/brands/herbals-c147844"
+    "url": "/brands/ultima-pharmacies"
   }
 ]
