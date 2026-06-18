@@ -9,6 +9,7 @@ export async function completeCheckout({
   form,
   items,
   reference = createOrderReference(),
+  captchaToken,
   saveOrder = persistOrder,
   sendEmail = submitOrder,
   markEmail = setOrderEmailStatus,
@@ -18,6 +19,7 @@ export async function completeCheckout({
   form: CheckoutForm
   items: CartItem[]
   reference?: string
+  captchaToken?: string
   saveOrder?: typeof persistOrder
   sendEmail?: typeof submitOrder
   markEmail?: typeof setOrderEmailStatus
@@ -25,7 +27,7 @@ export async function completeCheckout({
   const orderId = await saveOrder({ reference, currency, form, items })
 
   try {
-    await sendEmail({ accessKey, form, items, reference })
+    await sendEmail({ accessKey, form, items, reference, captchaToken })
     await markEmail(orderId, 'sent')
   } catch (error) {
     await markEmail(orderId, 'failed').catch(() => undefined)

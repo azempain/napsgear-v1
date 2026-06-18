@@ -263,6 +263,7 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
   inset: 0;
   z-index: 1100;
   background: rgba(8, 17, 28, .58);
+  -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
   animation: ngcSheetFade .18s ease-out;
 }
@@ -2249,6 +2250,11 @@ body.has-sticky-header {
 .ngc-auth-password-wrap {
   position: relative;
   display: block;
+}
+/* hCaptcha widget breathing room on checkout + forgot-password */
+.ngc-hcaptcha {
+  margin: 0.75rem 0;
+  min-height: 78px;
 }
 .ngc-auth-input-wrap > svg {
   position: absolute;

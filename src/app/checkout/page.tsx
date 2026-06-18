@@ -16,6 +16,8 @@ import { completeCheckout } from '@/lib/checkoutOrder'
 import { createOrderReference } from '@/lib/orderSubmission'
 import { authHref } from '@/lib/authRedirect'
 import { useAuthSession } from '@/lib/authSession'
+import HCaptcha from '@/components/HCaptcha'
+import { HCAPTCHA_CONFIGURED } from '@/lib/hcaptcha'
 
 const EMPTY: CheckoutForm = {
   fullName: '', email: '', phone: '', address1: '', address2: '',
@@ -30,6 +32,8 @@ export default function CheckoutPage() {
   const { data: session, isPending: sessionPending } = useAuthSession()
   const router = useRouter()
   const [status, setStatus] = useState<Status>('form')
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const [captchaError, setCaptchaError] = useState(false)
   // Captured at submit time so the confirmation screen survives clearCart.
   const snapshot = useRef<{ count: number; total: string; email: string; reference: string } | null>(null)
   const reference = useRef<string | null>(null)
@@ -42,6 +46,7 @@ export default function CheckoutPage() {
         form: value,
         items,
         reference: reference.current ?? (reference.current = createOrderReference()),
+        captchaToken: captchaToken ?? undefined,
       }),
   })
 
@@ -60,6 +65,13 @@ export default function CheckoutPage() {
         setStatus('error')
         return
       }
+      // Hard-gate on a solved captcha only when a real site key is configured,
+      // so local dev (test key) and unconfigured previews still work.
+      if (HCAPTCHA_CONFIGURED && !captchaToken) {
+        setCaptchaError(true)
+        return
+      }
+      setCaptchaError(false)
       setStatus('submitting')
       try {
         const result = await orderMutation.mutateAsync({ value, accessKey: key })
@@ -203,6 +215,15 @@ export default function CheckoutPage() {
 
           <aside className="ngc-totals" aria-label="Order summary column">
             <OrderSummary items={items} />
+            <HCaptcha
+              onVerify={token => { setCaptchaToken(token); setCaptchaError(false) }}
+              onExpire={() => setCaptchaToken(null)}
+            />
+            {captchaError && (
+              <div className="ngc-alert" role="alert">
+                Please complete the &ldquo;I&apos;m not a robot&rdquo; check before placing your order.
+              </div>
+            )}
             {status === 'error' && (
               <div className="ngc-alert" role="alert">
                 {orderMutation.error instanceof Error
