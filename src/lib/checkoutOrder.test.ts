@@ -46,6 +46,25 @@ describe('completeCheckout', () => {
     expect(calls).toEqual(['save', 'email', 'sent'])
   })
 
+  it('forwards the captcha token to the email sender', async () => {
+    const sendEmail = vi.fn(async () => ({ reference: 'NG-20260612-ABC123' }))
+    await completeCheckout({
+      accessKey: 'key',
+      currency: 'USD',
+      form,
+      items,
+      reference: 'NG-20260612-ABC123',
+      captchaToken: 'tok-xyz',
+      saveOrder: vi.fn(async () => 'order-id'),
+      sendEmail,
+      markEmail: vi.fn(async () => undefined),
+    })
+
+    expect(sendEmail).toHaveBeenCalledWith(
+      expect.objectContaining({ captchaToken: 'tok-xyz' }),
+    )
+  })
+
   it('keeps the saved order and records an email failure', async () => {
     const markEmail = vi.fn(async () => undefined)
     await expect(completeCheckout({

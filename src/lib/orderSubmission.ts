@@ -14,6 +14,7 @@ export async function submitOrder({
   fetchImpl = fetch,
   timeoutMs = 15_000,
   reference = createOrderReference(),
+  captchaToken,
 }: {
   accessKey: string
   form: CheckoutForm
@@ -21,6 +22,11 @@ export async function submitOrder({
   fetchImpl?: typeof fetch
   timeoutMs?: number
   reference?: string
+  /** hCaptcha token from the widget. When hCaptcha is enabled in the Web3Forms
+   *  dashboard, the provider rejects any submission whose `h-captcha-response`
+   *  is missing or invalid — so this is the real anti-abuse gate for the
+   *  publicly-keyed email endpoint, not the (ineffective-here) honeypot. */
+  captchaToken?: string
 }): Promise<OrderSubmission> {
   if (!accessKey.trim()) throw new Error('Checkout is not configured.')
   if (items.length === 0) throw new Error('Your cart is empty.')
@@ -37,6 +43,7 @@ export async function submitOrder({
         access_key: accessKey,
         order_reference: reference,
         ...buildOrderPayload(validForm, items),
+        ...(captchaToken ? { 'h-captcha-response': captchaToken } : {}),
       }),
       signal: controller.signal,
     })

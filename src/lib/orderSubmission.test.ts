@@ -42,6 +42,30 @@ describe('submitOrder', () => {
     expect(body.access_key).toBe('key')
   })
 
+  it('includes the hCaptcha token as h-captcha-response when provided', async () => {
+    const requests: RequestInit[] = []
+    const fetchImpl: typeof fetch = async (_input, init) => {
+      requests.push(init ?? {})
+      return new Response(JSON.stringify({ success: true }), { status: 200 })
+    }
+    await submitOrder({ accessKey: 'key', form, items, fetchImpl, captchaToken: 'tok-123' })
+
+    const body = JSON.parse(String(requests[0]?.body))
+    expect(body['h-captcha-response']).toBe('tok-123')
+  })
+
+  it('omits h-captcha-response when no token is supplied', async () => {
+    const requests: RequestInit[] = []
+    const fetchImpl: typeof fetch = async (_input, init) => {
+      requests.push(init ?? {})
+      return new Response(JSON.stringify({ success: true }), { status: 200 })
+    }
+    await submitOrder({ accessKey: 'key', form, items, fetchImpl })
+
+    const body = JSON.parse(String(requests[0]?.body))
+    expect('h-captcha-response' in body).toBe(false)
+  })
+
   it('rejects empty carts before making a request', async () => {
     const fetchImpl = vi.fn()
     await expect(submitOrder({ accessKey: 'key', form, items: [], fetchImpl })).rejects.toThrow('cart is empty')

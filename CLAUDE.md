@@ -8,7 +8,36 @@ from the code alone.
 
 A Next.js 16 **static export** (`output: 'export'`) storefront. Pre-renders
 to `out/` at build time, served from a CDN. No backend, no API routes, no
-middleware, no server actions. Everything is client-side after hydration.
+middleware, no server actions *in this repo*. Everything is client-side after
+hydration.
+
+The app is **not** state-less, though. After hydration it talks to three
+hosted services directly from the browser:
+
+- **Neon Auth** (Better Auth, via `@neondatabase/neon-js`) for sign-in,
+  sign-up, password reset, and Google OAuth.
+- **Neon Data API** (PostgREST-style REST) for persisting and reading
+  orders. The Data API URL is **public** (baked into the bundle); the only
+  thing protecting order data is **Postgres Row-Level Security**. See the
+  security model below.
+- **Web3Forms** for the checkout order email, and **Frankfurter** for FX
+  rates.
+
+### Security model (read before touching auth, checkout, or order data)
+
+- The browser hits the Data API with the user's Neon Auth JWT. Queries like
+  `listMyOrders()` (`src/lib/orderPersistence.ts`) deliberately have **no
+  `user_id` filter** — RLS does the scoping. The SQL that makes this safe
+  lives in `scripts/db/` (`002_ecommerce_orders.sql` policies +
+  `003_security_hardening.sql` FORCE-RLS/anon-revoke). **Never** add a query
+  that assumes the client can be trusted to filter its own rows.
+- After any change to the data model or policies, run
+  `scripts/db/004_verify_security.sql` (read-only) against the live Neon DB,
+  then do the two-user read test (log in as B, try to read A's order).
+- Checkout order email and password-reset are gated by **hCaptcha**
+  (`src/lib/hcaptcha.ts`, `src/components/HCaptcha.tsx`). The Web3Forms
+  access key is public, so the captcha — enforced server-side by Web3Forms /
+  Neon Auth — is the real anti-abuse control, not the honeypot.
 
 ## Hard rules
 
@@ -32,8 +61,13 @@ middleware, no server actions. Everything is client-side after hydration.
    the original site.** Treat them as read-only. Add styles to
    `src/app/globals.css` using the `.ngc-` namespace.
 
-5. **Don't commit `.env.local`.** The Web3Forms key it contains is gated
-   to a specific inbox but still shouldn't be in git history.
+5. **Don't commit `.env.local`.** It holds the Web3Forms key, the hCaptcha
+   site key, and the Neon Auth/Data API URLs. These are all `NEXT_PUBLIC_`
+   (inlined into the bundle) and individually low-sensitivity, but keep the
+   file out of git history anyway. There are **no server secrets in this
+   repo** — every secret (Web3Forms secret, hCaptcha secret, Postgres
+   credentials) lives in a hosted dashboard. If you ever need a true secret,
+   it cannot be `NEXT_PUBLIC_` and cannot live in a static export; raise it.
 
 6. **Branch per feature → PR → merge to master.** CI must be green
    (`.github/workflows/ci.yml`). The trailer
@@ -47,8 +81,11 @@ middleware, no server actions. Everything is client-side after hydration.
   Bootstrap layer (`vendors.css`) will eventually be removed.
 - **Component file size.** Most components are <200 lines. If a component
   grows past that, extract a hook or split sub-components.
-- **No `dangerouslySetInnerHTML`.** Ever. There's no current usage; keep
-  it that way.
+- **No `dangerouslySetInnerHTML`** — with exactly one sanctioned exception:
+  `src/components/JsonLd.tsx`, which emits `<script
+  type="application/ld+json">` (never executed as script) and defangs `</`.
+  Its input must stay limited to our own static catalog data — never user,
+  session, or remote content. Do not add any other usage.
 - **JSX-A11Y** is strict. `aria-pressed` and `aria-expanded` need
   string literals (`'true'` / `'false'`), not raw booleans. The linter
   has flagged this several times.
@@ -68,6 +105,11 @@ middleware, no server actions. Everything is client-side after hydration.
 | Pack pricing | `src/lib/pricing.ts` |
 | Checkout validation | `src/lib/checkout.ts` (`checkoutFieldValidators`) |
 | Order email body | `src/lib/orderEmail.ts` |
+| Order submit pipeline | `src/lib/checkoutOrder.ts` → `orderSubmission.ts` (Web3Forms) + `orderPersistence.ts` (Neon) |
+| Auth client / session | `src/lib/neon-client.ts`, `src/lib/authSession.ts`, `src/components/AuthForm.tsx` |
+| Open-redirect guard | `src/lib/authRedirect.ts` (`safeAuthRedirect`) |
+| Postgres schema + RLS | `scripts/db/*.sql` (002 = policies, 003 = hardening, 004 = read-only verify) |
+| Captcha (anti-abuse) | `src/lib/hcaptcha.ts`, `src/components/HCaptcha.tsx` |
 | Catalog filter/sort | `src/lib/productTable.helper.ts` |
 | Cart context | `src/context/CartContext.tsx` |
 | Sitewide CSS | `src/app/globals.css` (~1.6k lines, `.ngc-` namespace) |

@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react'
 import { authClient } from '@/lib/auth-client'
 import { safeAuthRedirect } from '@/lib/authRedirect'
+import HCaptcha from '@/components/HCaptcha'
+import { HCAPTCHA_CONFIGURED } from '@/lib/hcaptcha'
 
 type Mode = 'login' | 'signup' | 'forgot' | 'reset'
 
@@ -18,6 +20,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
   const [pending, setPending] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [nextQuery, setNextQuery] = useState('')
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
   useEffect(() => {
     setNextQuery(window.location.search)
@@ -55,10 +58,17 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         if (result.error) throw new Error(result.error.message)
         window.location.assign(redirectPath)
       } else if (mode === 'forgot') {
-        const result = await authClient.requestPasswordReset({
-          email,
-          redirectTo: `${window.location.origin}/reset-password/`,
-        })
+        // Gate password-reset requests behind a captcha to stop email-bombing
+        // of arbitrary addresses. The token is sent as the `x-captcha-response`
+        // header that Better Auth's captcha plugin reads; enforcement requires
+        // that plugin enabled on the Neon Auth side (see .env.local.example).
+        if (HCAPTCHA_CONFIGURED && !captchaToken) {
+          throw new Error('Please complete the captcha before requesting a reset link.')
+        }
+        const result = await authClient.requestPasswordReset(
+          { email, redirectTo: `${window.location.origin}/reset-password/` },
+          captchaToken ? { headers: { 'x-captcha-response': captchaToken } } : undefined,
+        )
         if (result.error) throw new Error(result.error.message)
         setMessage('Check your email for a password reset link.')
       } else {
@@ -141,6 +151,13 @@ export default function AuthForm({ mode }: { mode: Mode }) {
             <span className="ngc-field__label">Confirm password</span>
             <input className="ngc-input" type="password" minLength={8} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required autoComplete="new-password" />
           </label>
+        )}
+
+        {mode === 'forgot' && (
+          <HCaptcha
+            onVerify={token => setCaptchaToken(token)}
+            onExpire={() => setCaptchaToken(null)}
+          />
         )}
 
         {error && <div className="ngc-alert" role="alert">{error}</div>}
