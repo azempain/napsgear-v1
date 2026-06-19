@@ -919,6 +919,34 @@ const CHECKS = [
       if (productCount !== 0) throw new Error(`unknown category rendered ${productCount} products — should be none`)
     },
   },
+  {
+    name: 'F5: Quick View opens a dialog with product info + Add to Cart, ESC closes',
+    route: '/catalog/',
+    async assert(page) {
+      // Programmatic click bypasses the hover-only overlay visibility.
+      await page.$eval('.btn-quick-view', el => el.click())
+      await page.waitForSelector('[role="dialog"]', { timeout: 8000 })
+      const dialogText = await page.textContent('[role="dialog"]')
+      if (!dialogText || !/Add to Cart/i.test(dialogText)) {
+        throw new Error('Quick View dialog missing Add to Cart')
+      }
+      const title = (await page.textContent('[role="dialog"] .ngc-quickview__title'))?.trim()
+      if (!title) throw new Error('Quick View dialog missing product title')
+
+      // Add to cart from the dialog increments the header badge.
+      const before = parseInt((await page.textContent('.cart-count')) || '0', 10)
+      await page.click('[role="dialog"] .ngc-quickview__add')
+      await page.waitForFunction(
+        (n) => parseInt(document.querySelector('.cart-count')?.textContent || '0', 10) > n,
+        before,
+        { timeout: 8000 },
+      )
+
+      // ESC closes the dialog.
+      await page.keyboard.press('Escape')
+      await page.waitForSelector('[role="dialog"]', { state: 'detached', timeout: 8000 })
+    },
+  },
 ]
 
 ;(async () => {

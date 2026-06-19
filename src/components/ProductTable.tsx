@@ -16,6 +16,7 @@ import {
 } from '@tanstack/react-table'
 import type { Product, Ingredient } from '@/data/types'
 import ProductCard from './ProductCard'
+import { QuickViewProvider } from '@/context/QuickViewContext'
 import {
   productMatches,
   compareProducts,
@@ -100,6 +101,7 @@ export default function ProductTable({
   const anyChipActive = labels.new || labels.sale || ingSet.size > 0 || search.length > 0
 
   return (
+    <QuickViewProvider>
     <section className="ngc-list" aria-label={title || 'Products listing'}>
       {title && <h1 className="ngc-list__title">{title}</h1>}
 
@@ -223,5 +225,6 @@ export default function ProductTable({
         </nav>
       )}
     </section>
+    </QuickViewProvider>
   )
 }

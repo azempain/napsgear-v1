@@ -2588,3 +2588,64 @@ body.has-sticky-header {
   display: block;
 }
 
+/* ── Quick View dialog ─────────────────────────────────────────────────── */
+.ngc-quickview__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 640px) {
+  .ngc-quickview__grid { grid-template-columns: 1fr; }
+}
+.ngc-quickview__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f8fa;
+  border-radius: 8px;
+  padding: 12px;
+  min-height: 240px;
+}
+.ngc-quickview__swiper { width: 100%; position: relative; }
+.ngc-quickview__prev,
+.ngc-quickview__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .9);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+.ngc-quickview__prev { left: 4px; }
+.ngc-quickview__next { right: 4px; }
+.ngc-quickview__prev.swiper-button-disabled,
+.ngc-quickview__next.swiper-button-disabled { display: none; }
+.ngc-quickview__dots { text-align: center; margin-top: 8px; }
+.ngc-quickview__info { display: flex; flex-direction: column; gap: 10px; }
+.ngc-quickview__brand { color: #777; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+.ngc-quickview__title { font-size: 22px; }
+.ngc-quickview__desc-sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.ngc-quickview__rating { display: flex; align-items: center; gap: 8px; }
+.ngc-quickview__stars { color: #d0d0d0; font-size: 16px; letter-spacing: 1px; }
+.ngc-quickview__star.is-on { color: #f5a623; }
+.ngc-quickview__rating-count { color: #777; font-size: 13px; }
+.ngc-quickview__price { font-size: 24px; font-weight: 700; }
+.ngc-quickview__excerpt {
+  color: #444; font-size: 14px; line-height: 1.5; margin: 0;
+  display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.ngc-quickview__actions { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+.ngc-quickview__add { width: 100%; }
+.ngc-quickview__details { text-align: center; font-weight: 600; text-decoration: none; }
+
