@@ -2,15 +2,12 @@ import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { loadHtml, loadHtmlFromFile } from './lib/loadHtml'
 import { copyAsset } from './lib/copyAsset'
+import { slugify } from './lib/slugify'
 import type { Promotion } from '@/data/types'
 
 const SAVED_FILE = 'saved pages/NapsGear - All promotions.html'
 const PUBLIC_DIR = 'public/images/promotions'
 const DATA_FILE  = 'src/data/promotions.json'
-
-function slugify(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-}
 
 /** Promotions page is structured as: h4 heading + (ul of links) OR (div with
  *  banner anchor). Each link becomes its own Promotion; the h4 text goes into

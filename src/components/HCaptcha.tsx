@@ -5,7 +5,7 @@
 // reports the solved token up via onVerify. Clears the token on expiry/error
 // so the parent form can re-gate submission.
 
-import { useEffect, useRef } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { HCAPTCHA_SITE_KEY, HCAPTCHA_SCRIPT_SRC } from '@/lib/hcaptcha'
 
 interface HCaptchaApi {
@@ -50,15 +50,44 @@ function loadHCaptcha(): Promise<void> {
   return scriptPromise
 }
 
-export default function HCaptcha({
-  onVerify,
-  onExpire,
-}: {
+export interface HCaptchaHandle {
+  /** Clear the solved state so a new token must be obtained (single-use tokens
+   *  are consumed on submit; call this on a failed/retried submission). */
+  reset: () => void
+}
+
+interface HCaptchaProps {
   onVerify: (token: string) => void
   onExpire?: () => void
-}) {
+}
+
+const HCaptcha = forwardRef<HCaptchaHandle, HCaptchaProps>(function HCaptcha(
+  { onVerify, onExpire },
+  ref,
+) {
   const containerRef = useRef<HTMLDivElement>(null)
   const widgetIdRef = useRef<string | null>(null)
+
+  // Hold the latest callbacks in refs so the render effect can stay mount-only.
+  // Depending on the callbacks directly would tear down and re-render the widget
+  // on every parent re-render (callers pass fresh inline arrows), causing the
+  // solved checkbox to flicker/reset on each keystroke or state change.
+  const onVerifyRef = useRef(onVerify)
+  const onExpireRef = useRef(onExpire)
+  onVerifyRef.current = onVerify
+  onExpireRef.current = onExpire
+
+  useImperativeHandle(ref, () => ({
+    reset() {
+      if (widgetIdRef.current !== null && window.hcaptcha) {
+        try {
+          window.hcaptcha.reset(widgetIdRef.current)
+        } catch {
+          /* widget already gone */
+        }
+      }
+    },
+  }), [])
 
   useEffect(() => {
     let cancelled = false
@@ -70,9 +99,9 @@ export default function HCaptcha({
         if (widgetIdRef.current !== null) return
         widgetIdRef.current = window.hcaptcha.render(containerRef.current, {
           sitekey: HCAPTCHA_SITE_KEY,
-          callback: token => onVerify(token),
-          'expired-callback': () => onExpire?.(),
-          'error-callback': () => onExpire?.(),
+          callback: token => onVerifyRef.current(token),
+          'expired-callback': () => onExpireRef.current?.(),
+          'error-callback': () => onExpireRef.current?.(),
         })
       })
       .catch(() => {
@@ -90,7 +119,9 @@ export default function HCaptcha({
         widgetIdRef.current = null
       }
     }
-  }, [onVerify, onExpire])
+  }, [])
 
   return <div ref={containerRef} className="ngc-hcaptcha" />
-}
+})
+
+export default HCaptcha

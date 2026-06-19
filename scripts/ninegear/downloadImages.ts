@@ -1,8 +1,6 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-
-const UA =
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+import { USER_AGENT } from './api'
 
 /** Download one image to an absolute dest path. Returns false after all
  *  retries fail (logged by caller). Skips if the file already exists.
@@ -16,7 +14,7 @@ export async function downloadImage(
   for (let attempt = 1; attempt <= attempts; attempt++) {
     try {
       const res = await fetch(remote, {
-        headers: { 'User-Agent': UA, Referer: 'https://ninegear.us/' },
+        headers: { 'User-Agent': USER_AGENT, Referer: 'https://ninegear.us/' },
       })
       if (!res.ok) {
         if (res.status === 404) return false // permanent — don't retry
