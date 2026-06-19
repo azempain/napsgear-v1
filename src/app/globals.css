@@ -2591,7 +2591,10 @@ body.has-sticky-header {
 /* ── Quick View dialog ─────────────────────────────────────────────────── */
 .ngc-quickview__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* Fixed 300px image column (matches the native image size) + a flexible text
+     column that is allowed to shrink (minmax(0,1fr)) so neither track collapses.
+     Below 640px this switches to a single column. */
+  grid-template-columns: 300px minmax(0, 1fr);
   gap: 24px;
   align-items: start;
 }
@@ -2607,6 +2610,7 @@ body.has-sticky-header {
   padding: 12px;
   min-height: 240px;
 }
+.ngc-quickview__media .ngc-product-image { max-width: 100%; }
 .ngc-quickview__swiper { width: 100%; position: relative; }
 .ngc-quickview__prev,
 .ngc-quickview__next {
@@ -2643,7 +2647,8 @@ body.has-sticky-header {
 .ngc-quickview__price { font-size: 24px; font-weight: 700; }
 .ngc-quickview__excerpt {
   color: #444; font-size: 14px; line-height: 1.5; margin: 0;
-  display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  white-space: pre-line;
+  display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
 }
 .ngc-quickview__actions { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
 .ngc-quickview__add { width: 100%; }

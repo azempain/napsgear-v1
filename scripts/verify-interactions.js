@@ -933,6 +933,10 @@ const CHECKS = [
       const title = (await page.textContent('[role="dialog"] .ngc-quickview__title'))?.trim()
       if (!title) throw new Error('Quick View dialog missing product title')
 
+      // The image column must not collapse to a sliver (grid-track regression).
+      const imgWidth = await page.$eval('[role="dialog"] .ngc-quickview__media img', el => el.getBoundingClientRect().width)
+      if (imgWidth < 100) throw new Error(`Quick View image too narrow (${Math.round(imgWidth)}px) — media column collapsed`)
+
       // Add to cart from the dialog increments the header badge.
       const before = parseInt((await page.textContent('.cart-count')) || '0', 10)
       await page.click('[role="dialog"] .ngc-quickview__add')

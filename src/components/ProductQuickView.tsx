@@ -96,7 +96,9 @@ export default function ProductQuickView({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl ngc-quickview">
+      {/* `block` overrides the dialog's default `display:grid` (tailwind-merge)
+          so the inner two-column grid below receives the full content width. */}
+      <DialogContent className="block w-full max-w-3xl ngc-quickview">
         <div className="ngc-quickview__grid">
           <div className="ngc-quickview__media">
             {images.length > 1 ? (
