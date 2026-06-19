@@ -59,10 +59,17 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         if (result.error) throw new Error(result.error.message)
         window.location.assign(redirectPath)
       } else if (mode === 'forgot') {
-        // Gate password-reset requests behind a captcha to stop email-bombing
-        // of arbitrary addresses. The token is sent as the `x-captcha-response`
-        // header that Better Auth's captcha plugin reads; enforcement requires
-        // that plugin enabled on the Neon Auth side (see .env.local.example).
+        // Client-side gate against casual reset-email-bombing through the UI.
+        // We send the solved token as the `x-captcha-response` header that
+        // Better Auth's captcha plugin reads — BUT this is a client gate only.
+        // Real server-side enforcement needs the `captcha` plugin enabled on the
+        // Better Auth instance, which Neon Auth hosts for us. As of now Neon's
+        // managed Plugins catalog (Organizations, Magic Link, …) does NOT expose
+        // a captcha plugin, so there is no dashboard toggle to flip and the
+        // header is currently ignored upstream. A scripted caller can still hit
+        // the endpoint directly; rely on Neon Auth's built-in rate limiting for
+        // that until Neon exposes the captcha plugin. Do not assume a Neon
+        // setting enforces this server-side — it doesn't yet.
         if (HCAPTCHA_CONFIGURED && !captchaToken) {
           throw new Error('Please complete the captcha before requesting a reset link.')
         }
