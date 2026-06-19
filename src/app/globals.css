@@ -2576,3 +2576,15 @@ body.has-sticky-header {
   font-size: 16px;
 }
 
+/* Product catalog images are 300x300 at the source (ninegear's largest size).
+   Cap the PDP gallery image to its native width so the browser never upscales
+   it into the ~470px column — upscaling a 300px source is what reads as "low
+   quality". On narrower viewports it scales down, which stays sharp. */
+.ngc-product-image {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  margin-inline: auto;
+  display: block;
+}
+

@@ -61,7 +61,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             <div className="product-item-image">
               <div className="product-single-image">
                 {product.images[0] && (
-                  <img alt={product.name} className="img-fluid" src={product.images[0]} />
+                  <img alt={product.name} className="img-fluid ngc-product-image" src={product.images[0]} />
                 )}
               </div>
               <div className="label-group" />
