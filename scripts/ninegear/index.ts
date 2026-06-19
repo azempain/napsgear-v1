@@ -5,7 +5,7 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { fetchAllProducts } from './api'
-import { mapProduct } from './mapProduct'
+import { mapProduct, isSellable } from './mapProduct'
 import { seedReviews, type DateWindow } from './seedReviews'
 import { buildTaxonomy, type TaxonomyInput } from './buildTaxonomy'
 import { downloadImage } from './downloadImages'
@@ -24,13 +24,36 @@ function writeJson(file: string, data: unknown): void {
   fs.writeFileSync(path.join(DATA, file), JSON.stringify(data, null, 2) + '\n', 'utf8')
 }
 
+/** Run async `fn` over `items` with at most `limit` in flight at once. */
+async function runPool<T>(
+  items: T[],
+  limit: number,
+  fn: (item: T, index: number) => Promise<void>,
+): Promise<void> {
+  let next = 0
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (next < items.length) {
+      const i = next++
+      await fn(items[i], i)
+    }
+  })
+  await Promise.all(workers)
+}
+
 async function main(): Promise<void> {
   console.log('🚀  Fetching ninegear.us catalog via Store API …')
   const raw = await fetchAllProducts()
   console.log(`   ${raw.length} products fetched`)
 
+  // Drop unpriced/$0 placeholders — a $0 product would be addable to cart free.
+  const sellable = raw.filter(isSellable)
+  const skipped = raw.length - sellable.length
+  if (skipped > 0) {
+    console.log(`   ⚠️  Skipped ${skipped} product(s) with no positive price: ${raw.filter((p) => !isSellable(p)).map((p) => p.slug).join(', ')}`)
+  }
+
   const taxonomyInput: TaxonomyInput[] = []
-  const products = raw.map((np) => {
+  const products = sellable.map((np) => {
     const { product, images } = mapProduct(np)
     const { reviews, qa } = seedReviews(product.slug, WINDOW)
     if (reviews.length) product.reviews = reviews
@@ -61,17 +84,17 @@ async function main(): Promise<void> {
       jobs.push({ remote: ref.remote, dest })
     }
   }
-  console.log(`🖼️   Downloading ${jobs.length} images …`)
-  for (let i = 0; i < jobs.length; i++) {
-    const { remote, dest } = jobs[i]
+  console.log(`🖼️   Downloading ${jobs.length} images (concurrency 8) …`)
+  let done = 0
+  await runPool(jobs, 8, async ({ remote, dest }) => {
     const success = await downloadImage(remote, dest)
     if (success) ok++
     else {
       fail++
       console.warn(`   ⚠️  failed: ${remote}`)
     }
-    if ((i + 1) % 50 === 0) console.log(`   ${i + 1}/${jobs.length}`)
-  }
+    if (++done % 100 === 0) console.log(`   ${done}/${jobs.length}`)
+  })
   console.log(`\n✅  Images: ${ok} ok, ${fail} failed`)
   console.log('   Next: pnpm optimize-images')
 }

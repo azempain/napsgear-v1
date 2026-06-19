@@ -2,7 +2,10 @@
 import type { NinegearProduct } from './types'
 
 const BASE = 'https://ninegear.us/wp-json/wc/store/v1/products'
-const UA =
+
+/** Shared desktop UA for every ninegear.us request (JSON + image fetches), so
+ *  the spoofed client string can't drift between modules. */
+export const USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 
 export function buildProductsUrl(page: number, perPage = 100): string {
@@ -11,7 +14,7 @@ export function buildProductsUrl(page: number, perPage = 100): string {
 
 async function getJson<T>(url: string, attempt = 1): Promise<T> {
   try {
-    const res = await fetch(url, { headers: { 'User-Agent': UA } })
+    const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT } })
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`)
     return (await res.json()) as T
   } catch (err) {

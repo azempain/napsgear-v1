@@ -1,13 +1,10 @@
 import { promises as fs } from 'node:fs'
 import { loadHtml, loadHtmlFromFile } from './lib/loadHtml'
+import { slugify } from './lib/slugify'
 import type { FaqEntry } from '@/data/types'
 
 const SAVED_FILE = 'saved pages/faq - Knowledgebase.html'
 const DATA_FILE  = 'src/data/faq.json'
-
-function slugify(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-}
 
 export function extractFaq(html: string): FaqEntry[] {
   const $ = loadHtml(html)

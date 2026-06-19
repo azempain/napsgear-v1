@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react'
 import { authClient } from '@/lib/auth-client'
 import { safeAuthRedirect } from '@/lib/authRedirect'
-import HCaptcha from '@/components/HCaptcha'
+import HCaptcha, { type HCaptchaHandle } from '@/components/HCaptcha'
 import { HCAPTCHA_CONFIGURED } from '@/lib/hcaptcha'
 
 type Mode = 'login' | 'signup' | 'forgot' | 'reset'
@@ -21,6 +21,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
   const [showPassword, setShowPassword] = useState(false)
   const [nextQuery, setNextQuery] = useState('')
   const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const captchaRef = useRef<HCaptchaHandle>(null)
 
   useEffect(() => {
     setNextQuery(window.location.search)
@@ -80,6 +81,11 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       }
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Authentication failed. Please try again.')
+      // Reset the single-use captcha so a retry gets a fresh token.
+      if (HCAPTCHA_CONFIGURED) {
+        captchaRef.current?.reset()
+        setCaptchaToken(null)
+      }
     } finally {
       setPending(false)
     }
@@ -155,6 +161,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
         {mode === 'forgot' && (
           <HCaptcha
+            ref={captchaRef}
             onVerify={token => setCaptchaToken(token)}
             onExpire={() => setCaptchaToken(null)}
           />

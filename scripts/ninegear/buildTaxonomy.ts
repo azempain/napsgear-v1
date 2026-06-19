@@ -1,18 +1,12 @@
 // Pure: derive categories.json + brands.json from the mapped product set.
 import type { NinegearCategory } from './types'
 import type { Brand, Category } from '../../src/data/types'
+import { slugify } from '../extract/lib/slugify'
 
 export interface TaxonomyInput {
   slug: string
   brand?: string
   categories: NinegearCategory[]
-}
-
-function kebab(s: string): string {
-  return s
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
 }
 
 export function buildTaxonomy(items: TaxonomyInput[]): {
@@ -29,7 +23,7 @@ export function buildTaxonomy(items: TaxonomyInput[]): {
       catMap.set(c.slug, entry)
     }
     if (it.brand) {
-      brandSet.set(kebab(it.brand), it.brand)
+      brandSet.set(slugify(it.brand), it.brand)
     }
   }
 

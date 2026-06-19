@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { mapProduct } from './mapProduct'
+import { mapProduct, isSellable } from './mapProduct'
 import type { NinegearProduct } from './types'
 
 const WITH_SPEC: NinegearProduct = {
@@ -82,11 +82,51 @@ describe('mapProduct', () => {
     expect(images).toHaveLength(1)
   })
 
+  it('keeps real product images whose names merely contain "default" or "icon"', () => {
+    const np: NinegearProduct = {
+      id: 8,
+      name: 'Tren Blend',
+      slug: 'tren-blend',
+      prices: { price: '70' },
+      on_sale: false,
+      short_description: '',
+      images: [
+        { src: 'https://ninegear.us/wp-content/uploads/x/tren-default-blend.jpg' },
+        { src: 'https://ninegear.us/wp-content/uploads/x/arnold-classic-icon-pharma.jpg' },
+      ],
+      categories: [{ id: 1, name: 'Trenbolone', slug: 'trenbolone' }],
+    }
+    const { product } = mapProduct(np)
+    expect(product.images).toEqual([
+      '/images/products/tren-blend-1.jpg',
+      '/images/products/tren-blend-2.jpg',
+    ])
+  })
+
   it('uses a templated description and Sale label when bare + on_sale', () => {
     const { product } = mapProduct(BARE)
     expect(product.brand).toBeUndefined()
     expect(product.description).toContain('Anavar 10')
     expect(product.description.toLowerCase()).toContain('anavar')
     expect(product.labels).toEqual({ sale: 'Sale' })
+  })
+})
+
+describe('isSellable', () => {
+  const base = { ...BARE }
+  function withPrice(price: string): NinegearProduct {
+    return { ...base, prices: { price } }
+  }
+
+  it('rejects zero, empty, and non-numeric prices', () => {
+    expect(isSellable(withPrice('0'))).toBe(false)
+    expect(isSellable(withPrice(''))).toBe(false)
+    expect(isSellable(withPrice('   '))).toBe(false)
+    expect(isSellable(withPrice('N/A'))).toBe(false)
+  })
+
+  it('accepts any positive price', () => {
+    expect(isSellable(withPrice('110'))).toBe(true)
+    expect(isSellable(withPrice('29.99'))).toBe(true)
   })
 })

@@ -16,7 +16,7 @@ import { completeCheckout } from '@/lib/checkoutOrder'
 import { createOrderReference } from '@/lib/orderSubmission'
 import { authHref } from '@/lib/authRedirect'
 import { useAuthSession } from '@/lib/authSession'
-import HCaptcha from '@/components/HCaptcha'
+import HCaptcha, { type HCaptchaHandle } from '@/components/HCaptcha'
 import { HCAPTCHA_CONFIGURED } from '@/lib/hcaptcha'
 
 const EMPTY: CheckoutForm = {
@@ -34,6 +34,7 @@ export default function CheckoutPage() {
   const [status, setStatus] = useState<Status>('form')
   const [captchaToken, setCaptchaToken] = useState<string | null>(null)
   const [captchaError, setCaptchaError] = useState(false)
+  const captchaRef = useRef<HCaptchaHandle>(null)
   // Captured at submit time so the confirmation screen survives clearCart.
   const snapshot = useRef<{ count: number; total: string; email: string; reference: string } | null>(null)
   const reference = useRef<string | null>(null)
@@ -84,6 +85,12 @@ export default function CheckoutPage() {
         reference.current = null
         setStatus('success')
       } catch {
+        // hCaptcha tokens are single-use; clear the consumed token and reset
+        // the widget so a retry obtains a fresh one instead of replaying it.
+        if (HCAPTCHA_CONFIGURED) {
+          captchaRef.current?.reset()
+          setCaptchaToken(null)
+        }
         setStatus('error')
       }
     },
@@ -216,6 +223,7 @@ export default function CheckoutPage() {
           <aside className="ngc-totals" aria-label="Order summary column">
             <OrderSummary items={items} />
             <HCaptcha
+              ref={captchaRef}
               onVerify={token => { setCaptchaToken(token); setCaptchaError(false) }}
               onExpire={() => setCaptchaToken(null)}
             />

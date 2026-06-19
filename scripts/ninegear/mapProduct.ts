@@ -14,19 +14,30 @@ export interface MappedProduct {
   images: ImageRef[]
 }
 
-// Spec-table fields that aren't useful prose in the description body.
-const SKIP_FIELDS = new Set<string>()
-
 // The Store API's `images[]` mixes the real product photo (always first) with
-// Woodmart theme assets: shipping-flag icons (us-flag.png, int-flag.png,
-// eu-flag.png, uk-flag1.png), the "default" placeholder
-// (en-default-medium_default.webp), and small UI icons (test-icon-min2.png).
-// None are product imagery — drop them.
-const JUNK_IMAGE = /(?:[a-z]{2,3}-flag\d*\.(?:png|jpe?g|webp)|default|-icon)/i
+// Woodmart theme assets. Match those theme filenames precisely (anchored to the
+// full basename) so a real product image that merely contains "default" or
+// "icon" in its name is NOT dropped:
+//   - shipping-flag icons: us-flag.png, int-flag.png, eu-flag.png, uk-flag1.png
+//   - the WooCommerce placeholder: en-default-medium_default.webp
+//   - the theme UI icon: test-icon-min2.png
+const JUNK_IMAGE_PATTERNS: RegExp[] = [
+  /^[a-z]{2,3}-flag\d*\.(?:png|jpe?g|webp|gif)$/i,
+  /^[a-z]{2}-default-medium_default\.(?:png|jpe?g|webp|gif)$/i,
+  /^test-icon[\w-]*\.(?:png|jpe?g|webp|gif)$/i,
+]
 
 function isJunkImage(url: string): boolean {
   const basename = url.split('/').pop() ?? url
-  return JUNK_IMAGE.test(basename)
+  return JUNK_IMAGE_PATTERNS.some((re) => re.test(basename))
+}
+
+/** A product is sellable only with a positive numeric price. ninegear returns
+ *  "0"/"" for unpriced placeholders; those must not enter the catalog (a $0
+ *  product is addable to cart for free). */
+export function isSellable(np: NinegearProduct): boolean {
+  const n = Number(np.prices?.price)
+  return Number.isFinite(n) && n > 0
 }
 
 function extFromUrl(url: string): string {
@@ -43,9 +54,7 @@ function buildDescription(
   name: string,
   category: string | undefined,
 ): string {
-  const lines = Object.entries(fields)
-    .filter(([k]) => !SKIP_FIELDS.has(k))
-    .map(([k, v]) => `${k}: ${v}`)
+  const lines = Object.entries(fields).map(([k, v]) => `${k}: ${v}`)
   if (lines.length) return lines.join('\n')
   // Fallback for products with no spec table.
   const cat = category ? ` in our ${category} range` : ''
