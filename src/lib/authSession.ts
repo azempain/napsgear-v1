@@ -20,6 +20,7 @@ export function useAuthSession() {
     queryKey: authSessionQueryKey,
     queryFn: getAuthSession,
     staleTime: 30_000,
+    refetchOnMount: 'always',
     refetchOnWindowFocus: true,
     retry: 1,
   })
