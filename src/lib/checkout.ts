@@ -1,7 +1,7 @@
 import type { CartItem } from '@/context/CartContext'
 import { total } from './cart'
 import {
-  renderCustomer, renderShipping, renderItems, renderTotals, buildOrderSubject,
+  renderCustomer, renderShipping, renderItems, renderTotals, renderPaymentInstructions, buildOrderSubject,
 } from './orderEmail'
 import { z } from 'zod'
 
@@ -47,6 +47,8 @@ export interface OrderPayload {
   items: string
   /** Subtotal / Shipping / Loyalty / TOTAL on separate lines */
   totals: string
+  /** Bitcoin wallet/payment-link instructions for manual payment matching */
+  payment: string
   /** Omitted from the payload entirely when the user didn't type anything */
   notes?: string
   /** Single-line scalar so the Web3Forms dashboard can sort/filter by it */
@@ -88,7 +90,7 @@ function fieldError<K extends keyof CheckoutForm>(field: K, value: CheckoutForm[
 
 const fmt = (n: number) => `$${n.toFixed(2)}`
 
-export function buildOrderPayload(f: CheckoutForm, items: CartItem[]): OrderPayload {
+export function buildOrderPayload(f: CheckoutForm, items: CartItem[], reference = ''): OrderPayload {
   const validForm = checkoutSchema.parse(f)
   const payload: OrderPayload = {
     subject: buildOrderSubject(validForm, items),
@@ -99,6 +101,7 @@ export function buildOrderPayload(f: CheckoutForm, items: CartItem[]): OrderPayl
     shipping: renderShipping(validForm),
     items: renderItems(items),
     totals: renderTotals(items),
+    payment: renderPaymentInstructions(items, reference),
     order_total: fmt(total(items)),
   }
   const trimmed = validForm.notes

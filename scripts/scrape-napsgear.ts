@@ -1,4 +1,4 @@
-// Full-site napsgear.org scraper.
+// Full-site NapsGear source scraper.
 //
 //   npm run scrape
 //
@@ -212,7 +212,7 @@ function dedupIngredients(items: Ingredient[]): Ingredient[] {
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 ;(async () => {
-  console.log('🚀  napsgear.org full scraper')
+  console.log('🚀  NapsGear source scraper')
   console.log('   A Chromium window will open. If a Cloudflare challenge appears,')
   console.log('   click it manually — the clearance is persisted to')
   console.log(`   ${PROFILE_DIR}`)

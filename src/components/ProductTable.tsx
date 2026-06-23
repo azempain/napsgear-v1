@@ -7,7 +7,8 @@
 // which owns pagination state. This gives us the Table abstraction's lifecycle
 // (page index, page size, row model) without fighting it for filter semantics.
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useStore } from '@tanstack/react-store'
 import {
   useReactTable,
   getCoreRowModel,
@@ -21,10 +22,10 @@ import {
   productMatches,
   compareProducts,
   SORT_OPTIONS,
-  EMPTY_LABEL_FILTERS,
   type LabelFilters,
   type SortKey,
 } from '@/lib/productTable.helper'
+import { componentUiStore } from '@/store/componentUiStore'
 
 const DEFAULT_PAGE_SIZE = 24
 
@@ -48,21 +49,23 @@ export default function ProductTable({
   emptyMessage = 'No products match your filters.',
   pageSize = DEFAULT_PAGE_SIZE,
 }: ProductTableProps) {
-  const [search, setSearch] = useState('')
-  const [labels, setLabels] = useState<LabelFilters>(EMPTY_LABEL_FILTERS)
-  const [ingSet, setIngSet] = useState<Set<string>>(new Set())
-  const [sortKey, setSortKey] = useState<SortKey>('name-asc')
+  const { sourceKey, search, labels, ingredients: ingredientList, sortKey } = useStore(componentUiStore, state => state.productTable)
+  const currentSourceKey = typeof window === 'undefined' ? sourceKey : `${window.location.pathname}${window.location.search}`
+  const urlSearch = typeof window === 'undefined' ? '' : new URLSearchParams(window.location.search).get('q') ?? ''
+  const searchValue = sourceKey === currentSourceKey ? search : urlSearch
+  const ingSet = useMemo(() => new Set(ingredientList), [ingredientList])
 
   useEffect(() => {
-    const query = new URLSearchParams(window.location.search).get('q')
-    if (query) setSearch(query)
-  }, [])
+    const sourceKey = `${window.location.pathname}${window.location.search}`
+    const query = new URLSearchParams(window.location.search).get('q') ?? ''
+    componentUiStore.actions.hydrateProductTable(sourceKey, query)
+  })
 
   const filtered = useMemo(() => {
     return products
-      .filter((p) => productMatches(p, { search, labels, ingredients: ingSet }))
+      .filter((p) => productMatches(p, { search: searchValue, labels, ingredients: ingSet }))
       .sort((a, b) => compareProducts(a, b, sortKey))
-  }, [products, search, labels, ingSet, sortKey])
+  }, [products, searchValue, labels, ingSet, sortKey])
 
   const table = useReactTable({
     data: filtered,
@@ -80,25 +83,11 @@ export default function ProductTable({
   const total = filtered.length
   const grandTotal = products.length
 
-  const toggleLabel = useCallback((name: keyof LabelFilters) => {
-    setLabels((prev) => ({ ...prev, [name]: !prev[name] }))
-  }, [])
-  const toggleIngredient = useCallback((name: string) => {
-    setIngSet((prev) => {
-      const next = new Set(prev)
-      if (next.has(name)) next.delete(name)
-      else next.add(name)
-      return next
-    })
-  }, [])
-  const reset = useCallback(() => {
-    setSearch('')
-    setLabels(EMPTY_LABEL_FILTERS)
-    setIngSet(new Set())
-    setSortKey('name-asc')
-  }, [])
+  const toggleLabel = (name: keyof LabelFilters) => componentUiStore.actions.toggleProductLabel(name)
+  const toggleIngredient = (name: string) => componentUiStore.actions.toggleProductIngredient(name)
+  const reset = componentUiStore.actions.resetProductTable
 
-  const anyChipActive = labels.new || labels.sale || ingSet.size > 0 || search.length > 0
+  const anyChipActive = labels.new || labels.sale || ingSet.size > 0 || searchValue.length > 0
 
   return (
     <QuickViewProvider>
@@ -111,8 +100,8 @@ export default function ProductTable({
           <input
             type="search"
             placeholder="Search products…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchValue}
+            onChange={(e) => componentUiStore.actions.setProductSearch(e.target.value)}
             className="ngc-input"
             data-testid="product-search"
           />
@@ -122,7 +111,7 @@ export default function ProductTable({
           <span className="visually-hidden">Sort by</span>
           <select
             value={sortKey}
-            onChange={(e) => setSortKey(e.target.value as SortKey)}
+            onChange={(e) => componentUiStore.actions.setProductSort(e.target.value as SortKey)}
             className="ngc-input"
             data-testid="product-sort"
           >

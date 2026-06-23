@@ -59,10 +59,11 @@ export interface HCaptchaHandle {
 interface HCaptchaProps {
   onVerify: (token: string) => void
   onExpire?: () => void
+  configured?: boolean
 }
 
 const HCaptcha = forwardRef<HCaptchaHandle, HCaptchaProps>(function HCaptcha(
-  { onVerify, onExpire },
+  { onVerify, onExpire, configured = true },
   ref,
 ) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -79,6 +80,7 @@ const HCaptcha = forwardRef<HCaptchaHandle, HCaptchaProps>(function HCaptcha(
 
   useImperativeHandle(ref, () => ({
     reset() {
+      if (!configured) return
       if (widgetIdRef.current !== null && window.hcaptcha) {
         try {
           window.hcaptcha.reset(widgetIdRef.current)
@@ -90,6 +92,7 @@ const HCaptcha = forwardRef<HCaptchaHandle, HCaptchaProps>(function HCaptcha(
   }), [])
 
   useEffect(() => {
+    if (!configured) return undefined
     let cancelled = false
 
     loadHCaptcha()
@@ -119,7 +122,16 @@ const HCaptcha = forwardRef<HCaptchaHandle, HCaptchaProps>(function HCaptcha(
         widgetIdRef.current = null
       }
     }
-  }, [])
+  }, [configured])
+
+  if (!configured) {
+    return (
+      <div className="ngc-hcaptcha ngc-hcaptcha--disabled" role="note">
+        <strong>Bot check disabled</strong>
+        <span>Set NEXT_PUBLIC_HCAPTCHA_SITE_KEY to enable production hCaptcha.</span>
+      </div>
+    )
+  }
 
   return <div ref={containerRef} className="ngc-hcaptcha" />
 })

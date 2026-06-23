@@ -238,7 +238,7 @@ async function getNavUrls(page) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 ;(async () => {
-  console.log('🚀  napsgear.org scraper')
+  console.log('🚀  NapsGear source scraper')
   console.log('   A Chromium window will open. If a Cloudflare challenge appears,')
   console.log('   click the checkbox manually — the clearance cookie is persisted')
   console.log(`   to ${PROFILE_DIR} so future runs skip it.`)

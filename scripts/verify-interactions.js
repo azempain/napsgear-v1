@@ -293,7 +293,8 @@ const CHECKS = [
     async assert(page) {
       const requests = []
       page.on('request', r => requests.push(r.url()))
-      await page.reload({ waitUntil: 'load' })
+      await page.reload({ waitUntil: 'domcontentloaded' })
+      await page.waitForTimeout(500)
       const offline = requests.filter(u =>
         /\/js\/(runtime|main|vendors|bootstrap|swiper|dayjs|patch)\.js/.test(u),
       )
@@ -460,7 +461,7 @@ const CHECKS = [
     },
   },
   {
-    name: 'Checkout: anonymous customers must sign in before payment',
+    name: 'Checkout: anonymous order can continue when account history is unavailable',
     route: '/',
     async assert(page) {
       await page.addInitScript(() => {
@@ -468,15 +469,52 @@ const CHECKS = [
           { id: 'x__1', productName: 'Test Product', packCount: 1, slug: 'x', price: 30, qty: 1 },
         ]))
       })
+      const requestOrder = []
       await mockSession(page, false)
+      await page.route('**://*.apirest.*.aws.neon.tech/**', async route => {
+        requestOrder.push('database')
+        await route.fulfill({
+          status: 401,
+          contentType: 'application/json',
+          body: JSON.stringify({ message: 'Authentication required' }),
+        })
+      })
+      await page.route('**://api.web3forms.com/**', async route => {
+        requestOrder.push('email')
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ success: true }),
+        })
+      })
       await page.goto(BASE + '/checkout/', { waitUntil: 'load' })
-      await page.waitForSelector('.ngc-checkout-auth', { timeout: 8000 })
-      const loginHref = await page.getAttribute('.ngc-checkout-auth a[href^="/login/"]', 'href')
-      if (!loginHref || !loginHref.includes('next=%2Fcheckout%2F')) {
-        throw new Error(`checkout login redirect is unsafe or missing: "${loginHref}"`)
+      await page.waitForSelector('#placeOrderBtn', { timeout: 8000 })
+      if (await page.$('.ngc-checkout-auth')) {
+        throw new Error('anonymous checkout is still blocked by the sign-in wall')
       }
-      if (await page.$('#placeOrderBtn')) {
-        throw new Error('anonymous customer can still access the place-order button')
+      const fill = async (id, val) => page.fill(`#${id}`, val)
+      await fill('fullName', 'Guest Buyer')
+      await fill('email', 'guest@example.com')
+      await fill('phone', '5551234567')
+      await fill('address1', '12 King St')
+      await fill('city', 'Austin')
+      await fill('state', 'TX')
+      await fill('postalCode', '78701')
+      await fill('country', 'United States')
+
+      await page.click('#placeOrderBtn')
+      await page.waitForSelector('text=Bitcoin payment', { timeout: 6000 })
+      const body = await page.textContent('main')
+      if (!body?.includes('account order history could not be updated')) {
+        throw new Error('guest checkout did not surface the order-history warning')
+      }
+      if (!requestOrder.includes('email')) {
+        throw new Error(`guest checkout never sent email; sequence was ${requestOrder.join(' -> ')}`)
+      }
+      const databaseIndex = requestOrder.indexOf('database')
+      const emailIndex = requestOrder.indexOf('email')
+      if (databaseIndex > emailIndex) {
+        throw new Error(`guest checkout sent email before attempting history: ${requestOrder.join(' -> ')}`)
       }
       await clearNetworkMocks(page)
     },

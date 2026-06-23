@@ -12,6 +12,7 @@
 import type { CartItem } from '@/context/CartContext'
 import { subtotal, shippingFee, loyaltyCredit, total, formatCartLine } from './cart'
 import type { CheckoutForm } from './checkout'
+import { renderBitcoinInstructions } from './storefrontConfig'
 
 const fmt = (n: number) => `$${n.toFixed(2)}`
 
@@ -50,6 +51,10 @@ export function renderTotals(items: CartItem[]): string {
     `Loyalty credit · ${fmt(loyaltyCredit(items))}`,
     `TOTAL · ${fmt(total(items))}`,
   ].join('\n')
+}
+
+export function renderPaymentInstructions(items: CartItem[], reference: string): string {
+  return renderBitcoinInstructions({ reference, total: fmt(total(items)) })
 }
 
 /** Short, scannable subject for inbox triage. */

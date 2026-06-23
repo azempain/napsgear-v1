@@ -15,6 +15,7 @@ import JsonLd from '@/components/JsonLd'
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/site'
 import { organizationJsonLd, websiteJsonLd } from '@/lib/jsonld'
 import Providers from '@/components/Providers'
+import WhatsAppChatLink from '@/components/WhatsAppChatLink'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -57,7 +58,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <link rel="stylesheet" href="/css/vendors.css" />
         <link rel="stylesheet" href="/css/main.css" />
@@ -99,6 +100,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {children}
               </div>
               <Footer />
+              <WhatsAppChatLink />
             </CartProvider>
           </CurrencyProvider>
         </Providers>

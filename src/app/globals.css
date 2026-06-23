@@ -62,13 +62,13 @@ pre, code { overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
    double up against our outer fixed header. We reserve space below with a
    CSS var so content never disappears under the header. */
 :root {
-  --header-h: 72px;
+  --header-h: 56px;
 }
 @media (min-width: 768px) {
-  :root { --header-h: 140px; }
+  :root { --header-h: 118px; }
 }
 @media (min-width: 992px) {
-  :root { --header-h: 160px; }
+  :root { --header-h: 132px; }
 }
 /* NavInteractions overrides --header-h with the real measured height after
    hydration via ResizeObserver. The values above are SSR fallbacks so the
@@ -100,7 +100,7 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
    and one centered primary navigation row. */
 .header-top > .ngc-header-top-inner {
   position: relative;
-  min-height: 44px;
+  min-height: 34px;
   display: flex !important;
   align-items: center;
   justify-content: flex-start !important;
@@ -135,7 +135,7 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
 }
 .ngc-currency-select {
   width: 64px;
-  height: 34px;
+  height: 28px;
   border: 1px solid transparent;
   border-radius: 4px;
   background: #fff;
@@ -152,11 +152,15 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
   outline: 2px solid rgba(0, 137, 203, .2);
 }
 .header-middle > .container {
-  min-height: 110px;
+  min-height: 70px;
   display: grid !important;
-  grid-template-columns: minmax(180px, 220px) minmax(280px, 1fr) auto;
+  grid-template-columns: minmax(132px, 165px) minmax(280px, 1fr) auto;
   align-items: center;
-  gap: clamp(18px, 3vw, 42px);
+  gap: clamp(16px, 3vw, 36px);
+}
+.header-middle {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 .header-middle .logo,
 .header-middle .header-search,
@@ -237,9 +241,14 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
   justify-content: flex-end;
   gap: 14px;
 }
+.header-middle .logo svg {
+  max-width: 148px;
+}
 .header-bottom > .container {
+  min-height: 38px;
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 }
 .main-nav .menu {
   display: flex;
@@ -915,7 +924,7 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
    responsive height and center the content; banners use object-fit:contain
    (letterboxed, never cropped). Page content below is now static. */
 .hp-slider .swiper-slide {
-  height: clamp(260px, 30vw, 440px);
+  height: clamp(210px, 24vw, 360px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1047,7 +1056,7 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
    ──────────────────────────────────────────────────────────────── */
 .cart-main {
   background: #fff;
-  padding: 18px 0 64px;
+  padding: clamp(22px, 3vw, 34px) 0 72px;
 }
 
 .cart-main .ngc-crumbs {
@@ -1075,8 +1084,8 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
 }
 @media (min-width: 992px) {
   .cart-main .ngc-page {
-    grid-template-columns: minmax(0, 1fr) 340px;
-    gap: 40px;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 380px);
+    gap: clamp(32px, 4vw, 48px);
   }
 }
 
@@ -1170,6 +1179,8 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
   overflow: hidden;
 }
 .cart-main .ngc-item__image img {
+  width: auto !important;
+  height: auto !important;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -1287,12 +1298,29 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
 @media (min-width: 992px) {
   .cart-main .ngc-totals {
     position: sticky;
-    top: 16px;
+    top: 24px;
   }
+}
+.cart-main .ngc-checkout-rail {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+.cart-main .ngc-checkout-action-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #e6ebf0;
+  border-radius: 8px;
+  background: #fff;
+}
+.cart-main .ngc-checkout-action-card .ngc-hcaptcha,
+.cart-main .ngc-checkout-action-card .ngc-alert {
+  margin: 0;
 }
 
 .cart-main .ngc-totals__title {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
   color: #1a1f29;
   margin: 0 0 16px;
@@ -1536,7 +1564,13 @@ body.has-sticky-header {
 /* Mobile cart row polish — only ≤ 576px */
 @media (max-width: 576px) {
   .ngc-item__image { width: 48px; height: 48px; }
-  .ngc-item__image img { width: 48px; height: 48px; object-fit: contain; }
+  .ngc-item__image img {
+    width: auto !important;
+    height: auto !important;
+    max-width: 48px;
+    max-height: 48px;
+    object-fit: contain;
+  }
   .ngc-item { padding-top: 10px; padding-bottom: 10px; }
   .ngc-item__brand { font-size: 11px; color: #888; }
   .ngc-stepper__btn {
@@ -1664,6 +1698,13 @@ body.has-sticky-header {
   border-radius: 4px;
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
+.cart-main .ngc-input:-webkit-autofill,
+.cart-main .ngc-input:-webkit-autofill:hover,
+.cart-main .ngc-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #1a1f29;
+  box-shadow: 0 0 0 1000px #fff inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
 .cart-main .ngc-input--area {
   height: auto;
   padding: 10px 12px;
@@ -1759,6 +1800,43 @@ body.has-sticky-header {
   margin: 0 0 16px;
 }
 .cart-main .ngc-confirm .ngc-btn { display: inline-block; }
+.cart-main .ngc-payment-instructions {
+  margin: 24px auto;
+  padding: 18px;
+  max-width: 620px;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #f8fafc;
+  text-align: left;
+}
+.cart-main .ngc-payment-instructions h2 {
+  margin: 0 0 14px;
+  font-size: 20px;
+}
+.cart-main .ngc-payment-instructions dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.cart-main .ngc-payment-instructions dl > div {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 12px;
+}
+.cart-main .ngc-payment-instructions dt {
+  color: #5f6b7a;
+  font-weight: 700;
+}
+.cart-main .ngc-payment-instructions dd {
+  margin: 0;
+  color: #17202a;
+  overflow-wrap: anywhere;
+}
+.cart-main .ngc-payment-instructions p {
+  margin: 14px 0 0;
+  color: #5f6b7a;
+  line-height: 1.5;
+}
 
 /* ─────────────────────────────────────────────────────────────────────────
    F2a: <ProductTable> — shared listing UI for /catalog/, /brands/, /categories/
@@ -1973,6 +2051,13 @@ body.has-sticky-header {
 /* F3: ProductCard image wrapper needs a positioned parent for overlay fill */
 .product-item__image {
   position: relative;
+}
+.product-item__image .ngc-product-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
 }
 
 /* F3: cart-badge skeleton dot (header) */
@@ -2255,6 +2340,64 @@ body.has-sticky-header {
 .ngc-hcaptcha {
   margin: 0.75rem 0;
   min-height: 78px;
+  max-width: 100%;
+  overflow: hidden;
+}
+.ngc-hcaptcha iframe {
+  max-width: 100%;
+}
+.ngc-hcaptcha--disabled {
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  min-height: 0;
+  padding: 12px 14px;
+  border: 1px solid #cfe4f3;
+  border-radius: 6px;
+  background: #f3f9fd;
+  color: #2c5f80;
+  font-size: 13px;
+}
+.ngc-hcaptcha--disabled strong {
+  color: #16384f;
+  font-size: 14px;
+}
+.ngc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 18px;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s, box-shadow .15s;
+}
+.ngc-btn--dark {
+  background: #1a1f29;
+  color: #fff;
+  border-color: #1a1f29;
+}
+.ngc-btn--dark:hover {
+  background: #0d1218;
+  color: #fff;
+  border-color: #0d1218;
+  text-decoration: none;
+}
+.ngc-btn--outline {
+  background: #fff;
+  color: #0089cb;
+  border-color: #0089cb;
+}
+.ngc-btn--outline:hover {
+  background: #0089cb;
+  color: #fff;
+  text-decoration: none;
 }
 .ngc-auth-input-wrap > svg {
   position: absolute;
@@ -2329,42 +2472,60 @@ body.has-sticky-header {
   text-align: center;
 }
 .ngc-account {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
+  padding: clamp(28px, 4vw, 48px) 0 72px;
 }
 .ngc-account > h1 {
-  margin: 0 0 22px;
+  margin: 0 0 24px;
   color: #1a1f29;
-  font-size: clamp(28px, 5vw, 38px);
+  font-size: clamp(28px, 4vw, 38px);
+  line-height: 1.15;
 }
 .ngc-account__card {
   display: grid;
   gap: 1px;
   border: 1px solid #e5e7eb;
+  border-radius: 8px;
   background: #e5e7eb;
+  overflow: hidden;
 }
 .ngc-account__card > div {
   display: grid;
   grid-template-columns: 140px 1fr;
   gap: 16px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   background: #fff;
+}
+.ngc-account__card > div strong {
+  color: #111827;
+}
+.ngc-account__card > div span {
+  min-width: 0;
+  color: #2f3a46;
+  overflow-wrap: anywhere;
 }
 .ngc-account__actions {
   display: flex;
   gap: 12px;
-  margin-top: 18px;
+  align-items: center;
+  margin-top: 20px;
+}
+.ngc-account__actions .ngc-btn {
+  width: auto;
 }
 .ngc-account-orders {
-  margin-top: 42px;
+  margin-top: 44px;
 }
 .ngc-account-orders h2 {
-  margin-bottom: 16px;
+  margin: 0 0 18px;
+  font-size: clamp(24px, 3vw, 30px);
+  line-height: 1.2;
 }
 .ngc-order-list {
   display: grid;
   border: 1px solid #e3e8ed;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
 }
 .ngc-order-row {
@@ -2372,7 +2533,7 @@ body.has-sticky-header {
   grid-template-columns: minmax(180px, 1fr) 150px auto;
   align-items: center;
   gap: 18px;
-  padding: 16px 18px;
+  padding: 18px;
   background: #fff;
 }
 .ngc-order-row + .ngc-order-row {
@@ -2502,6 +2663,13 @@ body.has-sticky-header {
     width: 100%;
     white-space: normal;
   }
+  .cart-main .ngc-payment-instructions {
+    padding: 16px;
+  }
+  .cart-main .ngc-payment-instructions dl > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
   .ngc-auth-links,
   .ngc-checkout-auth__actions {
     flex-direction: column;
@@ -2547,6 +2715,33 @@ body.has-sticky-header {
 .ngc-info-page > .ngc-btn {
   display: inline-block;
   margin-top: 24px;
+}
+.ngc-whatsapp-chat {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1040;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #1fa855;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, .24);
+}
+.ngc-whatsapp-chat:hover {
+  color: #fff;
+  background: #178947;
+  text-decoration: none;
+}
+.ngc-whatsapp-chat:focus-visible {
+  outline: 3px solid rgba(31, 168, 85, .35);
+  outline-offset: 3px;
 }
 .ngc-gallery {
   display: grid;

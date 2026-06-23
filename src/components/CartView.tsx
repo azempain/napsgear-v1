@@ -1,5 +1,6 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
+import { useStore } from '@tanstack/react-store'
 import { useCart } from '@/context/CartContext'
 import { subtotal, shippingFee, loyaltyCredit, total } from '@/lib/cart'
 import EmptyCart from './EmptyCart'
@@ -7,6 +8,7 @@ import CartSkeleton from './CartSkeleton'
 import { useCurrency } from '@/context/CurrencyContext'
 import Image from 'next/image'
 import Link from 'next/link'
+import { componentUiStore } from '@/store/componentUiStore'
 
 const TrashIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105.7 122.88" aria-hidden="true">
@@ -30,7 +32,7 @@ function MobileCartActions({ totalLabel }: { totalLabel: string }) {
 export default function CartView() {
   const { items, hydrated, updateQty, removeItem, clearCart } = useCart()
   const { money } = useCurrency()
-  const [toast, setToast] = useState(false)
+  const toast = useStore(componentUiStore, state => state.cartToastVisible)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => () => {
@@ -39,9 +41,9 @@ export default function CartView() {
 
   function handleRemove(id: string) {
     removeItem(id)
-    setToast(true)
+    componentUiStore.actions.setCartToastVisible(true)
     if (toastTimer.current) clearTimeout(toastTimer.current)
-    toastTimer.current = setTimeout(() => setToast(false), 2500)
+    toastTimer.current = setTimeout(() => componentUiStore.actions.setCartToastVisible(false), 2500)
   }
 
   // Pre-hydration: render skeleton tree so the empty-state CTA doesn't flash

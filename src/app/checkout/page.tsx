@@ -1,8 +1,8 @@
 'use client'
-import { useRef, useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useForm } from '@tanstack/react-form'
+import { useStore } from '@tanstack/react-store'
 import { useCart } from '@/context/CartContext'
 import type { CheckoutForm } from '@/lib/checkout'
 import CheckoutFormView from '@/components/CheckoutForm'
@@ -14,100 +14,99 @@ import { useCurrency } from '@/context/CurrencyContext'
 import { useMutation } from '@tanstack/react-query'
 import { completeCheckout } from '@/lib/checkoutOrder'
 import { createOrderReference } from '@/lib/orderSubmission'
-import { authHref } from '@/lib/authRedirect'
 import { useAuthSession } from '@/lib/authSession'
 import HCaptcha, { type HCaptchaHandle } from '@/components/HCaptcha'
 import { HCAPTCHA_CONFIGURED } from '@/lib/hcaptcha'
-
-const EMPTY: CheckoutForm = {
-  fullName: '', email: '', phone: '', address1: '', address2: '',
-  city: '', state: '', postalCode: '', country: '', notes: '',
-}
-
-type Status = 'form' | 'submitting' | 'success' | 'error'
+import { BTC_PAYMENT_URL, BTC_WALLET_ADDRESS, SUPPORT_EMAIL, buildPaymentHref, buildWhatsAppHref } from '@/lib/storefrontConfig'
+import { checkoutDefaultsFromSession, checkoutUiStore } from '@/lib/checkoutUiStore'
 
 export default function CheckoutPage() {
   const { items, hydrated, clearCart } = useCart()
   const { currency, money } = useCurrency()
-  const { data: session, isPending: sessionPending } = useAuthSession()
-  const router = useRouter()
-  const [status, setStatus] = useState<Status>('form')
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
-  const [captchaError, setCaptchaError] = useState(false)
+  const { data: session } = useAuthSession()
+  const checkoutUi = useStore(checkoutUiStore)
   const captchaRef = useRef<HCaptchaHandle>(null)
-  // Captured at submit time so the confirmation screen survives clearCart.
-  const snapshot = useRef<{ count: number; total: string; email: string; reference: string } | null>(null)
-  const reference = useRef<string | null>(null)
+  const whatsappHref = buildWhatsAppHref()
 
   const orderMutation = useMutation({
-    mutationFn: ({ value, accessKey }: { value: CheckoutForm; accessKey: string }) =>
+    mutationFn: ({ value, accessKey, reference }: { value: CheckoutForm; accessKey: string; reference: string }) =>
       completeCheckout({
         accessKey,
         currency,
         form: value,
         items,
-        reference: reference.current ?? (reference.current = createOrderReference()),
-        captchaToken: captchaToken ?? undefined,
+        reference,
+        captchaToken: HCAPTCHA_CONFIGURED ? checkoutUiStore.state.captchaToken ?? undefined : undefined,
       }),
   })
 
   const form = useForm({
-    defaultValues: EMPTY,
+    defaultValues: checkoutDefaultsFromSession(null),
     onSubmit: async ({ value }) => {
       // CheckoutForm already wired per-field onBlur+onSubmit validators using
       // checkoutFieldValidators, so by the time we land here the form is valid.
-      if (!session) {
-        router.push(authHref('/login/'))
-        return
-      }
+      checkoutUiStore.actions.setFormError('')
       const key = process.env.NEXT_PUBLIC_WEB3FORMS_KEY
       if (!key) {
         console.warn('[checkout] NEXT_PUBLIC_WEB3FORMS_KEY is not set — see .env.local.example')
-        setStatus('error')
+        checkoutUiStore.actions.setFormError('Checkout email is not configured. Add NEXT_PUBLIC_WEB3FORMS_KEY before taking orders.')
         return
       }
-      // Hard-gate on a solved captcha only when a real site key is configured,
-      // so local dev (test key) and unconfigured previews still work.
-      if (HCAPTCHA_CONFIGURED && !captchaToken) {
-        setCaptchaError(true)
+      if (HCAPTCHA_CONFIGURED && !checkoutUiStore.state.captchaToken) {
+        checkoutUiStore.actions.setCaptchaError('Please complete the "I am human" check before placing your order.')
         return
       }
-      setCaptchaError(false)
-      setStatus('submitting')
+      checkoutUiStore.actions.setCaptchaError('')
+      const reference = checkoutUiStore.state.reference ?? createOrderReference()
+      checkoutUiStore.actions.setReference(reference)
       try {
-        const result = await orderMutation.mutateAsync({ value, accessKey: key })
-        snapshot.current = {
+        const result = await orderMutation.mutateAsync({ value, accessKey: key, reference })
+        checkoutUiStore.actions.complete({
           count: items.reduce((sum, item) => sum + item.qty, 0),
           total: money(total(items)),
           email: value.email,
           reference: result.reference,
-        }
-        reference.current = null
-        setStatus('success')
+          persistenceWarning: result.persistenceWarning,
+        })
       } catch {
         // hCaptcha tokens are single-use; clear the consumed token and reset
         // the widget so a retry obtains a fresh one instead of replaying it.
         if (HCAPTCHA_CONFIGURED) {
           captchaRef.current?.reset()
-          setCaptchaToken(null)
+          checkoutUiStore.actions.setCaptchaToken(null)
         }
-        setStatus('error')
       }
     },
   })
 
-  // Clear cart + scroll the success screen into view + auto-redirect once we
-  // reach success. Without the scroll, users who submit from a long form land
-  // on the success screen below the fold and don't see the confirmation.
   useEffect(() => {
-    if (status !== 'success') return
+    checkoutUiStore.actions.reset()
+    return () => checkoutUiStore.actions.reset()
+  }, [])
+
+  // Clear cart + scroll the success screen into view once we reach success.
+  // Without the scroll, users who submit from a long form land below the fold
+  // and don't see the payment instructions.
+  useEffect(() => {
+    if (checkoutUi.status !== 'success') return
     clearCart()
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
-    const t = setTimeout(() => router.push('/catalog/'), 5000)
+  }, [checkoutUi.status, clearCart])
+
+  useEffect(() => {
+    if (checkoutUi.status !== 'success' || !checkoutUi.snapshot || !BTC_PAYMENT_URL) return
+    const href = buildPaymentHref({
+      reference: checkoutUi.snapshot.reference,
+      total: checkoutUi.snapshot.total,
+    })
+    if (!href) return
+    const t = setTimeout(() => {
+      window.location.href = href
+    }, 8000)
     return () => clearTimeout(t)
-  }, [status, clearCart, router])
+  }, [checkoutUi.status, checkoutUi.snapshot])
 
   useEffect(() => {
     if (!session) return
@@ -120,7 +119,8 @@ export default function CheckoutPage() {
   }, [form, session])
 
   // success takes precedence over the empty-cart guard (cart is now empty by design)
-  if (status === 'success') {
+  if (checkoutUi.status === 'success') {
+    const snapshot = checkoutUi.snapshot
     return (
       <main className="main cart-main">
         <div className="container">
@@ -128,21 +128,75 @@ export default function CheckoutPage() {
           <div className="ngc-confirm__check" aria-hidden="true">&#10003;</div>
           <h1 className="ngc-confirm__title">Order received — thank you!</h1>
           <p className="ngc-confirm__sub">
-            We&apos;ve emailed your order to the NapsGear team. You&apos;ll hear
-            back at <strong>{snapshot.current?.email}</strong>.
+            We&apos;ve emailed your order to the NapsGear team. Complete the
+            Bitcoin payment next so support can match it to your order.
           </p>
-          {snapshot.current && (
+          {snapshot && (
             <>
               <p className="ngc-confirm__meta">
-                {snapshot.current.count} item(s) · Total {snapshot.current.total}
+                {snapshot.count} item(s) · Total {snapshot.total}
               </p>
               <p className="ngc-confirm__reference">
-                Order reference <strong>{snapshot.current.reference}</strong>
+                Order reference <strong>{snapshot.reference}</strong>
               </p>
+              {snapshot.persistenceWarning && (
+                <p className="ngc-confirm__hint">
+                  Your order was emailed, but account order history could not be updated. Reference: {snapshot.reference}.
+                </p>
+              )}
+              <section className="ngc-payment-instructions" aria-labelledby="payment-instructions-title">
+                <h2 id="payment-instructions-title">Bitcoin payment</h2>
+                <dl>
+                  <div>
+                    <dt>Total</dt>
+                    <dd>{snapshot.total}</dd>
+                  </div>
+                  <div>
+                    <dt>Reference</dt>
+                    <dd>{snapshot.reference}</dd>
+                  </div>
+                  {BTC_WALLET_ADDRESS && (
+                    <div>
+                      <dt>BTC wallet</dt>
+                      <dd className="ngc-payment-instructions__wallet">{BTC_WALLET_ADDRESS}</dd>
+                    </div>
+                  )}
+                  {SUPPORT_EMAIL && (
+                    <div>
+                      <dt>Email</dt>
+                      <dd><a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a></dd>
+                    </div>
+                  )}
+                  {whatsappHref && (
+                    <div>
+                      <dt>WhatsApp</dt>
+                      <dd><a href={whatsappHref} target="_blank" rel="noreferrer">Chat with support</a></dd>
+                    </div>
+                  )}
+                </dl>
+                <p>
+                  Include your order reference when sending payment details or
+                  contacting support.
+                </p>
+              </section>
             </>
           )}
-          <p className="ngc-confirm__hint">Redirecting you to the shop…</p>
-          <Link className="ngc-btn ngc-btn--dark" href="/catalog/">Continue shopping now &rarr;</Link>
+          {snapshot && BTC_PAYMENT_URL ? (
+            <>
+              <p className="ngc-confirm__hint">Redirecting to the payment page...</p>
+              <a
+                className="ngc-btn ngc-btn--dark"
+                href={buildPaymentHref({
+                  reference: snapshot.reference,
+                  total: snapshot.total,
+                })}
+              >
+                Open payment page
+              </a>
+            </>
+          ) : (
+            <Link className="ngc-btn ngc-btn--dark" href="/catalog/">Continue shopping now &rarr;</Link>
+          )}
         </div>
         </div>
       </main>
@@ -151,7 +205,7 @@ export default function CheckoutPage() {
 
   // Pre-hydration: render skeleton tree so the empty-state CTA doesn't flash
   // before localStorage is read.
-  if (!hydrated || sessionPending) {
+  if (!hydrated) {
     return (
       <main className="main cart-main">
         <CartSkeleton />
@@ -173,29 +227,7 @@ export default function CheckoutPage() {
     )
   }
 
-  if (!session) {
-    return (
-      <main className="main cart-main">
-        <div className="container">
-          <section className="ngc-checkout-auth" aria-labelledby="checkout-auth-title">
-            <div className="ngc-checkout-auth__icon" aria-hidden="true">✓</div>
-            <p className="ngc-checkout-auth__eyebrow">Secure checkout</p>
-            <h1 id="checkout-auth-title">Sign in before continuing</h1>
-            <p>
-              Your cart is ready. Sign in or create an account so the order,
-              payment status, and delivery details are protected and available later.
-            </p>
-            <div className="ngc-checkout-auth__actions">
-              <Link className="ngc-btn ngc-btn--dark" href={authHref('/login/')}>Sign In</Link>
-              <Link className="ngc-btn ngc-btn--outline" href={authHref('/signup/')}>Create Account</Link>
-            </div>
-          </section>
-        </div>
-      </main>
-    )
-  }
-
-  const submitting = status === 'submitting' || orderMutation.isPending
+  const submitting = orderMutation.isPending
 
   const grandTotal = money(total(items))
 
@@ -220,34 +252,42 @@ export default function CheckoutPage() {
             </form>
           </div>
 
-          <aside className="ngc-totals" aria-label="Order summary column">
+          <aside className="ngc-totals ngc-checkout-rail" aria-label="Order summary column">
             <OrderSummary items={items} />
-            <HCaptcha
-              ref={captchaRef}
-              onVerify={token => { setCaptchaToken(token); setCaptchaError(false) }}
-              onExpire={() => setCaptchaToken(null)}
-            />
-            {captchaError && (
-              <div className="ngc-alert" role="alert">
-                Please complete the &ldquo;I&apos;m not a robot&rdquo; check before placing your order.
-              </div>
-            )}
-            {status === 'error' && (
-              <div className="ngc-alert" role="alert">
-                {orderMutation.error instanceof Error
-                  ? orderMutation.error.message
-                  : 'Couldn&apos;t submit your order. Please try again.'}
-              </div>
-            )}
-            <button
-              type="button"
-              className="ngc-btn ngc-btn--dark ngc-btn--block d-none d-md-block"
-              id="placeOrderBtn"
-              disabled={submitting}
-              onClick={() => form.handleSubmit()}
-            >
-              {submitting ? 'Placing order…' : 'Place Order'}
-            </button>
+            <div className="ngc-checkout-action-card">
+              <HCaptcha
+                ref={captchaRef}
+                configured={HCAPTCHA_CONFIGURED}
+                onVerify={token => checkoutUiStore.actions.setCaptchaToken(token)}
+                onExpire={() => checkoutUiStore.actions.setCaptchaToken(null)}
+              />
+              {checkoutUi.captchaError && (
+                <div className="ngc-alert" role="alert">
+                  {checkoutUi.captchaError}
+                </div>
+              )}
+              {checkoutUi.formError && (
+                <div className="ngc-alert" role="alert">
+                  {checkoutUi.formError}
+                </div>
+              )}
+              {orderMutation.isError && (
+                <div className="ngc-alert" role="alert">
+                  {orderMutation.error instanceof Error
+                    ? orderMutation.error.message
+                    : 'Couldn&apos;t submit your order. Please try again.'}
+                </div>
+              )}
+              <button
+                type="button"
+                className="ngc-btn ngc-btn--dark ngc-btn--block d-none d-md-block"
+                id="placeOrderBtn"
+                disabled={submitting}
+                onClick={() => form.handleSubmit()}
+              >
+                {submitting ? 'Placing order…' : 'Place Order'}
+              </button>
+            </div>
           </aside>
         </div>
       </div>

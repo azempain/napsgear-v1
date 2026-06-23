@@ -42,8 +42,34 @@ describe('completeCheckout', () => {
       }),
     })
 
-    expect(result).toEqual({ orderId: 'order-id', reference: 'NG-20260612-ABC123' })
+    expect(result).toEqual({ orderId: 'order-id', reference: 'NG-20260612-ABC123', persistenceWarning: undefined })
     expect(calls).toEqual(['save', 'email', 'sent'])
+  })
+
+  it('continues checkout when order-history persistence is unavailable', async () => {
+    const markEmail = vi.fn(async () => undefined)
+    const sendEmail = vi.fn(async () => ({ reference: 'NG-20260612-ABC123' }))
+
+    const result = await completeCheckout({
+      accessKey: 'key',
+      currency: 'USD',
+      form,
+      items,
+      reference: 'NG-20260612-ABC123',
+      saveOrder: vi.fn(async () => {
+        throw new Error('Authentication required')
+      }),
+      sendEmail,
+      markEmail,
+    })
+
+    expect(result).toEqual({
+      orderId: null,
+      reference: 'NG-20260612-ABC123',
+      persistenceWarning: 'Authentication required',
+    })
+    expect(sendEmail).toHaveBeenCalled()
+    expect(markEmail).not.toHaveBeenCalled()
   })
 
   it('forwards the captcha token to the email sender', async () => {

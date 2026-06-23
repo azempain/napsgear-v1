@@ -42,7 +42,7 @@ export async function submitOrder({
       body: JSON.stringify({
         access_key: accessKey,
         order_reference: reference,
-        ...buildOrderPayload(validForm, items),
+        ...buildOrderPayload(validForm, items, reference),
         ...(captchaToken ? { 'h-captcha-response': captchaToken } : {}),
       }),
       signal: controller.signal,

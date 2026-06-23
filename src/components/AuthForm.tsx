@@ -1,43 +1,47 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import { useStore } from '@tanstack/react-store'
 import Link from 'next/link'
 import { Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react'
 import { authClient } from '@/lib/auth-client'
 import { safeAuthRedirect } from '@/lib/authRedirect'
 import HCaptcha, { type HCaptchaHandle } from '@/components/HCaptcha'
 import { HCAPTCHA_CONFIGURED } from '@/lib/hcaptcha'
+import { componentUiStore } from '@/store/componentUiStore'
 
 type Mode = 'login' | 'signup' | 'forgot' | 'reset'
 
 export default function AuthForm({ mode }: { mode: Mode }) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
-  const [message, setMessage] = useState('')
-  const [pending, setPending] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [nextQuery, setNextQuery] = useState('')
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    error,
+    message,
+    pending,
+    showPassword,
+    nextQuery,
+    captchaToken,
+  } = useStore(componentUiStore, state => state.authForm)
   const captchaRef = useRef<HCaptchaHandle>(null)
 
   useEffect(() => {
-    setNextQuery(window.location.search)
-  }, [])
+    componentUiStore.actions.resetAuthForm()
+    componentUiStore.actions.setAuthField('nextQuery', window.location.search)
+  }, [mode])
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setError('')
-    setMessage('')
+    componentUiStore.actions.clearAuthStatus()
 
     if ((mode === 'signup' || mode === 'reset') && password !== confirmPassword) {
-      setError('Passwords do not match.')
+      componentUiStore.actions.setAuthField('error', 'Passwords do not match.')
       return
     }
 
-    setPending(true)
+    componentUiStore.actions.setAuthField('pending', true)
     try {
       const redirectPath = safeAuthRedirect(window.location.search)
       const accountURL = `${window.location.origin}${redirectPath}`
@@ -78,23 +82,23 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           captchaToken ? { headers: { 'x-captcha-response': captchaToken } } : undefined,
         )
         if (result.error) throw new Error(result.error.message)
-        setMessage('Check your email for a password reset link.')
+        componentUiStore.actions.setAuthField('message', 'Check your email for a password reset link.')
       } else {
         const token = new URLSearchParams(window.location.search).get('token')
         if (!token) throw new Error('This password reset link is missing its token.')
         const result = await authClient.resetPassword({ newPassword: password, token })
         if (result.error) throw new Error(result.error.message)
-        setMessage('Password updated. You can now sign in.')
+        componentUiStore.actions.setAuthField('message', 'Password updated. You can now sign in.')
       }
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Authentication failed. Please try again.')
+      componentUiStore.actions.setAuthField('error', cause instanceof Error ? cause.message : 'Authentication failed. Please try again.')
       // Reset the single-use captcha so a retry gets a fresh token.
       if (HCAPTCHA_CONFIGURED) {
         captchaRef.current?.reset()
-        setCaptchaToken(null)
+        componentUiStore.actions.setAuthField('captchaToken', null)
       }
     } finally {
-      setPending(false)
+      componentUiStore.actions.setAuthField('pending', false)
     }
   }
 
@@ -119,7 +123,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         {mode === 'signup' && (
           <label className="ngc-field">
             <span className="ngc-field__label">Name</span>
-            <input className="ngc-input" value={name} onChange={e => setName(e.target.value)} required autoComplete="name" />
+            <input className="ngc-input" value={name} onChange={e => componentUiStore.actions.setAuthField('name', e.target.value)} required autoComplete="name" />
           </label>
         )}
 
@@ -128,7 +132,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
             <span className="ngc-field__label">Email</span>
             <span className="ngc-auth-input-wrap">
               <Mail size={17} aria-hidden="true" />
-              <input className="ngc-input" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" />
+              <input className="ngc-input" type="email" value={email} onChange={e => componentUiStore.actions.setAuthField('email', e.target.value)} required autoComplete="email" />
             </span>
           </label>
         )}
@@ -142,7 +146,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
                 type={showPassword ? 'text' : 'password'}
                 minLength={8}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={e => componentUiStore.actions.setAuthField('password', e.target.value)}
                 required
                 autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               />
@@ -151,7 +155,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
                 className="ngc-auth-password-toggle"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                 aria-pressed={showPassword ? 'true' : 'false'}
-                onClick={() => setShowPassword(value => !value)}
+                onClick={() => componentUiStore.actions.setAuthField('showPassword', !showPassword)}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -162,15 +166,16 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         {(mode === 'signup' || mode === 'reset') && (
           <label className="ngc-field">
             <span className="ngc-field__label">Confirm password</span>
-            <input className="ngc-input" type="password" minLength={8} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required autoComplete="new-password" />
+            <input className="ngc-input" type="password" minLength={8} value={confirmPassword} onChange={e => componentUiStore.actions.setAuthField('confirmPassword', e.target.value)} required autoComplete="new-password" />
           </label>
         )}
 
         {mode === 'forgot' && (
           <HCaptcha
             ref={captchaRef}
-            onVerify={token => setCaptchaToken(token)}
-            onExpire={() => setCaptchaToken(null)}
+            configured={HCAPTCHA_CONFIGURED}
+            onVerify={token => componentUiStore.actions.setAuthField('captchaToken', token)}
+            onExpire={() => componentUiStore.actions.setAuthField('captchaToken', null)}
           />
         )}
 

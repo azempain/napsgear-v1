@@ -1,12 +1,12 @@
 'use client'
-import { useState } from 'react'
+import { useStore } from '@tanstack/react-store'
 import type { QaPost } from '@/data/types'
 import { filterByCategory, sortByDate, QA_CATEGORIES, type QaSort } from '@/lib/qa'
 import QaPostCard from './QaPostCard'
+import { componentUiStore } from '@/store/componentUiStore'
 
 export default function QaForum({ posts }: { posts: QaPost[] }) {
-  const [category, setCategory] = useState<string>('All categories')
-  const [sort, setSort] = useState<QaSort>('newest')
+  const { category, sort } = useStore(componentUiStore, state => state.qaForum)
 
   const visible = sortByDate(filterByCategory(posts, category), sort)
 
@@ -17,7 +17,7 @@ export default function QaForum({ posts }: { posts: QaPost[] }) {
           className="form-select"
           style={{ maxWidth: 240 }}
           value={category}
-          onChange={e => setCategory(e.target.value)}
+          onChange={e => componentUiStore.actions.setQaCategory(e.target.value)}
           aria-label="Filter by category"
         >
           {QA_CATEGORIES.map(c => (
@@ -28,7 +28,7 @@ export default function QaForum({ posts }: { posts: QaPost[] }) {
           className="form-select"
           style={{ maxWidth: 180 }}
           value={sort}
-          onChange={e => setSort(e.target.value as QaSort)}
+          onChange={e => componentUiStore.actions.setQaSort(e.target.value as QaSort)}
           aria-label="Sort order"
         >
           <option value="newest">Newest first</option>

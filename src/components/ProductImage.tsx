@@ -7,8 +7,9 @@
 // (≈25-45% smaller than the JPG/PNG) while keeping the original raster as
 // the universal fallback. The .webp is emitted by scripts/optimize-images.ts.
 
-import { useState } from 'react'
+import { useStore } from '@tanstack/react-store'
 import Skeleton from './Skeleton'
+import { componentUiStore } from '@/store/componentUiStore'
 
 export default function ProductImage({
   src,
@@ -17,7 +18,8 @@ export default function ProductImage({
   src: string
   alt: string
 }) {
-  const [loaded, setLoaded] = useState(false)
+  const loaded = useStore(componentUiStore, state => Boolean(state.productImageLoaded[src]))
+  const markLoaded = () => componentUiStore.actions.markProductImageLoaded(src)
   return (
     <>
       {!loaded && <Skeleton fill aria-label={`Loading ${alt}`} />}
@@ -26,8 +28,8 @@ export default function ProductImage({
           src={src}
           alt={alt}
           loading="lazy"
-          onLoad={() => setLoaded(true)}
-          onError={() => setLoaded(true)}
+          onLoad={markLoaded}
+          onError={markLoaded}
           className={`ngc-product-img${loaded ? ' is-loaded' : ''}`}
         />
       </picture>

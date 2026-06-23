@@ -48,7 +48,7 @@ export default function ReferencesPage() {
         <ul>
           <li>Eroids.com</li>
           <li>EliteFitness.com</li>
-          <li>Evolutionary.org</li>
+          <li>Evolutionary</li>
           <li>Anabolex.com</li>
           <li>OutlawMuscle.com</li>
           <li>Muscle Unlimited</li>

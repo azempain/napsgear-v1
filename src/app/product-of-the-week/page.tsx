@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { productsBySlug } from '@/data'
 import ProductDetail from '@/components/ProductDetail'
 
-const featured = productsBySlug.get('gp-anastrozole-arimidex--p8194')
+const featured = productsBySlug.get('anastrozole')
 export const metadata: Metadata = { title: 'Product of the Week', alternates: { canonical: '/product-of-the-week/' } }
 
 export default function ProductOfWeekPage() {

@@ -6,9 +6,8 @@ import { useCurrency } from '@/context/CurrencyContext'
 export default function OrderSummary({ items }: { items: CartItem[] }) {
   const { money } = useCurrency()
   return (
-    <aside className="ngc-totals" aria-label="Order summary">
-      <div className="ngc-totals__card">
-        <h3 className="ngc-totals__title">ORDER SUMMARY</h3>
+    <div className="ngc-totals__card" aria-label="Order summary">
+      <h3 className="ngc-totals__title">ORDER SUMMARY</h3>
 
         <ul className="ngc-summary__items">
           {items.map(i => (
@@ -41,7 +40,6 @@ export default function OrderSummary({ items }: { items: CartItem[] }) {
           <h6>Total:</h6>
           <div data-order-total>{money(total(items))}</div>
         </div>
-      </div>
-    </aside>
+    </div>
   )
 }

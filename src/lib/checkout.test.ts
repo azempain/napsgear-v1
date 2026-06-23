@@ -87,6 +87,11 @@ describe('buildOrderPayload', () => {
       'Subtotal · $203.00\nShipping · $35.00\nLoyalty credit · $40.00\nTOTAL · $238.00',
     )
   })
+  it('payment field includes Bitcoin instructions', () => {
+    const payload = buildOrderPayload(valid, items, 'NG-20260623-ABC123')
+    expect(payload.payment).toContain('Payment method: Bitcoin')
+    expect(payload.payment).toContain('Order reference: NG-20260623-ABC123')
+  })
   it('order_total kept as a top-level sortable field', () => {
     expect(p.order_total).toBe('$238.00')
   })

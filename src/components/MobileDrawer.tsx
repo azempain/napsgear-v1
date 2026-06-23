@@ -2,12 +2,11 @@
 
 import { ChevronDown } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useStore } from '@tanstack/react-store'
 import { brands, categories } from '@/data'
 import NapsGearLogo from './NapsGearLogo'
 import { SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
-
-type Expanded = 'brands' | 'categories' | 'promotions' | 'information' | null
+import { componentUiStore, type MobileDrawerSection } from '@/store/componentUiStore'
 
 const SUPPORT_LINKS = [
   { href: '/', label: 'Home' },
@@ -34,15 +33,15 @@ const INFORMATION_LINKS = [
 ]
 
 export default function MobileDrawer({ onClose }: { onClose: () => void }) {
-  const [expanded, setExpanded] = useState<Expanded>(null)
+  const expanded = useStore(componentUiStore, state => state.mobileDrawerExpanded)
   const brandList = brands.filter(brand => brand.slug)
 
-  function toggle(section: Exclude<Expanded, null>) {
-    setExpanded(current => current === section ? null : section)
+  function toggle(section: Exclude<MobileDrawerSection, null>) {
+    componentUiStore.actions.toggleMobileDrawerSection(section)
   }
 
   function section(
-    id: Exclude<Expanded, null>,
+    id: Exclude<MobileDrawerSection, null>,
     label: string,
     links: Array<{ href: string; label: string }>,
   ) {

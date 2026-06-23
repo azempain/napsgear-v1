@@ -2,10 +2,7 @@
 import { useRef } from 'react'
 import { Autoplay, Pagination } from 'swiper/modules'
 import type { SwiperOptions } from 'swiper/types'
-import videosJson from '@/data/videos.json'
-import type { Video } from '@/data/types'
-
-const videos: Video[] = videosJson as Video[]
+import { videos } from '@/data'
 import { useSwiper } from '@/hooks/useSwiper'
 import AmaVideoCard from './AmaVideoCard'
 import AmaPremiereCard from './AmaPremiereCard'

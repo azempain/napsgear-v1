@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SUPPORT_EMAIL, buildWhatsAppHref } from '@/lib/storefrontConfig'
 
 export const metadata: Metadata = {
   title: 'Help',
@@ -7,6 +8,8 @@ export const metadata: Metadata = {
 }
 
 export default function HelpPage() {
+  const whatsappHref = buildWhatsAppHref()
+
   return (
     <main className="main">
       <div className="container py-5">
@@ -41,6 +44,22 @@ export default function HelpPage() {
             frequently asked questions.
           </li>
         </ul>
+
+        {(SUPPORT_EMAIL || whatsappHref) && (
+          <section className="ngc-info-page__section">
+            <h2>Direct support</h2>
+            {SUPPORT_EMAIL && (
+              <p>
+                Email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> for account, order, payment, or shipping questions.
+              </p>
+            )}
+            {whatsappHref && (
+              <p>
+                WhatsApp <a href={whatsappHref} target="_blank" rel="noreferrer">Chat with support</a> for quick payment follow-up.
+              </p>
+            )}
+          </section>
+        )}
 
         <h2 className="section-title mt-5">Please Note!</h2>
         <p>

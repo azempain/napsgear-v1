@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
-  renderCustomer, renderShipping, renderItems, renderTotals, buildOrderSubject,
+  renderCustomer, renderShipping, renderItems, renderTotals, renderPaymentInstructions, buildOrderSubject,
 } from './orderEmail'
 import type { CheckoutForm } from './checkout'
 import type { CartItem } from '@/context/CartContext'
@@ -69,6 +69,15 @@ describe('renderTotals', () => {
   })
   it('uppercased TOTAL line stands out without a divider above it', () => {
     expect(renderTotals(ITEMS)).toMatch(/\nTOTAL · /)
+  })
+})
+
+describe('renderPaymentInstructions', () => {
+  it('includes the order reference and Bitcoin payment method', () => {
+    const out = renderPaymentInstructions(ITEMS, 'NG-20260623-ABC123')
+    expect(out).toContain('Payment method: Bitcoin')
+    expect(out).toContain('Order reference: NG-20260623-ABC123')
+    expect(out).toContain('Order total: $238.00')
   })
 })
 

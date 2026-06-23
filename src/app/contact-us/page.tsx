@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import contactJson from '@/data/contact.json'
 import type { ContactInfo } from '@/data/types'
+import { SUPPORT_EMAIL, buildWhatsAppHref } from '@/lib/storefrontConfig'
 
 const c: ContactInfo = contactJson as ContactInfo
 
@@ -11,6 +12,8 @@ export const metadata: Metadata = {
 }
 
 export default function ContactPage() {
+  const whatsappHref = buildWhatsAppHref()
+
   return (
     <main className="main">
       <div className="container py-5">
@@ -27,6 +30,22 @@ export default function ContactPage() {
               <a href={action.href} rel="noreferrer">Open {action.label}</a>
             </section>
           ))}
+
+          {(SUPPORT_EMAIL || whatsappHref) && (
+            <section className="ngc-info-page__section">
+              <h2>Direct support</h2>
+              {SUPPORT_EMAIL && (
+                <p>
+                  Email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> for order, payment, and account questions.
+                </p>
+              )}
+              {whatsappHref && (
+                <p>
+                  WhatsApp <a href={whatsappHref} target="_blank" rel="noreferrer">Chat with support</a> for quick payment follow-up.
+                </p>
+              )}
+            </section>
+          )}
 
           <section className="ngc-info-page__section">
             <h2>Managing support tickets</h2>

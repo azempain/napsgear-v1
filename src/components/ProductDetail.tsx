@@ -1,9 +1,11 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
+import { useStore } from '@tanstack/react-store'
 import type { Product } from '@/data/types'
 import { useCart } from '@/context/CartContext'
 import { parsePrice, packTiers } from '@/lib/pricing'
 import { useCurrency } from '@/context/CurrencyContext'
+import { componentUiStore } from '@/store/componentUiStore'
 
 const FREE_PACK_BANNERS = [
   { free: '1 pack', text: 'For every 5 packs purchased, you get 1 pack FREE' },
@@ -16,10 +18,12 @@ export default function ProductDetail({ product }: { product: Product }) {
   const { addItem } = useCart()
   const { money } = useCurrency()
   const tiers = packTiers(parsePrice(product.price), product.packs)
-  const [selected, setSelected] = useState(0)
-  const [tab, setTab] = useState<'description' | 'reviews' | 'qa'>('description')
-  const [toast, setToast] = useState(false)
+  const { selected, tab, toastVisible } = useStore(componentUiStore, state => state.productDetail)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    componentUiStore.actions.resetProductDetail(product.slug)
+  }, [product.slug])
 
   useEffect(() => () => {
     if (toastTimer.current) clearTimeout(toastTimer.current)
@@ -41,14 +45,14 @@ export default function ProductDetail({ product }: { product: Product }) {
       image: product.images[0],
       brand: product.brand,
     })
-    setToast(true)
+    componentUiStore.actions.setProductToastVisible(true)
     if (toastTimer.current) clearTimeout(toastTimer.current)
-    toastTimer.current = setTimeout(() => setToast(false), 2500)
+    toastTimer.current = setTimeout(() => componentUiStore.actions.setProductToastVisible(false), 2500)
   }
 
   return (
     <>
-      <div className={`notification${toast ? ' visible' : ''}`} aria-live="polite">
+      <div className={`notification${toastVisible ? ' visible' : ''}`} aria-live="polite">
         <section className="body">
           <span className="title">Success</span>
           <p className="message">Item added to cart</p>
@@ -104,7 +108,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                       id={`pack_${t.packs}_${i}`}
                       name="pack"
                       checked={selected === i}
-                      onChange={() => setSelected(i)}
+                      onChange={() => componentUiStore.actions.setProductPack(i)}
                     />
                     <label htmlFor={`pack_${t.packs}_${i}`} className="product-multipliers__item--info">
                       <div className="quantity">
@@ -152,7 +156,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               <button
                 type="button"
                 className={`nav-link${tab === 'description' ? ' active' : ''}`}
-                onClick={() => setTab('description')}
+                onClick={() => componentUiStore.actions.setProductTab('description')}
               >
                 Description
               </button>
@@ -162,7 +166,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 <button
                   type="button"
                   className={`nav-link${tab === 'qa' ? ' active' : ''}`}
-                  onClick={() => setTab('qa')}
+                  onClick={() => componentUiStore.actions.setProductTab('qa')}
                 >
                   Customer Questions &amp; Answers: {qa.length}
                 </button>
@@ -173,7 +177,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 <button
                   type="button"
                   className={`nav-link nav-link-reviews${tab === 'reviews' ? ' active' : ''}`}
-                  onClick={() => setTab('reviews')}
+                  onClick={() => componentUiStore.actions.setProductTab('reviews')}
                 >
                   Reviews: {reviews.length}
                 </button>

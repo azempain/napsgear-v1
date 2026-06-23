@@ -1,5 +1,6 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import { useStore } from '@tanstack/react-store'
 import { Navigation, Pagination } from 'swiper/modules'
 import type { SwiperOptions } from 'swiper/types'
 import type { Product } from '@/data/types'
@@ -9,6 +10,7 @@ import { useCart } from '@/context/CartContext'
 import { useCurrency } from '@/context/CurrencyContext'
 import { parsePrice, packTiers } from '@/lib/pricing'
 import { ratingSummary } from '@/lib/reviews'
+import { componentUiStore } from '@/store/componentUiStore'
 
 // Carousel only mounts for multi-image products. Single-image products render a
 // plain <img>, so no Swiper instance is created for the 689 single-image SKUs.
@@ -61,12 +63,12 @@ export default function ProductQuickView({
 }) {
   const { addItem } = useCart()
   const { money } = useCurrency()
-  const [added, setAdded] = useState(false)
+  const added = useStore(componentUiStore, state => state.productQuickViewAdded)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Reset the "Added" affordance whenever the dialog opens a (different) product.
   useEffect(() => {
-    setAdded(false)
+    componentUiStore.actions.setProductQuickViewAdded(false)
   }, [product?.slug])
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current) }, [])
 
@@ -89,9 +91,9 @@ export default function ProductQuickView({
       image: images[0],
       brand: product.brand,
     })
-    setAdded(true)
+    componentUiStore.actions.setProductQuickViewAdded(true)
     if (timer.current) clearTimeout(timer.current)
-    timer.current = setTimeout(() => setAdded(false), 2000)
+    timer.current = setTimeout(() => componentUiStore.actions.setProductQuickViewAdded(false), 2000)
   }
 
   return (

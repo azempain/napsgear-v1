@@ -24,15 +24,22 @@ export async function completeCheckout({
   sendEmail?: typeof submitOrder
   markEmail?: typeof setOrderEmailStatus
 }) {
-  const orderId = await saveOrder({ reference, currency, form, items })
+  let orderId: string | null = null
+  let persistenceWarning: string | undefined
+
+  try {
+    orderId = await saveOrder({ reference, currency, form, items })
+  } catch (error) {
+    persistenceWarning = error instanceof Error ? error.message : 'Order history could not be saved.'
+  }
 
   try {
     await sendEmail({ accessKey, form, items, reference, captchaToken })
-    await markEmail(orderId, 'sent')
+    if (orderId) await markEmail(orderId, 'sent')
   } catch (error) {
-    await markEmail(orderId, 'failed').catch(() => undefined)
+    if (orderId) await markEmail(orderId, 'failed').catch(() => undefined)
     throw error
   }
 
-  return { orderId, reference }
+  return { orderId, reference, persistenceWarning }
 }
