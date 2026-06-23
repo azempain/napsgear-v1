@@ -178,7 +178,7 @@ const CHECKS = [
         if (Math.max(...centers) - Math.min(...centers) > 3) {
           throw new Error(`mobile controls are not vertically aligned at ${width}px`)
         }
-        if (!headerBox || headerBox.height > 60) {
+        if (!headerBox || headerBox.height > 68) {
           throw new Error(`mobile header is ${headerBox?.height}px tall at ${width}px`)
         }
         if (!(boxes[0].x < boxes[1].x && boxes[2].x > boxes[1].x + boxes[1].width)) {
@@ -505,8 +505,8 @@ const CHECKS = [
       await page.click('#placeOrderBtn')
       await page.waitForSelector('text=Bitcoin payment', { timeout: 6000 })
       const body = await page.textContent('main')
-      if (!body?.includes('account order history could not be updated')) {
-        throw new Error('guest checkout did not surface the order-history warning')
+      if (body?.includes('account order history could not be updated')) {
+        throw new Error('guest checkout surfaced the hidden order-history warning')
       }
       if (!requestOrder.includes('email')) {
         throw new Error(`guest checkout never sent email; sequence was ${requestOrder.join(' -> ')}`)

@@ -72,6 +72,31 @@ describe('completeCheckout', () => {
     expect(markEmail).not.toHaveBeenCalled()
   })
 
+  it('continues checkout when order email is not configured', async () => {
+    const sendEmail = vi.fn(async () => ({ reference: 'NG-20260612-ABC123' }))
+    const markEmail = vi.fn(async () => undefined)
+
+    const result = await completeCheckout({
+      currency: 'USD',
+      form,
+      items,
+      reference: 'NG-20260612-ABC123',
+      saveOrder: vi.fn(async () => {
+        throw new Error('Authentication required')
+      }),
+      sendEmail,
+      markEmail,
+    })
+
+    expect(result).toEqual({
+      orderId: null,
+      reference: 'NG-20260612-ABC123',
+      persistenceWarning: 'Authentication required',
+    })
+    expect(sendEmail).not.toHaveBeenCalled()
+    expect(markEmail).not.toHaveBeenCalled()
+  })
+
   it('forwards the captcha token to the email sender', async () => {
     const sendEmail = vi.fn(async () => ({ reference: 'NG-20260612-ABC123' }))
     await completeCheckout({

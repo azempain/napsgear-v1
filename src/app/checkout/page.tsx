@@ -29,7 +29,7 @@ export default function CheckoutPage() {
   const whatsappHref = buildWhatsAppHref()
 
   const orderMutation = useMutation({
-    mutationFn: ({ value, accessKey, reference }: { value: CheckoutForm; accessKey: string; reference: string }) =>
+    mutationFn: ({ value, accessKey, reference }: { value: CheckoutForm; accessKey?: string; reference: string }) =>
       completeCheckout({
         accessKey,
         currency,
@@ -49,10 +49,8 @@ export default function CheckoutPage() {
       const key = process.env.NEXT_PUBLIC_WEB3FORMS_KEY
       if (!key) {
         console.warn('[checkout] NEXT_PUBLIC_WEB3FORMS_KEY is not set — see .env.local.example')
-        checkoutUiStore.actions.setFormError('Checkout email is not configured. Add NEXT_PUBLIC_WEB3FORMS_KEY before taking orders.')
-        return
       }
-      if (HCAPTCHA_CONFIGURED && !checkoutUiStore.state.captchaToken) {
+      if (key && HCAPTCHA_CONFIGURED && !checkoutUiStore.state.captchaToken) {
         checkoutUiStore.actions.setCaptchaError('Please complete the "I am human" check before placing your order.')
         return
       }
@@ -128,8 +126,8 @@ export default function CheckoutPage() {
           <div className="ngc-confirm__check" aria-hidden="true">&#10003;</div>
           <h1 className="ngc-confirm__title">Order received — thank you!</h1>
           <p className="ngc-confirm__sub">
-            We&apos;ve emailed your order to the NapsGear team. Complete the
-            Bitcoin payment next so support can match it to your order.
+            We received your order details. Complete the Bitcoin payment next
+            so support can match it to your order.
           </p>
           {snapshot && (
             <>
@@ -139,11 +137,6 @@ export default function CheckoutPage() {
               <p className="ngc-confirm__reference">
                 Order reference <strong>{snapshot.reference}</strong>
               </p>
-              {snapshot.persistenceWarning && (
-                <p className="ngc-confirm__hint">
-                  Your order was emailed, but account order history could not be updated. Reference: {snapshot.reference}.
-                </p>
-              )}
               <section className="ngc-payment-instructions" aria-labelledby="payment-instructions-title">
                 <h2 id="payment-instructions-title">Bitcoin payment</h2>
                 <dl>
@@ -230,6 +223,8 @@ export default function CheckoutPage() {
   const submitting = orderMutation.isPending
 
   const grandTotal = money(total(items))
+  const hasCheckoutMessages = Boolean(checkoutUi.captchaError || checkoutUi.formError || orderMutation.isError)
+  const actionCardClass = `ngc-checkout-action-card${!HCAPTCHA_CONFIGURED && !hasCheckoutMessages ? ' ngc-checkout-action-card--button-only' : ''}`
 
   return (
     <main className="main cart-main">
@@ -254,13 +249,15 @@ export default function CheckoutPage() {
 
           <aside className="ngc-totals ngc-checkout-rail" aria-label="Order summary column">
             <OrderSummary items={items} />
-            <div className="ngc-checkout-action-card">
-              <HCaptcha
-                ref={captchaRef}
-                configured={HCAPTCHA_CONFIGURED}
-                onVerify={token => checkoutUiStore.actions.setCaptchaToken(token)}
-                onExpire={() => checkoutUiStore.actions.setCaptchaToken(null)}
-              />
+            <div className={actionCardClass}>
+              {HCAPTCHA_CONFIGURED && (
+                <HCaptcha
+                  ref={captchaRef}
+                  configured={HCAPTCHA_CONFIGURED}
+                  onVerify={token => checkoutUiStore.actions.setCaptchaToken(token)}
+                  onExpire={() => checkoutUiStore.actions.setCaptchaToken(null)}
+                />
+              )}
               {checkoutUi.captchaError && (
                 <div className="ngc-alert" role="alert">
                   {checkoutUi.captchaError}

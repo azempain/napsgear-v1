@@ -43,7 +43,7 @@ export default function AmaSection() {
         <div ref={ref} className="swiper" id="amaCarousel">
           <div className="swiper-wrapper">
             {videos.map((v, i) => (
-              <div className="swiper-slide" key={v.thumbnail || i}>
+              <div className="swiper-slide" key={`${v.title}-${v.thumbnail || 'thumb'}-${i}`}>
                 {v.isPremiere
                   ? <AmaPremiereCard video={v} />
                   : <AmaVideoCard video={v} />

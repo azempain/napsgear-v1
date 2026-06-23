@@ -124,14 +124,7 @@ const HCaptcha = forwardRef<HCaptchaHandle, HCaptchaProps>(function HCaptcha(
     }
   }, [configured])
 
-  if (!configured) {
-    return (
-      <div className="ngc-hcaptcha ngc-hcaptcha--disabled" role="note">
-        <strong>Bot check disabled</strong>
-        <span>Set NEXT_PUBLIC_HCAPTCHA_SITE_KEY to enable production hCaptcha.</span>
-      </div>
-    )
-  }
+  if (!configured) return null
 
   return <div ref={containerRef} className="ngc-hcaptcha" />
 })

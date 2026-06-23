@@ -14,7 +14,7 @@ export async function completeCheckout({
   sendEmail = submitOrder,
   markEmail = setOrderEmailStatus,
 }: {
-  accessKey: string
+  accessKey?: string
   currency: string
   form: CheckoutForm
   items: CartItem[]
@@ -31,6 +31,10 @@ export async function completeCheckout({
     orderId = await saveOrder({ reference, currency, form, items })
   } catch (error) {
     persistenceWarning = error instanceof Error ? error.message : 'Order history could not be saved.'
+  }
+
+  if (!accessKey) {
+    return { orderId, reference, persistenceWarning }
   }
 
   try {
