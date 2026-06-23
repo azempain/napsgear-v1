@@ -17,7 +17,7 @@ import { createOrderReference } from '@/lib/orderSubmission'
 import { useAuthSession } from '@/lib/authSession'
 import HCaptcha, { type HCaptchaHandle } from '@/components/HCaptcha'
 import { HCAPTCHA_CONFIGURED } from '@/lib/hcaptcha'
-import { BTC_PAYMENT_URL, BTC_WALLET_ADDRESS, SUPPORT_EMAIL, buildPaymentHref, buildWhatsAppHref } from '@/lib/storefrontConfig'
+import { BTC_WALLET_ADDRESS, SUPPORT_EMAIL, buildPaymentHref, buildWhatsAppHref } from '@/lib/storefrontConfig'
 import { checkoutDefaultsFromSession, checkoutUiStore } from '@/lib/checkoutUiStore'
 
 export default function CheckoutPage() {
@@ -94,19 +94,6 @@ export default function CheckoutPage() {
   }, [checkoutUi.status, clearCart])
 
   useEffect(() => {
-    if (checkoutUi.status !== 'success' || !checkoutUi.snapshot || !BTC_PAYMENT_URL) return
-    const href = buildPaymentHref({
-      reference: checkoutUi.snapshot.reference,
-      total: checkoutUi.snapshot.total,
-    })
-    if (!href) return
-    const t = setTimeout(() => {
-      window.location.href = href
-    }, 8000)
-    return () => clearTimeout(t)
-  }, [checkoutUi.status, checkoutUi.snapshot])
-
-  useEffect(() => {
     if (!session) return
     if (!form.getFieldValue('fullName') && session.user.name) {
       form.setFieldValue('fullName', session.user.name)
@@ -119,6 +106,12 @@ export default function CheckoutPage() {
   // success takes precedence over the empty-cart guard (cart is now empty by design)
   if (checkoutUi.status === 'success') {
     const snapshot = checkoutUi.snapshot
+    const paymentHref = snapshot
+      ? buildPaymentHref({
+        reference: snapshot.reference,
+        total: snapshot.total,
+      })
+      : ''
     return (
       <main className="main cart-main">
         <div className="container">
@@ -137,6 +130,46 @@ export default function CheckoutPage() {
               <p className="ngc-confirm__reference">
                 Order reference <strong>{snapshot.reference}</strong>
               </p>
+              <section className="ngc-payment-next" aria-labelledby="payment-next-title">
+                <div className="ngc-payment-next__eyebrow">Next step</div>
+                <h2 id="payment-next-title">Pay with Bitcoin</h2>
+                <p>
+                  Open the Bitcoin payment page, then include your order
+                  reference so support can match the payment to this order.
+                </p>
+                <div className="ngc-payment-next__summary" aria-label="Payment summary">
+                  <span>Total <strong>{snapshot.total}</strong></span>
+                  <span>Reference <strong>{snapshot.reference}</strong></span>
+                </div>
+                <div className="ngc-payment-next__actions">
+                  {paymentHref && (
+                    <a
+                      className="ngc-btn ngc-btn--dark"
+                      href={paymentHref}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Pay with Bitcoin now
+                    </a>
+                  )}
+                  {whatsappHref && (
+                    <a
+                      className="ngc-btn ngc-btn--outline"
+                      href={whatsappHref}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Send payment details on WhatsApp
+                    </a>
+                  )}
+                </div>
+                {!paymentHref && (
+                  <p className="ngc-payment-next__hint">
+                    Payment link is not configured yet. Use the wallet details
+                    below and contact support with your order reference.
+                  </p>
+                )}
+              </section>
               <section className="ngc-payment-instructions" aria-labelledby="payment-instructions-title">
                 <h2 id="payment-instructions-title">Bitcoin payment</h2>
                 <dl>
@@ -174,22 +207,7 @@ export default function CheckoutPage() {
               </section>
             </>
           )}
-          {snapshot && BTC_PAYMENT_URL ? (
-            <>
-              <p className="ngc-confirm__hint">Redirecting to the payment page...</p>
-              <a
-                className="ngc-btn ngc-btn--dark"
-                href={buildPaymentHref({
-                  reference: snapshot.reference,
-                  total: snapshot.total,
-                })}
-              >
-                Open payment page
-              </a>
-            </>
-          ) : (
-            <Link className="ngc-btn ngc-btn--dark" href="/catalog/">Continue shopping now &rarr;</Link>
-          )}
+          <Link className="ngc-btn ngc-btn--outline" href="/catalog/">Continue shopping</Link>
         </div>
         </div>
       </main>

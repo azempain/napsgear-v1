@@ -174,6 +174,15 @@ const CHECKS = [
           if (!box) throw new Error(`${selector} missing at ${width}px`)
           boxes.push(box)
         }
+        const visibleAccountIcons = await page.$$eval('.header-middle .header-icon-user', els =>
+          els.filter(el => {
+            const style = getComputedStyle(el)
+            const rect = el.getBoundingClientRect()
+            return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0
+          }).length)
+        if (visibleAccountIcons !== 1) {
+          throw new Error(`expected 1 visible mobile account icon at ${width}px, got ${visibleAccountIcons}`)
+        }
         const centers = boxes.map(box => box.y + box.height / 2)
         if (Math.max(...centers) - Math.min(...centers) > 3) {
           throw new Error(`mobile controls are not vertically aligned at ${width}px`)
@@ -448,6 +457,10 @@ const CHECKS = [
       await page.click('#placeOrderBtn')
       // Confirmation screen
       await page.waitForSelector('text=Order received', { timeout: 6000 })
+      const paymentNext = await page.textContent('.ngc-payment-next')
+      if (!paymentNext?.includes('Pay with Bitcoin') || !paymentNext.includes('$95.00') || !/NG-\d{8}-[A-Z0-9]+/.test(paymentNext)) {
+        throw new Error('confirmation screen is missing the Bitcoin next-step payment panel')
+      }
       // Cart cleared in localStorage
       const cart = await page.evaluate(() => localStorage.getItem('napsgear_cart'))
       const parsed = cart ? JSON.parse(cart) : []
@@ -505,6 +518,10 @@ const CHECKS = [
       await page.click('#placeOrderBtn')
       await page.waitForSelector('text=Bitcoin payment', { timeout: 6000 })
       const body = await page.textContent('main')
+      const paymentNext = await page.textContent('.ngc-payment-next')
+      if (!paymentNext?.includes('Pay with Bitcoin')) {
+        throw new Error('guest checkout confirmation is missing the Bitcoin next-step payment panel')
+      }
       if (body?.includes('account order history could not be updated')) {
         throw new Error('guest checkout surfaced the hidden order-history warning')
       }

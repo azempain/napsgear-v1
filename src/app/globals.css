@@ -1811,6 +1811,68 @@ body.has-sticky-header {
   margin: 0 0 16px;
 }
 .cart-main .ngc-confirm .ngc-btn { display: inline-block; }
+.cart-main .ngc-payment-next {
+  margin: 24px auto 18px;
+  padding: 22px;
+  max-width: 620px;
+  border: 1px solid #c7e6f5;
+  border-radius: 8px;
+  background: #f2fbff;
+  text-align: left;
+}
+.cart-main .ngc-payment-next__eyebrow {
+  margin-bottom: 5px;
+  color: #0089cb;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.cart-main .ngc-payment-next h2 {
+  margin: 0 0 8px;
+  color: #17202a;
+  font-size: 23px;
+  line-height: 1.2;
+}
+.cart-main .ngc-payment-next p {
+  margin: 0;
+  color: #526171;
+  line-height: 1.55;
+}
+.cart-main .ngc-payment-next__summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+.cart-main .ngc-payment-next__summary span {
+  display: grid;
+  gap: 3px;
+  padding: 11px 12px;
+  border: 1px solid #d5e9f2;
+  border-radius: 6px;
+  background: #fff;
+  color: #637080;
+  font-size: 12px;
+}
+.cart-main .ngc-payment-next__summary strong {
+  color: #17202a;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.cart-main .ngc-payment-next__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cart-main .ngc-payment-next__actions .ngc-btn {
+  flex: 1 1 210px;
+  min-height: 46px;
+}
+.cart-main .ngc-payment-next__hint {
+  margin-top: 12px !important;
+  color: #7a4b00 !important;
+}
 .cart-main .ngc-payment-instructions {
   margin: 24px auto;
   padding: 18px;
@@ -2278,12 +2340,6 @@ body.has-sticky-header {
     box-shadow: none !important;
     cursor: pointer;
   }
-  .ngc-account-link--desktop {
-    display: none !important;
-  }
-  .header-middle .ngc-account-link--desktop {
-    display: none !important;
-  }
   .header-middle .header-icon,
   .mobile-menu-toggle {
     width: 44px !important;
@@ -2298,6 +2354,9 @@ body.has-sticky-header {
   .mobile-menu-toggle svg {
     width: 28px !important;
     height: 28px !important;
+  }
+  .header-middle .header-actions .ngc-account-link--desktop {
+    display: none !important;
   }
   .ngc-account-presence {
     right: 0;
@@ -2690,6 +2749,15 @@ body.has-sticky-header {
   }
   .cart-main .ngc-payment-instructions {
     padding: 16px;
+  }
+  .cart-main .ngc-payment-next {
+    padding: 18px;
+  }
+  .cart-main .ngc-payment-next__summary {
+    grid-template-columns: 1fr;
+  }
+  .cart-main .ngc-payment-next__actions {
+    display: grid;
   }
   .cart-main .ngc-payment-instructions dl > div {
     grid-template-columns: 1fr;
