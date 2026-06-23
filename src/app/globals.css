@@ -1319,14 +1319,6 @@ body.has-sticky-header { padding-top: var(--header-h) !important; }
   border-radius: 8px;
   background: #fff;
 }
-.cart-main .ngc-checkout-action-card--button-only {
-  display: none;
-}
-@media (min-width: 768px) {
-  .cart-main .ngc-checkout-action-card--button-only {
-    display: grid;
-  }
-}
 .cart-main .ngc-checkout-action-card .ngc-hcaptcha,
 .cart-main .ngc-checkout-action-card .ngc-alert {
   margin: 0;
@@ -1598,17 +1590,10 @@ body.has-sticky-header {
     line-height: 1;
   }
   .ngc-stepper__input { width: 44px; height: 32px; font-size: 14px; }
-  /* Spacer so the last cart row isn't covered by the fixed action bar */
-  .ngc-page::after {
-    content: "";
-    display: block;
-    height: 96px;
-  }
-  /* Show the Continue Shopping link under the dark Checkout button on small screens */
+  /* Legacy mobile action bar styles kept for any future in-flow use. */
   .ngc-cart-mobile-actions {
     left: 12px;
     right: 12px;
-    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
     flex-wrap: wrap;
     border: 1px solid #edf0f3;
     border-radius: 10px;
@@ -1625,11 +1610,9 @@ body.has-sticky-header {
   }
 }
 
-/* F1: reserve space under the page for the fixed mobile action bar so it never
-   covers the last row, the totals card, or the empty-cart CTA. */
 @media (max-width: 767px) {
   .cart-main {
-    padding-bottom: calc(172px + env(safe-area-inset-bottom));
+    padding-bottom: 36px;
   }
 }
 
@@ -2296,6 +2279,9 @@ body.has-sticky-header {
     cursor: pointer;
   }
   .ngc-account-link--desktop {
+    display: none !important;
+  }
+  .header-middle .ngc-account-link--desktop {
     display: none !important;
   }
   .header-middle .header-icon,

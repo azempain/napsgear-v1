@@ -755,7 +755,7 @@ const CHECKS = [
     },
   },
   {
-    name: 'F1: mobile /cart/ reserves padding-bottom for the sticky action bar',
+    name: 'F1: mobile /cart/ keeps checkout actions in normal flow',
     route: '/',
     async assert(page) {
       await page.setViewportSize({ width: 375, height: 720 })
@@ -766,9 +766,11 @@ const CHECKS = [
       })
       await page.goto(BASE + '/cart/', { waitUntil: 'load' })
       await page.waitForSelector('.cart-main', { timeout: 8000 })
+      const actionBar = await page.$('.ngc-cart-mobile-actions')
+      if (actionBar) throw new Error('mobile cart still renders the fixed action bar')
       const pad = await page.$eval('.cart-main', el =>
         parseFloat(getComputedStyle(el).paddingBottom))
-      if (!(pad >= 72)) throw new Error(`expected padding-bottom >= 72px on mobile, got ${pad}px`)
+      if (pad > 60) throw new Error(`mobile cart has stale fixed-bar padding (${pad}px)`)
       // Restore default viewport so subsequent checks aren't affected.
       await page.setViewportSize({ width: 1280, height: 800 })
     },

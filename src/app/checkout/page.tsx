@@ -222,10 +222,6 @@ export default function CheckoutPage() {
 
   const submitting = orderMutation.isPending
 
-  const grandTotal = money(total(items))
-  const hasCheckoutMessages = Boolean(checkoutUi.captchaError || checkoutUi.formError || orderMutation.isError)
-  const actionCardClass = `ngc-checkout-action-card${!HCAPTCHA_CONFIGURED && !hasCheckoutMessages ? ' ngc-checkout-action-card--button-only' : ''}`
-
   return (
     <main className="main cart-main">
       <div className="container">
@@ -249,7 +245,7 @@ export default function CheckoutPage() {
 
           <aside className="ngc-totals ngc-checkout-rail" aria-label="Order summary column">
             <OrderSummary items={items} />
-            <div className={actionCardClass}>
+            <div className="ngc-checkout-action-card">
               {HCAPTCHA_CONFIGURED && (
                 <HCaptcha
                   ref={captchaRef}
@@ -277,7 +273,7 @@ export default function CheckoutPage() {
               )}
               <button
                 type="button"
-                className="ngc-btn ngc-btn--dark ngc-btn--block d-none d-md-block"
+                className="ngc-btn ngc-btn--dark ngc-btn--block"
                 id="placeOrderBtn"
                 disabled={submitting}
                 onClick={() => form.handleSubmit()}
@@ -287,23 +283,6 @@ export default function CheckoutPage() {
             </div>
           </aside>
         </div>
-      </div>
-
-      {/* Mobile sticky action bar — mirrors the cart pattern so the Place
-          Order button is always reachable without scrolling the long form. */}
-      <div className="ngc-cart-mobile-actions d-md-none" role="region" aria-label="Checkout actions">
-        <div className="ngc-cart-mobile-actions__total">
-          <span>Total</span>
-          <strong>{grandTotal}</strong>
-        </div>
-        <button
-          type="button"
-          className="ngc-btn ngc-btn--dark"
-          disabled={submitting}
-          onClick={() => form.handleSubmit()}
-        >
-          {submitting ? 'Placing…' : 'Place Order'}
-        </button>
       </div>
     </main>
   )
